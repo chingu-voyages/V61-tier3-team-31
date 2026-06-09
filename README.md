@@ -35,7 +35,7 @@ your repo access and to practice PR'ing with your team *before* you start
 coding!
 
 - Teammate name #1: Oluwatosin Awoniyi [GitHub](https://github.com/Yowa-Tosin) / [LinkedIn](https://linkedin.com/in/oluwatosin-awoniyi)
-- Teammate name #2: Nadiia Lashtun [GitHub](https://github.com/NadiiaLashtun) / [LinkedIn](https://linkedin.com/in/lashtun)
+- Nadiia Lashtun : [GitHub](https://github.com/NadiiaLashtun) / [LinkedIn](https://linkedin.com/in/lashtun)
 
    ...
 - Teammate name #n: [GitHub](https://github.com/ghaccountname) / [LinkedIn](https://linkedin.com/in/liaccountname)
