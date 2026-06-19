@@ -49,7 +49,7 @@ export default function SettingsPage() {
           <button className="px-4 py-2 bg-white dark:bg-[#1a1b24] border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-sm cursor-pointer">
             Discard Changes
           </button>
-          <button className="px-4 py-2 bg-[#1CB368] text-white rounded-xl text-sm font-medium hover:bg-[#189958] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+          <button className="px-4 py-2 bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             <Save className="w-4 h-4" /> Save Preferences
           </button>
         </div>
@@ -102,7 +102,7 @@ export default function SettingsPage() {
                   <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Organization Name</label>
-                      <input type="text" defaultValue="Nexus Ops" className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg py-2.5 px-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-shadow" />
+                      <input type="text" defaultValue="Amigo" className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg py-2.5 px-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-shadow" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Support Email</label>
@@ -130,7 +130,7 @@ export default function SettingsPage() {
                       <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Minimum score required for auto-matching candidates to teams.</div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <input type="range" min="50" max="100" defaultValue="85" className="w-32 accent-[#1CB368]" />
+                      <input type="range" min="50" max="100" defaultValue="85" className="w-32 accent-[#77CF97]" />
                       <span className="text-sm font-bold text-slate-700 dark:text-slate-300 w-10 text-right">85%</span>
                     </div>
                   </div>
@@ -141,7 +141,7 @@ export default function SettingsPage() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input type="checkbox" className="sr-only peer" defaultChecked />
-                      <div className="w-11 h-6 bg-slate-200 dark:bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1CB368]"></div>
+                      <div className="w-11 h-6 bg-slate-200 dark:bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#77CF97]"></div>
                     </label>
                   </div>
                   <div className="flex items-center justify-between">

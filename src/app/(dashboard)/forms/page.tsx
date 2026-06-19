@@ -62,7 +62,7 @@ export default function FormsPage() {
           <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Form Builder & Templates</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm">Create and manage application forms, feedback surveys, and onboarding documents.</p>
         </div>
-        <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#1CB368] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#189958] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+        <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
           <Plus className="w-4 h-4" /> Create Form
         </button>
       </div>
@@ -134,11 +134,11 @@ export default function FormsPage() {
                     <td className="px-6 py-5">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
                         form.status === 'Collecting'
-                          ? 'bg-[#1CB368]/10 text-[#1CB368] border border-[#1CB368]/20'
+                          ? 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20'
                           : 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10'
                       }`}>
                         {form.status === 'Collecting' ? (
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#1CB368] animate-pulse"></div>
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#77CF97] animate-pulse"></div>
                         ) : (
                           <Archive className="w-3 h-3" />
                         )}
@@ -147,7 +147,7 @@ export default function FormsPage() {
                     </td>
                     <td className="px-6 py-5">
                       <div className="text-sm font-semibold text-slate-800 dark:text-white">{form.responses}</div>
-                      <div className={`text-[11px] flex items-center gap-1 ${form.responseExtra?.startsWith('+') ? 'text-[#1CB368]' : 'text-slate-400 dark:text-slate-500'}`}>
+                      <div className={`text-[11px] flex items-center gap-1 ${form.responseExtra?.startsWith('+') ? 'text-[#77CF97]' : 'text-slate-400 dark:text-slate-500'}`}>
                         {form.responseExtra?.startsWith('+') && <ArrowUpRight className="w-3 h-3" />}
                         {form.responseExtra}
                       </div>

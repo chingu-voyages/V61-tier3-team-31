@@ -9,7 +9,8 @@ export type DashboardView =
   | 'teams'
   | 'onboarding'
   | 'forms'
-  | 'settings';
+  | 'settings'
+  | 'profile';
 
 /** Verfügbare Tabs in den Einstellungen */
 export type SettingsTab =
@@ -45,8 +46,7 @@ export type ExperienceLevel = 'Beginner' | 'Intermediate' | 'Advanced';
 /** Formularstatus */
 export type FormStatus = 'collecting' | 'draft' | 'closed';
 
-/** Dashboad-Kontext für benutzerabhängige Ansichten */
-export interface DashboardContext {
+export interface DashboardCtx {
   role: UserRole;
   setRole: (role: UserRole) => void;
   isAuthenticated: boolean;
@@ -55,4 +55,5 @@ export interface DashboardContext {
   setCurrentView: (view: DashboardView) => void;
   isSidebarExpanded: boolean;
   setIsSidebarExpanded: (val: boolean) => void;
+  isInitialized: boolean;
 }

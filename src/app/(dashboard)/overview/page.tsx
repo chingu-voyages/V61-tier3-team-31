@@ -14,7 +14,7 @@ const sprintTaskData = [
   {name: 'In Progress', value: 2},
   {name: 'Done', value: 6},
 ];
-const TASK_COLORS = ['#e2e8f0', '#818cf8', '#1CB368'];
+const TASK_COLORS = ['#e2e8f0', '#818cf8', '#77CF97'];
 
 /** Metrik-Block fuer Admin-Uebersicht */
 function MetricBlock({icon, color, value, label, subtext}: {
@@ -43,20 +43,20 @@ const deadlines = [
   {title: 'Review applications', date: 'May 2, 2026', badge: '3 days', badgeColor: 'bg-rose-50 dark:bg-rose-500/10 text-rose-500'},
   {title: 'Confirm teams', date: 'May 9, 2026', badge: '10 days', badgeColor: 'bg-amber-50 dark:bg-amber-500/10 text-amber-600'},
   {title: 'Onboarding check', date: 'May 16, 2026', badge: '17 days', badgeColor: 'bg-blue-50 dark:bg-blue-500/10 text-blue-500'},
-  {title: 'Voyage starts', date: 'May 23, 2026', badge: '24 days', badgeColor: 'bg-[#1CB368]/10 text-[#1CB368]'},
+  {title: 'Voyage starts', date: 'May 23, 2026', badge: '24 days', badgeColor: 'bg-[#77CF97]/10 text-[#77CF97]'},
 ];
 
 /** Deadlinedaten fuer Admin-Uebersicht */
 const pipelineSteps = [
   {
-    step: '01', color: 'text-[#1CB368]', btnBg: 'bg-[#1CB368]/10', barColor: 'bg-[#1CB368]',
+    step: '01', color: 'text-[#77CF97]', btnBg: 'bg-[#77CF97]/10', barColor: 'bg-[#77CF97]',
     title: 'Applications', subtitle: 'Collect & review applications',
     total: '312 TOTAL', progressWidth: '100%',
     stats: [
       {label: 'Pending Review', value: '64', color: 'text-slate-800 dark:text-white'},
-      {label: 'Accepted', value: '128', color: 'text-[#1CB368]'},
+      {label: 'Accepted', value: '128', color: 'text-[#77CF97]'},
       {label: 'Rejected', value: '28', color: 'text-rose-500'},
-      {label: 'Incomplete', value: '92', color: 'text-[#1CB368]'},
+      {label: 'Incomplete', value: '92', color: 'text-[#77CF97]'},
     ],
   },
   {
@@ -75,7 +75,7 @@ const pipelineSteps = [
     total: '18 TEAMS', progressWidth: '70%',
     stats: [
       {label: 'Draft Teams', value: '12', color: 'text-purple-600'},
-      {label: 'Confirmed', value: '6', color: 'text-[#1CB368]'},
+      {label: 'Confirmed', value: '6', color: 'text-[#77CF97]'},
       {label: 'Needs Attention', value: '3', color: 'text-rose-500'},
     ],
   },
@@ -84,7 +84,7 @@ const pipelineSteps = [
     title: 'Onboarding', subtitle: 'Complete required steps',
     total: '61% COMPLETED', progressWidth: '61%',
     stats: [
-      {label: 'Completed', value: '79', color: 'text-[#1CB368]'},
+      {label: 'Completed', value: '79', color: 'text-[#77CF97]'},
       {label: 'In Progress', value: '38', color: 'text-blue-500'},
       {label: 'Missing', value: '19', color: 'text-rose-500'},
     ],
@@ -101,7 +101,7 @@ const attentionItems = [
 
 /** Aktivitaets-Eintraege */
 const activityItems = [
-  {avatar: 'https://i.pravatar.cc/100?img=11', icon: Check, iconColor: {bg: 'bg-[#1CB368]/20', text: 'text-[#1CB368]'}, highlight: 'Daniel Martinez', text: 'was accepted', time: '2 minutes ago'},
+  {avatar: 'https://i.pravatar.cc/100?img=11', icon: Check, iconColor: {bg: 'bg-[#77CF97]/20', text: 'text-[#77CF97]'}, highlight: 'Daniel Martinez', text: 'was accepted', time: '2 minutes ago'},
   {avatar: 'https://i.pravatar.cc/100?img=4', icon: UsersRound, iconColor: {bg: 'bg-purple-100 dark:bg-purple-500/20', text: 'text-purple-600'}, highlight: 'New team "Pixel Pioneers"', text: 'was created', time: '15 minutes ago'},
   {avatar: 'https://i.pravatar.cc/100?img=5', icon: FileSignature, iconColor: {bg: 'bg-blue-100 dark:bg-blue-500/20', text: 'text-blue-500'}, highlight: 'Sophia Taylor', text: 'submitted onboarding', time: '1 hour ago'},
   {avatar: 'https://i.pravatar.cc/100?img=9', icon: XCircle, iconColor: {bg: 'bg-rose-100 dark:bg-rose-500/20', text: 'text-rose-500'}, highlight: 'Alex Morgan', text: 'was rejected', time: '2 hours ago'},
@@ -116,11 +116,11 @@ export function AdminOverview() {
         {/* Linkes Panel: Begruessung + Metriken */}
         <div className="lg:col-span-8 bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-8 flex flex-col justify-between">
           <div className="mb-6">
-            <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Good morning, Jane.</h1>
+            <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Good morning, Jane. <span className="animate-wave">👋</span></h1>
             <p className="text-slate-500 dark:text-slate-400 text-sm">Voyage <span className="text-rose-500 font-medium">51</span> is in application review.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-1">
-            <MetricBlock icon={<FileText />} color={{bg: 'bg-[#1CB368]/10', text: 'text-[#1CB368]'}} value="312" label="Applications" subtext="+24 since yesterday" />
+            <MetricBlock icon={<FileText />} color={{bg: 'bg-[#77CF97]/10', text: 'text-[#77CF97]'}} value="312" label="Applications" subtext="+24 since yesterday" />
             <MetricBlock icon={<User />} color={{bg: 'bg-blue-500/10', text: 'text-blue-500'}} value="128" label="Accepted" subtext="41% of total" />
             <MetricBlock icon={<Users />} color={{bg: 'bg-purple-500/10', text: 'text-purple-500'}} value="64" label="Pending Review" subtext="20% of total" />
             <MetricBlock icon={<XCircle />} color={{bg: 'bg-rose-500/10', text: 'text-rose-500'}} value="28" label="Rejected" subtext="9% of total" />
@@ -256,7 +256,7 @@ export function ParticipantOverview() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Welcome back, Mark 👋</h1>
+          <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Welcome back, Mark <span className="animate-wave">👋</span></h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm">Here is what is happening with your team and tasks today.</p>
         </div>
       </div>
@@ -271,7 +271,7 @@ export function ParticipantOverview() {
               </p>
               <button
                 onClick={() => setCurrentView('teams')}
-                className="mt-8 w-fit px-6 py-2.5 bg-[#0b0c10] dark:bg-[#1CB368] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#189958] transition-colors shadow-sm flex items-center gap-2"
+                className="mt-8 w-fit px-6 py-2.5 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2"
               >
                 Go to Team Space <span className="w-4 h-4">↗</span>
               </button>
@@ -355,12 +355,12 @@ export function ApplicantOverview() {
           {['Submitted', 'Under Review', 'Decision', 'Onboarding'].map((step, i) => (
             <div key={i} className="flex items-center gap-2 flex-1">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                i === 0 ? 'bg-[#1CB368] text-white' : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-slate-500'
+                i === 0 ? 'bg-[#77CF97] text-white' : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-slate-500'
               }`}>
                 {i === 0 ? <CheckCircle className="w-4 h-4" /> : i + 1}
               </div>
-              <span className={`text-xs font-medium ${i === 0 ? 'text-[#1CB368]' : 'text-slate-400 dark:text-slate-500'}`}>{step}</span>
-              {i < 3 && <div className={`flex-1 h-[2px] ${i === 0 ? 'bg-[#1CB368]' : 'bg-slate-200 dark:bg-white/10'}`}></div>}
+              <span className={`text-xs font-medium ${i === 0 ? 'text-[#77CF97]' : 'text-slate-400 dark:text-slate-500'}`}>{step}</span>
+              {i < 3 && <div className={`flex-1 h-[2px] ${i === 0 ? 'bg-[#77CF97]' : 'bg-slate-200 dark:bg-white/10'}`}></div>}
             </div>
           ))}
         </div>

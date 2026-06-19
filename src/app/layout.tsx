@@ -11,8 +11,8 @@ const inter = Inter({subsets: ['latin'], variable: '--font-inter'});
 const outfit = Outfit({subsets: ['latin'], variable: '--font-outfit'});
 
 export const metadata: Metadata = {
-  title: 'Nexus | Cohort Management',
-  description: 'Apply to join the next cohort on Nexus.',
+  title: 'Amigo | Cohort Management',
+  description: 'Apply to join the next cohort on Amigo.',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

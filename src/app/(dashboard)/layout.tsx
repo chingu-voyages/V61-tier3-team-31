@@ -8,18 +8,20 @@ import {Sidebar} from '@/components/sidebar';
 /**
  * Layout fuer den Dashboard-Bereich.
  * Schuetzt alle Routes unter /(dashboard) hinter der Authentifizierung.
+ * Wartet auf die Initialisierung aus localStorage, bevor umgeleitet wird.
  */
 export default function DashboardLayout({children}: {children: React.ReactNode}) {
-  const {isAuthenticated} = useDashboard();
+  const {isAuthenticated, isInitialized} = useDashboard();
   const router = useRouter();
 
   useEffect(() => {
+    if (!isInitialized) return;
     if (!isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isInitialized, isAuthenticated, router]);
 
-  if (!isAuthenticated) {
+  if (!isInitialized || !isAuthenticated) {
     return null;
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {ShieldAlert, User, FileCheck} from 'lucide-react';
 import {NexusLogo} from '@/components/nexus-logo';
 import {useDashboard} from '@/lib/auth-context';
@@ -8,10 +8,21 @@ import {useRouter} from 'next/navigation';
 
 /** Login-Seite mit Formular und Quick-Login-Buttons */
 export default function LoginPage() {
-  const {setRole, setIsAuthenticated} = useDashboard();
+  const {setRole, setIsAuthenticated, isAuthenticated, isInitialized} = useDashboard();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // Bereits authentifiziert → direkt zum Dashboard
+  useEffect(() => {
+    if (isInitialized && isAuthenticated) {
+      router.replace('/overview');
+    }
+  }, [isInitialized, isAuthenticated, router]);
+
+  if (isInitialized && isAuthenticated) {
+    return null;
+  }
 
   const handleLogin = (selectedRole: 'admin' | 'applicant' | 'participant') => {
     setRole(selectedRole);
@@ -27,7 +38,7 @@ export default function LoginPage() {
             <NexusLogo className="w-8 h-8" />
           </div>
           <h1 className="text-2xl font-outfit font-bold text-slate-900 dark:text-white mb-2">Welcome back</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Sign in to your Nexus Ops workspace.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Sign in to your Amigo workspace.</p>
         </div>
 
         <div className="p-8">
@@ -67,7 +78,7 @@ export default function LoginPage() {
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-[#0b0c10] dark:bg-[#1CB368] text-white rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-[#189958] transition-colors shadow-sm mt-2 cursor-pointer"
+              className="w-full py-3 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm mt-2 cursor-pointer"
             >
               Sign In
             </button>

@@ -4,17 +4,19 @@ import {
   CheckCircle, AlertTriangle, Clock, Search, Plus,
   MessageSquare, ChevronRight, UserPlus, Database,
   Monitor, History, Copy, Check, ArrowUpRight,
+  Users, ExternalLink, FileText, Info, Activity,
 } from 'lucide-react';
+import Link from 'next/link';
 import {useDashboard} from '@/lib/auth-context';
 
 /** Mock-Teams fuer Admin-Ansicht */
 const adminTeams = [
-  {name: 'Nebula Builders', tier: 'Tier 2', domain: 'E-Commerce', emoji: '🌌', bg: 'bg-indigo-50 dark:bg-indigo-500/10', textColor: 'text-indigo-600 dark:text-indigo-400', status: 'Active', statusStyle: 'bg-[#1CB368]/10 text-[#1CB368] border border-[#1CB368]/20', statusIcon: CheckCircle, description: 'Building a decentralized marketplace for digital assets with cross-chain compatibility and zero gas fees.', progress: 75, barColor: 'bg-indigo-500', members: ['11', '12', '13'], extra: '+1'},
+  {name: 'Nebula Builders', tier: 'Tier 2', domain: 'E-Commerce', emoji: '🌌', bg: 'bg-indigo-50 dark:bg-indigo-500/10', textColor: 'text-indigo-600 dark:text-indigo-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Building a decentralized marketplace for digital assets with cross-chain compatibility and zero gas fees.', progress: 75, barColor: 'bg-indigo-500', members: ['11', '12', '13'], extra: '+1'},
   {name: 'Apollo Strike', tier: 'Tier 3', domain: 'Developer Tools', emoji: '🚀', bg: 'bg-rose-50 dark:bg-rose-500/10', textColor: 'text-rose-600 dark:text-rose-400', status: 'At Risk', statusStyle: 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20', statusIcon: AlertTriangle, description: 'An AI-powered VS Code extension for real-time refactoring and style guide enforcement for Next.js.', progress: 30, barColor: 'bg-rose-500', members: ['14', '15'], extra: ''},
-  {name: 'Flora Health', tier: 'Tier 1', domain: 'HealthTech', emoji: '🌿', bg: 'bg-emerald-50 dark:bg-emerald-500/10', textColor: 'text-emerald-600 dark:text-emerald-400', status: 'Active', statusStyle: 'bg-[#1CB368]/10 text-[#1CB368] border border-[#1CB368]/20', statusIcon: CheckCircle, description: 'Mental health journal app utilizing sentiment analysis to track mood trends and recommend mindfulness exercises.', progress: 90, barColor: 'bg-emerald-500', members: ['17', '18', '19'], extra: ''},
-  {name: 'Bolt Finance', tier: 'Tier 2', domain: 'FinTech', emoji: '⚡️', bg: 'bg-amber-50 dark:bg-amber-500/10', textColor: 'text-amber-600 dark:text-amber-400', status: 'Active', statusStyle: 'bg-[#1CB368]/10 text-[#1CB368] border border-[#1CB368]/20', statusIcon: CheckCircle, description: 'Micro-budgeting tool aiming to help college students automatically round up savings across multiple bank accounts.', progress: 55, barColor: 'bg-amber-500', members: ['20', '21', '22', '23'], extra: ''},
+  {name: 'Flora Health', tier: 'Tier 1', domain: 'HealthTech', emoji: '🌿', bg: 'bg-emerald-50 dark:bg-emerald-500/10', textColor: 'text-emerald-600 dark:text-emerald-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Mental health journal app utilizing sentiment analysis to track mood trends and recommend mindfulness exercises.', progress: 90, barColor: 'bg-emerald-500', members: ['17', '18', '19'], extra: ''},
+  {name: 'Bolt Finance', tier: 'Tier 2', domain: 'FinTech', emoji: '⚡️', bg: 'bg-amber-50 dark:bg-amber-500/10', textColor: 'text-amber-600 dark:text-amber-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Micro-budgeting tool aiming to help college students automatically round up savings across multiple bank accounts.', progress: 55, barColor: 'bg-amber-500', members: ['20', '21', '22', '23'], extra: ''},
   {name: 'Ocean Data', tier: 'Tier 3', domain: 'Data Vis', emoji: '🌊', bg: 'bg-cyan-50 dark:bg-cyan-500/10', textColor: 'text-cyan-600 dark:text-cyan-400', status: 'Forming', statusStyle: 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-white/10', statusIcon: Clock, description: 'Visualizing open-source marine data to track coral bleaching events and climate impact.', progress: 10, barColor: 'bg-cyan-500', members: ['24', '25'], extra: ''},
-  {name: 'Pixel Pirates', tier: 'Tier 2', domain: 'Gaming', emoji: '🎮', bg: 'bg-purple-50 dark:bg-purple-500/10', textColor: 'text-purple-600 dark:text-purple-400', status: 'Active', statusStyle: 'bg-[#1CB368]/10 text-[#1CB368] border border-[#1CB368]/20', statusIcon: CheckCircle, description: 'Browser-based multiplayer trivia game using web sockets and real-time question generation via LLM.', progress: 100, barColor: 'bg-purple-500', members: ['26', '27', '28'], extra: ''},
+  {name: 'Pixel Pirates', tier: 'Tier 2', domain: 'Gaming', emoji: '🎮', bg: 'bg-purple-50 dark:bg-purple-500/10', textColor: 'text-purple-600 dark:text-purple-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Browser-based multiplayer trivia game using web sockets and real-time question generation via LLM.', progress: 100, barColor: 'bg-purple-500', members: ['26', '27', '28'], extra: ''},
 ];
 
 /** Admin-Ansicht: Team-Verzeichnis mit Karten */
@@ -30,7 +32,7 @@ function AdminTeams() {
           <button className="px-4 py-2 bg-white dark:bg-[#1a1b24] border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             Sprints
           </button>
-          <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#1CB368] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#189958] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+          <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             <Plus className="w-4 h-4" /> New Team
           </button>
         </div>
@@ -97,121 +99,311 @@ function AdminTeams() {
   );
 }
 
-/** User-Ansicht: Team Space mit Aufgaben, Repo und Velocity */
-function UserTeams() {
+/** Mock-Daten fuer Team Space (Participant-Ansicht) */
+const MOCK_TEAM = {
+  name: 'Team Atlas',
+  voyage: 'Voyage 54',
+  domain: 'Full-stack product team',
+  status: 'active' as const,
+  members: [
+    {name: 'Olivia Chen', avatar: '32', role: 'Frontend', timezone: 'UTC-7', availability: 'Mon-Thu, 18:00-22:00', github: 'oliviachen', isYou: true},
+    {name: 'Daniel Martinez', avatar: '11', role: 'PM', timezone: 'UTC-6', availability: 'Weekdays, 17:00 - 20:00', github: 'dmartinez'},
+    {name: 'Emma Wilson', avatar: '5', role: 'Design', timezone: 'UTC-5', availability: 'Tue-Sat evenings', github: 'emmawilson'},
+    {name: 'Michael Davis', avatar: '7', role: 'Backend', timezone: 'UTC+1', availability: 'Weekends + evenings', github: 'michaeldavis'},
+    {name: 'Sophia Taylor', avatar: '9', role: 'Backend', timezone: 'UTC+0', availability: 'Mon-Fri, 18:00 - 22:00', github: 'sophiataylor'},
+    {name: 'James Liu', avatar: '14', role: 'Fullstack', timezone: 'UTC+8', availability: 'Sat-Sun mornings', github: 'jamesliu'},
+  ],
+  roleCoverage: [
+    {role: 'PM', name: 'Daniel Martinez', filled: true},
+    {role: 'Frontend', name: 'Olivia Chen', filled: true},
+    {role: 'Backend', name: 'Sophia Taylor', filled: true},
+    {role: 'Design', name: 'Emma Wilson', filled: true},
+    {role: 'Product', name: null, filled: false},
+  ],
+  avgTimezone: 'UTC-5',
+  sharedOverlap: '4.5h/day',
+  openRole: 'Product',
+  resources: [
+    {label: 'GitHub Repository', sublabel: 'team-atlas/product', icon: 'git'},
+    {label: 'Discord Channel', sublabel: '#team-atlas', icon: 'chat'},
+    {label: 'Project Board', sublabel: 'Linear project', icon: 'board'},
+    {label: 'Meeting Notes', sublabel: 'team-atlas-notes', icon: 'doc'},
+  ],
+};
+
+/**
+ * Verfuegbarkeits-Zeitleiste — zeigt die Verfuegbarkeit jedes Mitglieds
+ * als horizontale Balken auf einer 24h-Skala (UTC).
+ * Die gruene gestrichelte Zone markiert das gemeinsame Ueberlappungsfenster.
+ */
+function AvailabilityMap({members}: {members: typeof MOCK_TEAM.members}) {
+  const ticks = [0, 3, 6, 9, 12, 15, 18, 21, 24];
+  const dotColors = ['#6366f1', '#d946ef', '#86efac', '#38bdf8', '#f97316', '#60a5fa'];
+  const ROW_H = 28; // px pro Zeile
+
+  // Verfuegbarkeit in UTC (startHour, endHour) pro Mitglied
+  const availability: Array<{start: number; end: number}> = [
+    {start: 11, end: 22}, // Olivia Chen — UTC-7
+    {start: 11, end: 23}, // Daniel Martinez — UTC-6
+    {start: 12, end: 22}, // Emma Wilson — UTC-5
+    {start: 17, end: 22}, // Michael Davis — UTC+1
+    {start: 18, end: 24}, // Sophia Taylor — UTC+0
+    {start: 18, end: 22}, // James Liu — UTC+8
+  ];
+
+  const overlapStart = Math.max(...availability.map((a) => a.start));
+  const overlapEnd = Math.min(...availability.map((a) => a.end));
+  const pct = (h: number) => `${(h / 24) * 100}%`;
+
   return (
-    <div className="space-y-6">
-      {/* Kopf */}
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white tracking-tight">Pixel Pioneers</h1>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1CB368]/10 text-[#1CB368] text-xs font-semibold border border-[#1CB368]/20">
-              <CheckCircle className="w-3 h-3" /> Active
+    <div className="bg-white dark:bg-[#1a1b24] rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-6">
+      <h3 className="text-sm font-semibold text-slate-800 dark:text-white mb-5 flex items-center gap-2">
+        Availability Map
+        <Info className="w-3.5 h-3.5 text-slate-400" />
+      </h3>
+
+      <div className="overflow-x-auto">
+        <div className="min-w-[580px]">
+          {/* Stunden-Header */}
+          <div className="flex mb-2">
+            <div className="w-[160px] shrink-0" />
+            <div className="flex-1 relative h-5">
+              {ticks.map((h) => (
+                <span key={h} className="absolute text-[10px] text-slate-400 dark:text-slate-500 font-mono" style={{left: pct(h), transform: 'translateX(-50%)'}}>
+                  {String(h).padStart(2, '0')}:00
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Balkenbereich mit Ueberlappungs-Zone */}
+          <div className="relative">
+            {members.map((m, i) => {
+              const a = availability[i] ?? {start: 12, end: 20};
+              const color = dotColors[i % dotColors.length];
+
+              return (
+                <div key={i} className="flex items-center" style={{height: ROW_H}}>
+                  <div className="w-[160px] shrink-0 flex items-center gap-2 pr-3">
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{backgroundColor: color}} />
+                    <span className="text-xs text-slate-700 dark:text-slate-200 truncate">{m.name}</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0 ml-auto">{m.timezone}</span>
+                  </div>
+                  <div className="flex-1 relative" style={{height: ROW_H}}>
+                    {ticks.map((h) => (
+                      <div key={h} className="absolute top-0 bottom-0 border-l border-slate-100 dark:border-white/5" style={{left: pct(h)}} />
+                    ))}
+                    <div className="absolute rounded-sm" style={{left: pct(a.start), width: pct(a.end - a.start), top: 4, bottom: 4, backgroundColor: color, opacity: 0.85}} />
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Shared-Overlap-Zone (absolute, ueberlagert alle Zeilen) */}
+            <div
+              className="absolute border-2 border-dashed border-[#77CF97]/40 bg-[#77CF97]/[0.04] rounded pointer-events-none z-10"
+              style={{
+                left: `calc(160px + ${(overlapStart / 24)} * (100% - 160px))`,
+                width: `calc(${(overlapEnd - overlapStart) / 24} * (100% - 160px))`,
+                top: 0,
+                height: members.length * ROW_H,
+              }}
+            />
+          </div>
+
+          {/* Legende */}
+          <div className="flex items-center gap-2 mt-4 ml-[160px]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#77CF97]" />
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Best shared overlap: {String(overlapStart).padStart(2, '0')}:00 – {String(overlapEnd).padStart(2, '0')}:30 UTC
             </span>
           </div>
-          <p className="text-slate-500 dark:text-slate-400 text-sm">Tier 2 • E-Commerce tooling</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex -space-x-3 mr-4">
-            {['11', '12', '13', '14'].map((id, i) => (
-              <img key={i} src={`https://i.pravatar.cc/100?img=${id}`} className="w-10 h-10 rounded-full border-2 border-[#f8f9fc] dark:border-[#0f0f0f] hover:z-10 transition-transform hover:scale-110 cursor-pointer shadow-sm" alt="team member" />
-            ))}
-          </div>
-          <button className="px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
-            <MessageSquare className="w-4 h-4" /> Team Chat
-          </button>
         </div>
       </div>
+    </div>
+  );
+}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-        {/* Hauptinhalt */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white dark:bg-[#1a1b24] p-6 rounded-[24px] border border-slate-200 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Sprint 3 Goal</h3>
-            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/5">
-              Integrate Stripe payment forms and finalize the responsive cart states. All end-to-end tests for checkout must be passing.
-            </p>
+/** Participant Team Space — nur eigene Team-Ansicht */
+function UserTeams() {
+  const t = MOCK_TEAM;
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        {/* Linke Spalte — Hauptinhalt */}
+        <div className="xl:col-span-9 space-y-6">
+          {/* Kopf — Gradient */}
+          <div className="rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-6 bg-gradient-to-r from-teal-50 via-sky-50 to-indigo-50 dark:from-teal-500/10 dark:via-sky-500/10 dark:to-indigo-500/10">
+            <div className="flex flex-col lg:flex-row items-start gap-5">
+              {/* Linke Seite: Icon + Info */}
+              <div className="flex items-start gap-4 flex-1 min-w-0">
+                {/* Team-Icon */}
+                <div className="w-16 h-16 rounded-full bg-white dark:bg-white/10 shadow-sm flex items-center justify-center text-2xl shrink-0 border border-white/60 dark:border-white/10">
+                  🏔️
+                </div>
+
+                {/* Info */}
+                <div className="min-w-0">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <h1 className="text-xl font-bold text-slate-900 dark:text-white">{t.name}</h1>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#77CF97]/10 text-[#77CF97] text-xs font-semibold border border-[#77CF97]/20">
+                      <CheckCircle className="w-3 h-3" /> Active
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{t.voyage} • {t.domain}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-2.5">You are viewing this team as a participant. Only admins can make changes.</p>
+                </div>
+              </div>
+
+              {/* Rechte Seite: Avatare */}
+              <div className="flex flex-col items-end gap-3 shrink-0 w-full lg:w-auto">
+                <div className="flex -space-x-2">
+                  {t.members.slice(0, 5).map((m, i) => (
+                    <img key={i} src={`https://i.pravatar.cc/100?img=${m.avatar}`} className="w-9 h-9 rounded-full border-2 border-white dark:border-[#1a1b24]" alt={m.name} title={m.name} />
+                  ))}
+                  {t.members.length > 5 && (
+                    <div className="w-9 h-9 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 text-[10px] font-medium flex items-center justify-center">
+                      +{t.members.length - 5}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Stat-Badges — ganz unten im Block */}
+            <div className="flex flex-wrap items-center gap-3 bg-white/70 dark:bg-white/5 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white dark:border-white/10 mt-5">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                <Users className="w-3.5 h-3.5 text-slate-400" />
+                <span className="font-bold">{t.members.length}</span>
+                <span className="text-slate-400 dark:text-slate-500">Members</span>
+              </span>
+              <span className="w-px h-4 bg-slate-200 dark:bg-white/10" />
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                <span className="font-bold">{t.avgTimezone}</span>
+                <span className="text-slate-400 dark:text-slate-500">Avg Timezone</span>
+              </span>
+              <span className="w-px h-4 bg-slate-200 dark:bg-white/10" />
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                <Users className="w-3.5 h-3.5 text-slate-400" />
+                <span className="font-bold">{t.sharedOverlap}</span>
+                <span className="text-slate-400 dark:text-slate-500">Shared Overlap</span>
+              </span>
+            </div>
           </div>
 
-          <div className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-200 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] flex flex-col">
-            <div className="p-6 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
-              <h3 className="font-semibold text-slate-800 dark:text-white">My Tasks</h3>
-              <button className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors">View All</button>
-            </div>
-            <div className="p-2 space-y-1">
-              <div className="p-4 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl flex items-start gap-4 transition-colors group cursor-pointer">
-                <button className="w-5 h-5 rounded-md border border-slate-300 dark:border-white/20 mt-0.5 group-hover:border-indigo-400 transition-colors flex items-center justify-center"></button>
-                <div>
-                  <div className="text-sm font-medium text-slate-900 dark:text-white leading-tight">Design empty cart state</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex gap-2">
-                    <span className="text-orange-500 font-medium">Medium</span> • <span>Due Today</span>
+          {/* Mitglieder */}
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {t.members.map((m, i) => (
+                <div key={i} className="bg-white dark:bg-[#1a1b24] rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-5 hover:shadow-md dark:hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-3 mb-3">
+                    <img src={`https://i.pravatar.cc/100?img=${m.avatar}`} className="w-12 h-12 rounded-full bg-slate-100 dark:bg-white/10" alt={m.name} />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-sm font-semibold text-slate-900 dark:text-white truncate">{m.name}</h3>
+                        {m.isYou && (
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400">You</span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="p-4 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl flex items-start gap-4 transition-colors group cursor-pointer">
-                <button className="w-5 h-5 rounded-md border border-slate-300 dark:border-white/20 mt-0.5 group-hover:border-indigo-400 transition-colors flex items-center justify-center"></button>
-                <div>
-                  <div className="text-sm font-medium text-slate-900 dark:text-white leading-tight">Implement Stripe Elements hook</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex gap-2">
-                    <span className="text-rose-500 font-medium">High</span> • <span>Due Tomorrow</span>
+                  <div className="space-y-1.5 mb-3">
+                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                      <Clock className="w-3 h-3 shrink-0" />
+                      {m.timezone}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                      <Users className="w-3 h-3 shrink-0" />
+                      {m.availability}
+                    </div>
+                    <a href={`https://github.com/${m.github}`} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+                      <ExternalLink className="w-3 h-3 shrink-0" />
+                      github.com/{m.github}
+                    </a>
                   </div>
+                  <Link href="/profile" className="block w-full text-center py-2 border border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                    View Profile →
+                  </Link>
                 </div>
-              </div>
-              <div className="p-4 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl flex items-start gap-4 transition-colors">
-                <button className="w-5 h-5 rounded-md border text-white bg-[#1CB368] border-[#1CB368] mt-0.5 flex items-center justify-center">
-                  <Check className="w-3 h-3" />
-                </button>
-                <div>
-                  <div className="text-sm font-medium text-slate-500 dark:text-slate-400 line-through leading-tight">Configure Next.js API route for payments</div>
-                  <div className="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium flex gap-1 items-center">
-                    <CheckCircle className="w-3 h-3" /> Completed Oct 23
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
+
+          {/* Availability Map */}
+          <AvailabilityMap members={t.members} />
         </div>
 
-        {/* Seitenleiste */}
-        <div className="space-y-6">
-          {/* Repo-Info */}
-          <div className="bg-[#0b0c10] p-6 rounded-[24px] border border-[#1a1b24] shadow-xl text-white">
-            <h3 className="font-semibold text-slate-200 mb-4 flex items-center gap-2">
-              <Database className="w-4 h-4 text-slate-400" /> Repository
-            </h3>
-            <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-xl p-3 mb-4">
-              <div className="flex gap-2 items-center min-w-0">
-                <Monitor className="w-4 h-4 text-slate-400 shrink-0" />
-                <span className="text-sm text-slate-300 truncate font-mono">nexus/pixel-pioneers</span>
+        {/* Rechte Spalte — Sidebar */}
+        <div className="xl:col-span-3 space-y-6">
+          {/* Role Coverage */}
+          <div className="bg-white dark:bg-[#1a1b24] rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-sm font-semibold text-slate-800 dark:text-white flex items-center gap-2">
+                Role Coverage
+                <Info className="w-3.5 h-3.5 text-slate-400" />
+              </h3>
+              {/* Circular progress ring */}
+              <div className="relative w-12 h-12">
+                <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                  <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" strokeWidth="3" className="text-slate-100 dark:text-white/10" />
+                  <circle cx="24" cy="24" r="20" fill="none" stroke="#77CF97" strokeWidth="3" strokeLinecap="round" strokeDasharray={`${0.8 * 2 * Math.PI * 20} ${2 * Math.PI * 20}`} />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-slate-800 dark:text-white">80%</span>
               </div>
-              <button className="text-slate-400 hover:text-white transition-colors shrink-0">
-                <Copy className="w-4 h-4" />
-              </button>
             </div>
-            <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-400 flex items-center gap-1.5"><History className="w-3.5 h-3.5" /> main branch</span>
-              <span className="text-[#1CB368] font-medium flex items-center gap-1"><CheckCircle className="w-3 h-3" /> passing</span>
+            <div className="space-y-4">
+              {t.roleCoverage.map((rc, i) => {
+                const roleStyles: Record<string, {bg: string; text: string; icon: React.ReactNode}> = {
+                  PM: {bg: 'bg-purple-100 dark:bg-purple-500/15', text: 'text-purple-600 dark:text-purple-400', icon: <Users className="w-4 h-4" />},
+                  Frontend: {bg: 'bg-emerald-100 dark:bg-emerald-500/15', text: 'text-emerald-600 dark:text-emerald-400', icon: <Monitor className="w-4 h-4" />},
+                  Backend: {bg: 'bg-amber-100 dark:bg-amber-500/15', text: 'text-amber-600 dark:text-amber-400', icon: <Database className="w-4 h-4" />},
+                  Design: {bg: 'bg-blue-100 dark:bg-blue-500/15', text: 'text-blue-600 dark:text-blue-400', icon: <FileText className="w-4 h-4" />},
+                  Product: {bg: 'bg-rose-100 dark:bg-rose-500/15', text: 'text-rose-600 dark:text-rose-400', icon: <Users className="w-4 h-4" />},
+                };
+                const s = roleStyles[rc.role] ?? roleStyles.PM;
+
+                return (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className={`w-9 h-9 rounded-xl ${s.bg} ${s.text} flex items-center justify-center shrink-0`}>
+                      {s.icon}
+                    </div>
+                    <span className="text-sm font-semibold text-slate-900 dark:text-white w-[72px] shrink-0">{rc.role}</span>
+                    <span className={`text-sm flex-1 ${rc.filled ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500 italic'}`}>
+                      {rc.name ?? 'Vacant'}
+                    </span>
+                    {rc.filled ? (
+                      <CheckCircle className="w-5 h-5 text-[#77CF97] shrink-0" />
+                    ) : (
+                      <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* Velocity */}
-          <div className="bg-white dark:bg-[#1a1b24] p-6 rounded-[24px] border border-slate-200 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
-            <h3 className="font-semibold text-slate-800 dark:text-white mb-5">Sprint Velocity</h3>
-            <div className="space-y-4">
-              {[
-                {label: 'To Do', pts: '12 pts', width: '40%', color: 'bg-slate-400'},
-                {label: 'In Progress', pts: '8 pts', width: '60%', color: 'bg-blue-400'},
-                {label: 'Done', pts: '24 pts', width: '100%', color: 'bg-[#1CB368]'},
-              ].map((item, i) => (
-                <div key={i}>
-                  <div className="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">
-                    <span>{item.label}</span>
-                    <span>{item.pts}</span>
+          {/* Team Resources */}
+          <div className="bg-white dark:bg-[#1a1b24] rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-6">
+            <h3 className="text-sm font-semibold text-slate-800 dark:text-white mb-4">Team Resources</h3>
+            <div className="space-y-3">
+              {t.resources.map((r, i) => (
+                <div key={i} className="flex items-center justify-between group cursor-pointer">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center shrink-0">
+                      {r.icon === 'git' && <Database className="w-4 h-4 text-slate-500 dark:text-slate-400" />}
+                      {r.icon === 'chat' && <MessageSquare className="w-4 h-4 text-slate-500 dark:text-slate-400" />}
+                      {r.icon === 'board' && <Monitor className="w-4 h-4 text-slate-500 dark:text-slate-400" />}
+                      {r.icon === 'doc' && <FileText className="w-4 h-4 text-slate-500 dark:text-slate-400" />}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-medium text-slate-800 dark:text-white">{r.label}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate">{r.sublabel}</div>
+                    </div>
                   </div>
-                  <div className="w-full h-2 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
-                    <div className={`h-full ${item.color}`} style={{width: item.width}}></div>
-                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors shrink-0" />
                 </div>
               ))}
             </div>

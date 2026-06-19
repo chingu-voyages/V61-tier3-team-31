@@ -6,8 +6,8 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-outfit: var(--font-outfit), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  --color-nexus-green: #1CB368;
-  --color-nexus-green-dark: #189958;
+  --color-nexus-green: #77CF97;
+  --color-nexus-green-dark: #5ab87e;
   --color-nexus-dark: #0b0c10;
   --color-nexus-sidebar: #13151a;
   --color-nexus-page: #f8f9fc;
@@ -25,4 +25,21 @@ html {
 .dark {
   --background: #0a0a0a;
   --foreground: #ededed;
+}
+
+/* Emoji-Mahnen-Animation — einmal nach Render */
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  15% { transform: rotate(16deg); }
+  30% { transform: rotate(-10deg); }
+  45% { transform: rotate(12deg); }
+  60% { transform: rotate(-4deg); }
+  75% { transform: rotate(6deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-wave {
+  display: inline-block;
+  animation: wave 0.8s ease-in-out 1;
+  transform-origin: 70% 70%;
 }

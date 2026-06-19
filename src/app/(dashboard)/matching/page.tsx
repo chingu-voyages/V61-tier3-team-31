@@ -27,7 +27,7 @@ export default function MatchingPage() {
           <button className="px-4 py-2 bg-white dark:bg-[#1a1b24] border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             <Settings className="w-4 h-4" /> Matching Rules
           </button>
-          <button className="px-4 py-2 bg-[#1CB368] text-white rounded-xl text-sm font-medium hover:bg-[#189958] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+          <button className="px-4 py-2 bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             <Network className="w-4 h-4" /> Auto-Match All
           </button>
         </div>
@@ -39,7 +39,7 @@ export default function MatchingPage() {
           {icon: <Users />, bg: 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300', value: '72', label: 'Unassigned'},
           {icon: <Network />, bg: 'bg-blue-50 dark:bg-blue-500/10 text-blue-500 dark:text-blue-400', value: '34', label: 'Partial Matches'},
           {icon: <Users />, bg: 'bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400', value: '18', label: 'Drafted Teams'},
-          {icon: <CheckCircle />, bg: 'bg-[#1CB368]/10 text-[#1CB368]', value: '56', label: 'Matched'},
+          {icon: <CheckCircle />, bg: 'bg-[#77CF97]/10 text-[#77CF97]', value: '56', label: 'Matched'},
         ].map((s, i) => (
           <div key={i} className="bg-white dark:bg-[#1a1b24] p-4 rounded-[20px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] flex items-center gap-4">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${s.bg}`}>{s.icon}</div>
@@ -129,7 +129,7 @@ export default function MatchingPage() {
                 ))}
               </div>
               <div className="mt-4 pt-3 flex items-center justify-between border-t border-slate-100 dark:border-white/10">
-                <div className="flex items-center gap-1.5 text-xs font-medium text-[#1CB368]">
+                <div className="flex items-center gap-1.5 text-xs font-medium text-[#77CF97]">
                   <CheckCircle className="w-3.5 h-3.5" /> Team Complete
                 </div>
                 <button className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Confirm Team</button>
@@ -209,7 +209,7 @@ export default function MatchingPage() {
                 ))}
               </div>
               <div className="mt-4 pt-3 flex items-center justify-between border-t border-slate-100 dark:border-white/10">
-                <div className="flex items-center gap-1.5 text-xs font-medium text-[#1CB368]">
+                <div className="flex items-center gap-1.5 text-xs font-medium text-[#77CF97]">
                   <CheckCircle className="w-3.5 h-3.5" /> Team Complete
                 </div>
                 <button className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Confirm Team</button>
