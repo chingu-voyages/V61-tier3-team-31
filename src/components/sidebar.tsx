@@ -11,6 +11,12 @@ import {useDashboard} from '@/lib/auth-context';
 import {useRouter} from 'next/navigation';
 import {useState} from 'react';
 import type {DashboardView} from '@/types';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 /** Navigations-Item in der Sidebar */
 function NavItem({
@@ -46,12 +52,10 @@ function NavItem({
 export function Sidebar() {
   const {role, currentView, setCurrentView, isSidebarExpanded, setIsSidebarExpanded, setIsAuthenticated} = useDashboard();
   const router = useRouter();
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    setIsProfileMenuOpen(false);
     router.push('/login');
   };
 
@@ -114,13 +118,13 @@ export function Sidebar() {
         )}
       </div>
 
-      <div className="p-4 mt-auto">
+      <div className="p-4 mt-auto space-y-3">
         {/* Voyage-Karte */}
         {isSidebarExpanded && (
-          <div className="bg-[#13151a] rounded-xl border border-white/5 mb-4 shadow-xl whitespace-nowrap overflow-hidden transition-all duration-300">
+          <div className="bg-[#13151a] rounded-xl border border-white/5 shadow-xl whitespace-nowrap overflow-hidden transition-all duration-300">
             <button
               onClick={() => setIsVoyageExpanded(!isVoyageExpanded)}
-              className="w-full flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-colors"
+              className="w-full flex items-center justify-between p-4 cursor-pointer transition-colors"
             >
               <div className="flex flex-col items-start gap-1">
                 <div className="flex items-center gap-2">
@@ -148,54 +152,60 @@ export function Sidebar() {
         )}
 
         {!isSidebarExpanded && (
-          <div className="flex justify-center mb-6" title="Voyage 51">
+          <div className="flex justify-center" title="Voyage 51">
             <div className="w-8 h-8 rounded-full border border-white/10 bg-[#13151a] flex items-center justify-center">
               <Target className="w-4 h-4 text-[#1CB368]" />
             </div>
           </div>
         )}
 
-        {/* Benutzerprofil */}
-        <div className="relative">
-          <div
-            onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-            className={`flex items-center ${isSidebarExpanded ? 'gap-3 px-2 py-1' : 'justify-center p-1'} cursor-pointer hover:bg-white/5 rounded-xl transition-colors`}
-          >
-            <img
-              src={role === 'admin' ? 'https://i.pravatar.cc/100?img=5' : role === 'applicant' ? 'https://i.pravatar.cc/100?img=32' : 'https://i.pravatar.cc/100?img=11'}
-              className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 shrink-0"
-              alt="profile"
-              title={role === 'admin' ? 'Jane Cooper' : role === 'applicant' ? 'David Rust' : 'Mark Logic'}
-            />
-            {isSidebarExpanded && (
-              <div className="flex-1 overflow-hidden">
-                <div className="text-sm font-medium text-white truncate">{role === 'admin' ? 'Jane Cooper' : role === 'applicant' ? 'David Rust' : 'Mark Logic'}</div>
-                <div className="text-xs text-slate-500 capitalize">{role}</div>
-              </div>
-            )}
-            {isSidebarExpanded && (
-              <div className="flex items-center gap-1 shrink-0">
-                <button
-                  onClick={(e) => { e.stopPropagation(); navigate('settings'); }}
-                  title="Settings"
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-white/10 transition-colors cursor-pointer"
-                >
-                  <Settings className="w-3.5 h-3.5" />
-                </button>
-                <ThemeToggle />
-              </div>
-            )}
-          </div>
+        {/* Benutzerprofil + Aktionen — auf gleicher Ebene */}
+        <div className={`flex items-center ${isSidebarExpanded ? 'justify-between' : 'justify-center'} gap-2`}>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={`flex items-center ${isSidebarExpanded ? 'gap-3 px-2 py-1' : 'p-1'} cursor-pointer rounded-xl transition-colors min-w-0 flex-1 outline-none`}
+            >
+              <img
+                src={role === 'admin' ? 'https://i.pravatar.cc/100?img=5' : role === 'applicant' ? 'https://i.pravatar.cc/100?img=32' : 'https://i.pravatar.cc/100?img=11'}
+                className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 shrink-0"
+                alt="profile"
+                title={role === 'admin' ? 'Jane Cooper' : role === 'applicant' ? 'David Rust' : 'Mark Logic'}
+              />
+              {isSidebarExpanded && (
+                <div className="flex-1 overflow-hidden text-left">
+                  <div className="text-sm font-medium text-white truncate">{role === 'admin' ? 'Jane Cooper' : role === 'applicant' ? 'David Rust' : 'Mark Logic'}</div>
+                  <div className="text-xs text-slate-500 capitalize">{role}</div>
+                </div>
+              )}
+            </DropdownMenuTrigger>
 
-          {isProfileMenuOpen && (
-            <div className={`absolute bottom-full mb-2 bg-[#1a1b24] border border-white/10 rounded-xl shadow-xl overflow-hidden py-1 z-50 ${isSidebarExpanded ? 'left-0 w-full' : 'left-full ml-4 w-48'}`}>
-              <button
+            <DropdownMenuContent
+              side={isSidebarExpanded ? "top" : "right"}
+              align="start"
+              sideOffset={8}
+              className="min-w-[180px] bg-[#1a1b24] border border-white/10 text-slate-200 p-1 shadow-xl"
+            >
+              <DropdownMenuItem
                 onClick={handleLogout}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-rose-400 hover:bg-white/5 transition-colors cursor-pointer text-left"
+                className="text-rose-400 focus:text-rose-300 focus:bg-white/5 cursor-pointer rounded-lg px-2 py-2 text-sm"
               >
                 <LogOut className="w-4 h-4" />
                 Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Knopfleiste — auf gleicher Ebene neben Profil */}
+          {isSidebarExpanded && (
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                onClick={(e) => { e.stopPropagation(); navigate('settings'); }}
+                title="Settings"
+                className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <Settings className="w-3.5 h-3.5" />
               </button>
+              <ThemeToggle />
             </div>
           )}
         </div>
