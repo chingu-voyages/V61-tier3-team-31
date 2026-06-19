@@ -22,9 +22,9 @@ const settingsTabs: {id: SettingsTab; label: string; icon: React.ReactNode}[] = 
 /** Placeholder fuer unvollstaendige Settings-Tabs */
 function SettingsPlaceholder({icon, title, description}: {icon: React.ReactNode; title: string; description: string}) {
   return (
-    <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm overflow-hidden p-12 text-center text-slate-500">
-      <div className="w-8 h-8 mx-auto mb-3 text-slate-300">{icon}</div>
-      <h3 className="text-lg font-bold text-slate-800 mb-1">{title}</h3>
+    <div className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden p-12 text-center text-slate-500 dark:text-slate-400">
+      <div className="w-8 h-8 mx-auto mb-3 text-slate-300 dark:text-slate-600">{icon}</div>
+      <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{title}</h3>
       <p className="text-sm">{description}</p>
     </div>
   );
@@ -42,11 +42,11 @@ export default function SettingsPage() {
       {/* Seitenkopf */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-[28px] font-outfit font-medium text-slate-900 mb-1 tracking-tight">Settings Workspace</h1>
-          <p className="text-slate-500 text-sm">Manage organization preferences, integrations, and access control.</p>
+          <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Settings Workspace</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">Manage organization preferences, integrations, and access control.</p>
         </div>
         <div className="flex gap-3">
-          <button className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm cursor-pointer">
+          <button className="px-4 py-2 bg-white dark:bg-[#1a1b24] border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-sm cursor-pointer">
             Discard Changes
           </button>
           <button className="px-4 py-2 bg-[#1CB368] text-white rounded-xl text-sm font-medium hover:bg-[#189958] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
@@ -63,7 +63,7 @@ export default function SettingsPage() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-colors text-left ${
-                activeTab === tab.id ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                activeTab === tab.id ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10'
               }`}
             >
               {tab.icon} {tab.label}
@@ -76,82 +76,82 @@ export default function SettingsPage() {
           {activeTab === 'general' && (
             <>
               {/* Organisationsprofil */}
-              <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-slate-100 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center">
+              <div className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-slate-100 dark:border-white/10 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center">
                     <Search className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-slate-900">Organization Profile</h2>
-                    <p className="text-sm text-slate-500">Update your company photo and details here.</p>
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white">Organization Profile</h2>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Update your company photo and details here.</p>
                   </div>
                 </div>
                 <div className="p-6 space-y-6">
                   <div className="flex items-center gap-6">
-                    <div className="w-20 h-20 rounded-2xl bg-[#0b0c10] flex items-center justify-center shrink-0 border-2 border-slate-100">
+                    <div className="w-20 h-20 rounded-2xl bg-[#0b0c10] flex items-center justify-center shrink-0 border-2 border-slate-100 dark:border-white/10">
                       <NexusLogo className="w-10 h-10" />
                     </div>
                     <div className="space-y-1">
                       <div className="flex gap-2">
-                        <button className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50">Upload New</button>
-                        <button className="px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 rounded-lg">Delete</button>
+                        <button className="px-4 py-2 border border-slate-200 dark:border-white/10 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5">Upload New</button>
+                        <button className="px-4 py-2 text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg">Delete</button>
                       </div>
-                      <div className="text-xs text-slate-400">SVG, PNG, JPG or GIF (max. 800x400px)</div>
+                      <div className="text-xs text-slate-400 dark:text-slate-500">SVG, PNG, JPG or GIF (max. 800x400px)</div>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700">Organization Name</label>
-                      <input type="text" defaultValue="Nexus Ops" className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-shadow" />
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Organization Name</label>
+                      <input type="text" defaultValue="Nexus Ops" className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg py-2.5 px-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-shadow" />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700">Support Email</label>
-                      <input type="email" defaultValue="support@nexus.io" className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-shadow" />
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Support Email</label>
+                      <input type="email" defaultValue="support@nexus.io" className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg py-2.5 px-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-shadow" />
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Systemeinstellungen */}
-              <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-slate-100 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center">
+              <div className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-slate-100 dark:border-white/10 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-500/20 flex items-center justify-center">
                     <Sliders className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-slate-900">System Preferences</h2>
-                    <p className="text-sm text-slate-500">Configure global settings and defaults.</p>
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white">System Preferences</h2>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">Configure global settings and defaults.</p>
                   </div>
                 </div>
                 <div className="p-6 space-y-6">
-                  <div className="flex items-center justify-between pb-6 border-b border-slate-100">
+                  <div className="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-white/10">
                     <div>
-                      <div className="text-sm font-semibold text-slate-900">Default Match Threshold</div>
-                      <div className="text-xs text-slate-500 mt-1">Minimum score required for auto-matching candidates to teams.</div>
+                      <div className="text-sm font-semibold text-slate-900 dark:text-white">Default Match Threshold</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Minimum score required for auto-matching candidates to teams.</div>
                     </div>
                     <div className="flex items-center gap-3">
                       <input type="range" min="50" max="100" defaultValue="85" className="w-32 accent-[#1CB368]" />
-                      <span className="text-sm font-bold text-slate-700 w-10 text-right">85%</span>
+                      <span className="text-sm font-bold text-slate-700 dark:text-slate-300 w-10 text-right">85%</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between pb-6 border-b border-slate-100">
+                  <div className="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-white/10">
                     <div>
-                      <div className="text-sm font-semibold text-slate-900">Automated Onboarding Emails</div>
-                      <div className="text-xs text-slate-500 mt-1">Send welcome workflow automatically upon candidate acceptance.</div>
+                      <div className="text-sm font-semibold text-slate-900 dark:text-white">Automated Onboarding Emails</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Send welcome workflow automatically upon candidate acceptance.</div>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input type="checkbox" className="sr-only peer" defaultChecked />
-                      <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1CB368]"></div>
+                      <div className="w-11 h-6 bg-slate-200 dark:bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1CB368]"></div>
                     </label>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-semibold text-slate-900">Require 2FA for Admins</div>
-                      <div className="text-xs text-slate-500 mt-1">Enforce two-factor authentication for all Workspace Owners.</div>
+                      <div className="text-sm font-semibold text-slate-900 dark:text-white">Require 2FA for Admins</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Enforce two-factor authentication for all Workspace Owners.</div>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input type="checkbox" className="sr-only peer" defaultChecked />
-                      <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                      <div className="w-11 h-6 bg-slate-200 dark:bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                     </label>
                   </div>
                 </div>

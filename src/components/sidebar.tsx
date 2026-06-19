@@ -6,6 +6,7 @@ import {
   Target, LogOut, UsersRound, FileCheck, ClipboardList,
 } from 'lucide-react';
 import {NexusLogo} from '@/components/nexus-logo';
+import {ThemeToggle} from '@/components/theme-toggle';
 import {useDashboard} from '@/lib/auth-context';
 import {useRouter} from 'next/navigation';
 import {useState} from 'react';
@@ -64,7 +65,7 @@ export function Sidebar() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-        className="absolute -right-3.5 top-[28px] w-7 h-7 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm z-10 cursor-pointer"
+        className="absolute -right-3.5 top-[28px] w-7 h-7 bg-white dark:bg-[#1a1b24] border border-slate-200 dark:border-white/10 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 shadow-sm z-10 cursor-pointer transition-colors"
       >
         {isSidebarExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
       </button>
@@ -173,7 +174,16 @@ export function Sidebar() {
               </div>
             )}
             {isSidebarExpanded && (
-              <ChevronDown className={`w-4 h-4 shrink-0 text-slate-500 transition-transform ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigate('settings'); }}
+                  title="Settings"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-white/10 transition-colors cursor-pointer"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                </button>
+                <ThemeToggle />
+              </div>
             )}
           </div>
 

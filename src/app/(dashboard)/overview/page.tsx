@@ -30,9 +30,9 @@ function MetricBlock({icon, color, value, label, subtext}: {
         <span className={`w-4 h-4 ${color.text}`}>{icon}</span>
       </div>
       <div className="min-w-0">
-        <div className="font-outfit text-xl font-bold text-slate-800 leading-none">{value}</div>
-        <div className="text-[11px] font-semibold text-slate-600 leading-tight truncate">{label}</div>
-        <div className="text-[10px] text-slate-400 font-medium mt-0.5">{subtext}</div>
+        <div className="font-outfit text-xl font-bold text-slate-800 dark:text-white leading-none">{value}</div>
+        <div className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 leading-tight truncate">{label}</div>
+        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5">{subtext}</div>
       </div>
     </div>
   );
@@ -40,9 +40,9 @@ function MetricBlock({icon, color, value, label, subtext}: {
 
 /** Deadlinedaten fuer Admin-Uebersicht */
 const deadlines = [
-  {title: 'Review applications', date: 'May 2, 2026', badge: '3 days', badgeColor: 'bg-rose-50 text-rose-500'},
-  {title: 'Confirm teams', date: 'May 9, 2026', badge: '10 days', badgeColor: 'bg-amber-50 text-amber-600'},
-  {title: 'Onboarding check', date: 'May 16, 2026', badge: '17 days', badgeColor: 'bg-blue-50 text-blue-500'},
+  {title: 'Review applications', date: 'May 2, 2026', badge: '3 days', badgeColor: 'bg-rose-50 dark:bg-rose-500/10 text-rose-500'},
+  {title: 'Confirm teams', date: 'May 9, 2026', badge: '10 days', badgeColor: 'bg-amber-50 dark:bg-amber-500/10 text-amber-600'},
+  {title: 'Onboarding check', date: 'May 16, 2026', badge: '17 days', badgeColor: 'bg-blue-50 dark:bg-blue-500/10 text-blue-500'},
   {title: 'Voyage starts', date: 'May 23, 2026', badge: '24 days', badgeColor: 'bg-[#1CB368]/10 text-[#1CB368]'},
 ];
 
@@ -53,7 +53,7 @@ const pipelineSteps = [
     title: 'Applications', subtitle: 'Collect & review applications',
     total: '312 TOTAL', progressWidth: '100%',
     stats: [
-      {label: 'Pending Review', value: '64', color: 'text-slate-800'},
+      {label: 'Pending Review', value: '64', color: 'text-slate-800 dark:text-white'},
       {label: 'Accepted', value: '128', color: 'text-[#1CB368]'},
       {label: 'Rejected', value: '28', color: 'text-rose-500'},
       {label: 'Incomplete', value: '92', color: 'text-[#1CB368]'},
@@ -64,7 +64,7 @@ const pipelineSteps = [
     title: 'Matching', subtitle: 'Match & assign participants',
     total: '72 REMAINING', progressWidth: '40%',
     stats: [
-      {label: 'Unassigned', value: '72', color: 'text-slate-800'},
+      {label: 'Unassigned', value: '72', color: 'text-slate-800 dark:text-white'},
       {label: 'Partial Matches', value: '34', color: 'text-blue-500'},
       {label: 'Matched', value: '56', color: 'text-purple-600'},
     ],
@@ -93,18 +93,18 @@ const pipelineSteps = [
 
 /** Aufmerksamkeits-Eintraege fuer Admin */
 const attentionItems = [
-  {icon: <FileSearch />, color: {bg: 'bg-rose-50', text: 'text-rose-500'}, title: 'Applications older than 7 days', desc: 'Need review', value: '24'},
-  {icon: <AlertTriangle />, color: {bg: 'bg-orange-50', text: 'text-orange-500'}, title: 'Accepted participants without team', desc: 'Require assignment', value: '16'},
-  {icon: <UsersRound />, color: {bg: 'bg-purple-50', text: 'text-purple-500'}, title: 'Teams missing required role', desc: 'Missing Product Owner or Developer', value: '8'},
-  {icon: <FileSignature />, color: {bg: 'bg-blue-50', text: 'text-blue-500'}, title: 'Onboarding forms incomplete', desc: 'Participants need to complete', value: '12'},
+  {icon: <FileSearch />, color: {bg: 'bg-rose-50 dark:bg-rose-500/10', text: 'text-rose-500'}, title: 'Applications older than 7 days', desc: 'Need review', value: '24'},
+  {icon: <AlertTriangle />, color: {bg: 'bg-orange-50 dark:bg-orange-500/10', text: 'text-orange-500'}, title: 'Accepted participants without team', desc: 'Require assignment', value: '16'},
+  {icon: <UsersRound />, color: {bg: 'bg-purple-50 dark:bg-purple-500/10', text: 'text-purple-500'}, title: 'Teams missing required role', desc: 'Missing Product Owner or Developer', value: '8'},
+  {icon: <FileSignature />, color: {bg: 'bg-blue-50 dark:bg-blue-500/10', text: 'text-blue-500'}, title: 'Onboarding forms incomplete', desc: 'Participants need to complete', value: '12'},
 ];
 
 /** Aktivitaets-Eintraege */
 const activityItems = [
   {avatar: 'https://i.pravatar.cc/100?img=11', icon: Check, iconColor: {bg: 'bg-[#1CB368]/20', text: 'text-[#1CB368]'}, highlight: 'Daniel Martinez', text: 'was accepted', time: '2 minutes ago'},
-  {avatar: 'https://i.pravatar.cc/100?img=4', icon: UsersRound, iconColor: {bg: 'bg-purple-100', text: 'text-purple-600'}, highlight: 'New team "Pixel Pioneers"', text: 'was created', time: '15 minutes ago'},
-  {avatar: 'https://i.pravatar.cc/100?img=5', icon: FileSignature, iconColor: {bg: 'bg-blue-100', text: 'text-blue-500'}, highlight: 'Sophia Taylor', text: 'submitted onboarding', time: '1 hour ago'},
-  {avatar: 'https://i.pravatar.cc/100?img=9', icon: XCircle, iconColor: {bg: 'bg-rose-100', text: 'text-rose-500'}, highlight: 'Alex Morgan', text: 'was rejected', time: '2 hours ago'},
+  {avatar: 'https://i.pravatar.cc/100?img=4', icon: UsersRound, iconColor: {bg: 'bg-purple-100 dark:bg-purple-500/20', text: 'text-purple-600'}, highlight: 'New team "Pixel Pioneers"', text: 'was created', time: '15 minutes ago'},
+  {avatar: 'https://i.pravatar.cc/100?img=5', icon: FileSignature, iconColor: {bg: 'bg-blue-100 dark:bg-blue-500/20', text: 'text-blue-500'}, highlight: 'Sophia Taylor', text: 'submitted onboarding', time: '1 hour ago'},
+  {avatar: 'https://i.pravatar.cc/100?img=9', icon: XCircle, iconColor: {bg: 'bg-rose-100 dark:bg-rose-500/20', text: 'text-rose-500'}, highlight: 'Alex Morgan', text: 'was rejected', time: '2 hours ago'},
 ];
 
 /** Admin-Uebersicht: Metriken, Deadlines, Pipeline, Aufmerksamkeit, Aktivitaet */
@@ -114,10 +114,10 @@ export function AdminOverview() {
       {/* Obere Reihe: Metriken & Deadlines */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Linkes Panel: Begruessung + Metriken */}
-        <div className="lg:col-span-8 bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-8 flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-8 flex flex-col justify-between">
           <div className="mb-6">
-            <h1 className="text-[28px] font-outfit font-medium text-slate-900 mb-1 tracking-tight">Good morning, Jane.</h1>
-            <p className="text-slate-500 text-sm">Voyage <span className="text-rose-500 font-medium">51</span> is in application review.</p>
+            <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Good morning, Jane.</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Voyage <span className="text-rose-500 font-medium">51</span> is in application review.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-1">
             <MetricBlock icon={<FileText />} color={{bg: 'bg-[#1CB368]/10', text: 'text-[#1CB368]'}} value="312" label="Applications" subtext="+24 since yesterday" />
@@ -129,20 +129,20 @@ export function AdminOverview() {
         </div>
 
         {/* Rechtes Panel: Kommende Deadlines */}
-        <div className="lg:col-span-4 bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-6 flex flex-col">
+        <div className="lg:col-span-4 bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6 flex flex-col">
           <div className="flex items-center justify-between mb-5">
-            <h3 className="font-semibold text-slate-800">Upcoming Deadlines</h3>
-            <a href="#" className="text-xs font-medium text-slate-400 hover:text-slate-800 transition-colors">View all</a>
+            <h3 className="font-semibold text-slate-800 dark:text-white">Upcoming Deadlines</h3>
+            <a href="#" className="text-xs font-medium text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">View all</a>
           </div>
           <div className="space-y-4 flex-1">
             {deadlines.map((d, i) => (
               <div key={i} className="flex items-center gap-4 py-1">
-                <div className="p-2.5 rounded-xl bg-slate-50 text-slate-400 border border-slate-100/50">
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 text-slate-400 dark:text-slate-500 border border-slate-100/50 dark:border-white/5">
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div className="flex-1">
-                  <div className="text-sm font-medium text-slate-800">{d.title}</div>
-                  <div className="text-xs text-slate-500 mt-0.5">{d.date}</div>
+                  <div className="text-sm font-medium text-slate-800 dark:text-white">{d.title}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{d.date}</div>
                 </div>
                 <div className={`text-xs px-2.5 py-1 rounded-full font-medium ${d.badgeColor}`}>{d.badge}</div>
               </div>
@@ -154,30 +154,30 @@ export function AdminOverview() {
       {/* Pipeline-Bereich */}
       <div>
         <div className="flex justify-between items-end mb-4 px-1">
-          <h2 className="font-semibold text-slate-900 text-lg">Voyage Pipeline</h2>
-          <a href="#" className="text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors">View full pipeline</a>
+          <h2 className="font-semibold text-slate-900 dark:text-white text-lg">Voyage Pipeline</h2>
+          <a href="#" className="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">View full pipeline</a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {pipelineSteps.map((p, i) => (
-            <div key={i} className="bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-6 relative flex flex-col h-full hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-shadow">
+            <div key={i} className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6 relative flex flex-col h-full hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow">
               <div className="flex gap-3.5 items-start mb-6">
                 <div className={`font-outfit text-[40px] leading-none tracking-tighter font-light ${p.color}`}>{p.step}</div>
                 <div className="pt-1">
-                  <div className="font-semibold text-slate-800 text-sm leading-tight mb-1">{p.title}</div>
-                  <div className="text-[11px] text-slate-500 leading-tight">{p.subtitle}</div>
+                  <div className="font-semibold text-slate-800 dark:text-white text-sm leading-tight mb-1">{p.title}</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">{p.subtitle}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="flex-1 h-1.5 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                   <div className={`h-full rounded-full ${p.barColor}`} style={{width: p.progressWidth}}></div>
                 </div>
-                <div className="text-[10px] font-medium text-slate-500 whitespace-nowrap uppercase tracking-wider">{p.total}</div>
+                <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap uppercase tracking-wider">{p.total}</div>
               </div>
               <div className="space-y-3 mb-8 flex-1">
                 {p.stats.map((s, j) => (
                   <div key={j} className="flex justify-between items-center text-xs">
-                    <span className="text-slate-500 font-medium">{s.label}</span>
-                    <span className={`font-semibold ${s.color || 'text-slate-900'}`}>{s.value}</span>
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">{s.label}</span>
+                    <span className={`font-semibold ${s.color || 'text-slate-900 dark:text-white'}`}>{s.value}</span>
                   </div>
                 ))}
               </div>
@@ -192,23 +192,23 @@ export function AdminOverview() {
       {/* Untere Reihe: Aufmerksamkeit & Aktivitaet */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Aufmerksamkeit */}
-        <div className="lg:col-span-6 bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-6">
+        <div className="lg:col-span-6 bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6">
           <div className="flex items-center justify-between mb-6 px-1">
-            <h3 className="font-semibold text-slate-900">Needs Attention</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white">Needs Attention</h3>
           </div>
           <div className="space-y-1">
             {attentionItems.map((item, i) => (
-              <div key={i} className="flex items-center gap-4 py-3 border-b border-slate-50 last:border-0 last:pb-0 cursor-pointer group">
-                <div className={`p-2.5 rounded-xl border border-rose-100/50 shrink-0 shadow-sm ${item.color.bg} ${item.color.text}`}>
+              <div key={i} className="flex items-center gap-4 py-3 border-b border-slate-50 dark:border-white/5 last:border-0 last:pb-0 cursor-pointer group">
+                <div className={`p-2.5 rounded-xl border border-rose-100/50 dark:border-white/10 shrink-0 shadow-sm ${item.color.bg} ${item.color.text}`}>
                   <span className="w-4 h-4">{item.icon}</span>
                 </div>
                 <div className="flex-1 pt-0.5">
-                  <div className="text-sm font-medium text-slate-800 group-hover:text-rose-500 transition-colors mb-0.5">{item.title}</div>
-                  <div className="text-[11px] text-slate-500">{item.desc}</div>
+                  <div className="text-sm font-medium text-slate-800 dark:text-white group-hover:text-rose-500 transition-colors mb-0.5">{item.title}</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">{item.desc}</div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="text-xs font-semibold text-rose-500 bg-rose-50 px-2 py-0.5 rounded-md">{item.value}</div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                  <div className="text-xs font-semibold text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-2 py-0.5 rounded-md">{item.value}</div>
+                  <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-300 transition-colors" />
                 </div>
               </div>
             ))}
@@ -216,27 +216,27 @@ export function AdminOverview() {
         </div>
 
         {/* Aktivitaet */}
-        <div className="lg:col-span-6 bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-6">
+        <div className="lg:col-span-6 bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6">
           <div className="flex items-center justify-between mb-6 px-1">
-            <h3 className="font-semibold text-slate-900">Recent Activity</h3>
-            <a href="#" className="text-xs font-medium text-slate-400 hover:text-slate-800 transition-colors">View all</a>
+            <h3 className="font-semibold text-slate-900 dark:text-white">Recent Activity</h3>
+            <a href="#" className="text-xs font-medium text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">View all</a>
           </div>
           <div className="space-y-1">
             {activityItems.map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="flex gap-4 items-start py-3 border-b border-slate-50 last:border-0 last:pb-0 cursor-pointer group">
+                <div key={i} className="flex gap-4 items-start py-3 border-b border-slate-50 dark:border-white/5 last:border-0 last:pb-0 cursor-pointer group">
                   <div className="relative shrink-0 mt-0.5">
-                    <img src={item.avatar} className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200" alt="avatar" />
-                    <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center ${item.iconColor.bg}`}>
+                    <img src={item.avatar} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10" alt="avatar" />
+                    <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-[#1a1b24] flex items-center justify-center ${item.iconColor.bg}`}>
                       <Icon className={`w-3 h-3 ${item.iconColor.text}`} />
                     </div>
                   </div>
                   <div className="pt-0.5">
-                    <div className="text-sm text-slate-600 leading-snug">
-                      <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{item.highlight}</span> {item.text}
+                    <div className="text-sm text-slate-600 dark:text-slate-300 leading-snug">
+                      <span className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{item.highlight}</span> {item.text}
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-1 font-medium">{item.time}</div>
+                    <div className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 font-medium">{item.time}</div>
                   </div>
                 </div>
               );
@@ -256,22 +256,22 @@ export function ParticipantOverview() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[28px] font-outfit font-medium text-slate-900 mb-1 tracking-tight">Welcome back, Mark 👋</h1>
-          <p className="text-slate-500 text-sm">Here is what is happening with your team and tasks today.</p>
+          <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Welcome back, Mark 👋</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">Here is what is happening with your team and tasks today.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="col-span-2 space-y-6">
-          <div className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex items-center h-[350px]">
+          <div className="bg-white dark:bg-[#1a1b24] p-6 rounded-[24px] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] flex items-center h-[350px]">
             <div className="flex-1 flex flex-col justify-center pl-8 text-left">
-              <h3 className="text-2xl font-bold text-slate-800 tracking-tight">Sprint 3 is Active</h3>
-              <p className="text-slate-500 mt-2 max-w-sm leading-relaxed">
-                Your team &quot;Pixel Pioneers&quot; has <strong className="text-slate-800">5 tasks</strong> remaining for this sprint. You are 54% complete overall.
+              <h3 className="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Sprint 3 is Active</h3>
+              <p className="text-slate-500 dark:text-slate-400 mt-2 max-w-sm leading-relaxed">
+                Your team &quot;Pixel Pioneers&quot; has <strong className="text-slate-800 dark:text-white">5 tasks</strong> remaining for this sprint. You are 54% complete overall.
               </p>
               <button
                 onClick={() => setCurrentView('teams')}
-                className="mt-8 w-fit px-6 py-2.5 bg-[#0b0c10] text-white rounded-xl text-sm font-medium hover:bg-slate-800 transition-colors shadow-sm flex items-center gap-2"
+                className="mt-8 w-fit px-6 py-2.5 bg-[#0b0c10] dark:bg-[#1CB368] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#189958] transition-colors shadow-sm flex items-center gap-2"
               >
                 Go to Team Space <span className="w-4 h-4">↗</span>
               </button>
@@ -284,40 +284,40 @@ export function ParticipantOverview() {
                       <Cell key={`cell-${index}`} fill={TASK_COLORS[index % TASK_COLORS.length]} />
                     ))}
                   </Pie>
-                  <RechartsTooltip contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)'}} itemStyle={{color: '#1e293b', fontWeight: 500}} />
+                  <RechartsTooltip contentStyle={{borderRadius: '12px', border: 'none', background: '#1a1b24', color: '#e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.3)'}} itemStyle={{color: '#e2e8f0', fontWeight: 500}} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-3xl font-bold text-slate-800">54%</span>
-                <span className="text-xs font-semibold text-slate-500 tracking-wide uppercase">Done</span>
+                <span className="text-3xl font-bold text-slate-800 dark:text-white">54%</span>
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 tracking-wide uppercase">Done</span>
               </div>
             </div>
           </div>
         </div>
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-[24px] border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.02)] h-[350px]">
-            <h3 className="font-semibold text-slate-900 mb-5">Upcoming Meetings</h3>
+          <div className="bg-white dark:bg-[#1a1b24] p-6 rounded-[24px] border border-slate-200 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] h-[350px]">
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-5">Upcoming Meetings</h3>
             <div className="space-y-4">
-              <div className="p-3.5 rounded-2xl border border-slate-100 flex gap-4 items-center bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
-                <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100/50 text-indigo-600 flex flex-col items-center justify-center shrink-0 shadow-sm">
+              <div className="p-3.5 rounded-2xl border border-slate-100 dark:border-white/10 flex gap-4 items-center bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 transition-colors cursor-pointer">
+                <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex flex-col items-center justify-center shrink-0 shadow-sm">
                   <span className="text-[10px] font-bold uppercase tracking-wider">Oct</span>
                   <span className="text-base font-bold leading-none mt-0.5">24</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-bold text-slate-800 truncate">Daily Standup</div>
-                  <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5">
+                  <div className="text-sm font-bold text-slate-800 dark:text-white truncate">Daily Standup</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
                     <Clock className="w-3 h-3" /> 10:00 AM • Zoom
                   </div>
                 </div>
               </div>
-              <div className="p-3.5 rounded-2xl border border-slate-100 flex gap-4 items-center bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
-                <div className="w-12 h-12 rounded-xl bg-purple-50 border border-purple-100/50 text-purple-600 flex flex-col items-center justify-center shrink-0 shadow-sm">
+              <div className="p-3.5 rounded-2xl border border-slate-100 dark:border-white/10 flex gap-4 items-center bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 transition-colors cursor-pointer">
+                <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-500/10 border border-purple-100/50 dark:border-purple-500/20 text-purple-600 dark:text-purple-400 flex flex-col items-center justify-center shrink-0 shadow-sm">
                   <span className="text-[10px] font-bold uppercase tracking-wider">Oct</span>
                   <span className="text-base font-bold leading-none mt-0.5">26</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-bold text-slate-800 truncate">Sprint Planning</div>
-                  <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5">
+                  <div className="text-sm font-bold text-slate-800 dark:text-white truncate">Sprint Planning</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
                     <Clock className="w-3 h-3" /> 2:00 PM • Discord
                   </div>
                 </div>
@@ -335,18 +335,18 @@ export function ApplicantOverview() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[28px] font-outfit font-medium text-slate-900 mb-1 tracking-tight">Application Status</h1>
-        <p className="text-slate-500 text-sm">Track your application for Voyage 51.</p>
+        <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Application Status</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">Track your application for Voyage 51.</p>
       </div>
 
-      <div className="bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-8">
+      <div className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-8">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-500/20 flex items-center justify-center">
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Your Application</h2>
-            <p className="text-sm text-slate-500">Submitted for Voyage 51 — Application Review</p>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Your Application</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Submitted for Voyage 51 — Application Review</p>
           </div>
         </div>
 
@@ -355,12 +355,12 @@ export function ApplicantOverview() {
           {['Submitted', 'Under Review', 'Decision', 'Onboarding'].map((step, i) => (
             <div key={i} className="flex items-center gap-2 flex-1">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                i === 0 ? 'bg-[#1CB368] text-white' : 'bg-slate-100 text-slate-400'
+                i === 0 ? 'bg-[#1CB368] text-white' : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-slate-500'
               }`}>
                 {i === 0 ? <CheckCircle className="w-4 h-4" /> : i + 1}
               </div>
-              <span className={`text-xs font-medium ${i === 0 ? 'text-[#1CB368]' : 'text-slate-400'}`}>{step}</span>
-              {i < 3 && <div className={`flex-1 h-[2px] ${i === 0 ? 'bg-[#1CB368]' : 'bg-slate-200'}`}></div>}
+              <span className={`text-xs font-medium ${i === 0 ? 'text-[#1CB368]' : 'text-slate-400 dark:text-slate-500'}`}>{step}</span>
+              {i < 3 && <div className={`flex-1 h-[2px] ${i === 0 ? 'bg-[#1CB368]' : 'bg-slate-200 dark:bg-white/10'}`}></div>}
             </div>
           ))}
         </div>
@@ -369,22 +369,22 @@ export function ApplicantOverview() {
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Applied Role</div>
-              <div className="text-sm font-medium text-slate-800">Frontend Developer</div>
+              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Applied Role</div>
+              <div className="text-sm font-medium text-slate-800 dark:text-white">Frontend Developer</div>
             </div>
             <div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Experience Level</div>
-              <div className="text-sm font-medium text-slate-800">Advanced — 4 years</div>
+              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Experience Level</div>
+              <div className="text-sm font-medium text-slate-800 dark:text-white">Advanced — 4 years</div>
             </div>
           </div>
           <div className="space-y-4">
             <div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Submitted</div>
-              <div className="text-sm font-medium text-slate-800">May 1, 2026</div>
+              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Submitted</div>
+              <div className="text-sm font-medium text-slate-800 dark:text-white">May 1, 2026</div>
             </div>
             <div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Status</div>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-semibold border border-amber-100">
+              <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Status</div>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold border border-amber-100 dark:border-amber-500/20">
                 <Clock className="w-3 h-3" /> Under Review
               </span>
             </div>
