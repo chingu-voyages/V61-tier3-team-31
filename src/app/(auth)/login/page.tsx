@@ -5,6 +5,7 @@ import {ShieldAlert, User, FileCheck} from 'lucide-react';
 import {NexusLogo} from '@/components/nexus-logo';
 import {useDashboard} from '@/lib/auth-context';
 import {useRouter} from 'next/navigation';
+import Link from 'next/link';
 
 /** Login-Seite mit Formular und Quick-Login-Buttons */
 export default function LoginPage() {
@@ -120,11 +121,19 @@ export default function LoginPage() {
               Participant
             </button>
           </div>
+
+          {/* Register Link */}
+          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+            Don&apos;t have an account?{' '}
+            <Link href="/register" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors">
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
 
       <div className="mt-8 text-center text-xs font-medium text-slate-400 dark:text-slate-500">
-        Protected by Nexus Identity Management
+        Protected by Amigo Identity Management
       </div>
     </div>
   );

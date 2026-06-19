@@ -6,6 +6,7 @@ import {
   Target, LogOut, UsersRound, FileCheck, ClipboardList, User,
 } from 'lucide-react';
 import {NexusLogo} from '@/components/nexus-logo';
+import {GradientText} from '@/components/gradient-text';
 import {ThemeToggle} from '@/components/theme-toggle';
 import {useDashboard} from '@/lib/auth-context';
 import {useRouter} from 'next/navigation';
@@ -80,7 +81,7 @@ export function Sidebar() {
       <div className="h-[76px] flex items-center px-6 gap-3 pt-2 overflow-hidden">
         <NexusLogo className="w-8 h-8 shrink-0" />
         {isSidebarExpanded && (
-          <span className="font-outfit text-xl font-medium tracking-wide text-white truncate">Am<span className="bg-gradient-to-r from-[#77CF97] to-[#a855f7] bg-clip-text text-transparent">i</span>go</span>
+          <span className="font-outfit text-xl font-medium tracking-wide text-white truncate">Amigo</span>
         )}
       </div>
 

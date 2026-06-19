@@ -43,3 +43,9 @@ html {
   animation: wave 0.8s ease-in-out 1;
   transform-origin: 70% 70%;
 }
+
+/* Gradient-Sweep-Animation — von links nach rechts */
+@keyframes gradient-sweep {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
