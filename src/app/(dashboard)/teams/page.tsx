@@ -7,20 +7,22 @@ import {
   Users, ExternalLink, FileText, Info, Activity,
 } from 'lucide-react';
 import Link from 'next/link';
+import {useRouter} from 'next/navigation';
 import {useDashboard} from '@/lib/auth-context';
 
 /** Mock-Teams fuer Admin-Ansicht */
 const adminTeams = [
-  {name: 'Nebula Builders', tier: 'Tier 2', domain: 'E-Commerce', emoji: '🌌', bg: 'bg-indigo-50 dark:bg-indigo-500/10', textColor: 'text-indigo-600 dark:text-indigo-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Building a decentralized marketplace for digital assets with cross-chain compatibility and zero gas fees.', progress: 75, barColor: 'bg-indigo-500', members: ['11', '12', '13'], extra: '+1'},
-  {name: 'Apollo Strike', tier: 'Tier 3', domain: 'Developer Tools', emoji: '🚀', bg: 'bg-rose-50 dark:bg-rose-500/10', textColor: 'text-rose-600 dark:text-rose-400', status: 'At Risk', statusStyle: 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20', statusIcon: AlertTriangle, description: 'An AI-powered VS Code extension for real-time refactoring and style guide enforcement for Next.js.', progress: 30, barColor: 'bg-rose-500', members: ['14', '15'], extra: ''},
-  {name: 'Flora Health', tier: 'Tier 1', domain: 'HealthTech', emoji: '🌿', bg: 'bg-emerald-50 dark:bg-emerald-500/10', textColor: 'text-emerald-600 dark:text-emerald-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Mental health journal app utilizing sentiment analysis to track mood trends and recommend mindfulness exercises.', progress: 90, barColor: 'bg-emerald-500', members: ['17', '18', '19'], extra: ''},
-  {name: 'Bolt Finance', tier: 'Tier 2', domain: 'FinTech', emoji: '⚡️', bg: 'bg-amber-50 dark:bg-amber-500/10', textColor: 'text-amber-600 dark:text-amber-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Micro-budgeting tool aiming to help college students automatically round up savings across multiple bank accounts.', progress: 55, barColor: 'bg-amber-500', members: ['20', '21', '22', '23'], extra: ''},
-  {name: 'Ocean Data', tier: 'Tier 3', domain: 'Data Vis', emoji: '🌊', bg: 'bg-cyan-50 dark:bg-cyan-500/10', textColor: 'text-cyan-600 dark:text-cyan-400', status: 'Forming', statusStyle: 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-white/10', statusIcon: Clock, description: 'Visualizing open-source marine data to track coral bleaching events and climate impact.', progress: 10, barColor: 'bg-cyan-500', members: ['24', '25'], extra: ''},
-  {name: 'Pixel Pirates', tier: 'Tier 2', domain: 'Gaming', emoji: '🎮', bg: 'bg-purple-50 dark:bg-purple-500/10', textColor: 'text-purple-600 dark:text-purple-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Browser-based multiplayer trivia game using web sockets and real-time question generation via LLM.', progress: 100, barColor: 'bg-purple-500', members: ['26', '27', '28'], extra: ''},
+  {id: 'team-nebula', name: 'Nebula Builders', tier: 'Tier 2', domain: 'E-Commerce', emoji: '🌌', bg: 'bg-indigo-50 dark:bg-indigo-500/10', textColor: 'text-indigo-600 dark:text-indigo-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Building a decentralized marketplace for digital assets with cross-chain compatibility and zero gas fees.', progress: 75, barColor: 'bg-indigo-500', members: ['11', '12', '13'], extra: '+1'},
+  {id: 'team-apollo', name: 'Apollo Strike', tier: 'Tier 3', domain: 'Developer Tools', emoji: '🚀', bg: 'bg-rose-50 dark:bg-rose-500/10', textColor: 'text-rose-600 dark:text-rose-400', status: 'At Risk', statusStyle: 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20', statusIcon: AlertTriangle, description: 'An AI-powered VS Code extension for real-time refactoring and style guide enforcement for Next.js.', progress: 30, barColor: 'bg-rose-500', members: ['14', '15'], extra: ''},
+  {id: 'team-flora', name: 'Flora Health', tier: 'Tier 1', domain: 'HealthTech', emoji: '🌿', bg: 'bg-emerald-50 dark:bg-emerald-500/10', textColor: 'text-emerald-600 dark:text-emerald-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Mental health journal app utilizing sentiment analysis to track mood trends and recommend mindfulness exercises.', progress: 90, barColor: 'bg-emerald-500', members: ['17', '18', '19'], extra: ''},
+  {id: 'team-bolt', name: 'Bolt Finance', tier: 'Tier 2', domain: 'FinTech', emoji: '⚡️', bg: 'bg-amber-50 dark:bg-amber-500/10', textColor: 'text-amber-600 dark:text-amber-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Micro-budgeting tool aiming to help college students automatically round up savings across multiple bank accounts.', progress: 55, barColor: 'bg-amber-500', members: ['20', '21', '22', '23'], extra: ''},
+  {id: 'team-ocean', name: 'Ocean Data', tier: 'Tier 3', domain: 'Data Vis', emoji: '🌊', bg: 'bg-cyan-50 dark:bg-cyan-500/10', textColor: 'text-cyan-600 dark:text-cyan-400', status: 'Forming', statusStyle: 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-white/10', statusIcon: Clock, description: 'Visualizing open-source marine data to track coral bleaching events and climate impact.', progress: 10, barColor: 'bg-cyan-500', members: ['24', '25'], extra: ''},
+  {id: 'team-pixel', name: 'Pixel Pirates', tier: 'Tier 2', domain: 'Gaming', emoji: '🎮', bg: 'bg-purple-50 dark:bg-purple-500/10', textColor: 'text-purple-600 dark:text-purple-400', status: 'Active', statusStyle: 'bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20', statusIcon: CheckCircle, description: 'Browser-based multiplayer trivia game using web sockets and real-time question generation via LLM.', progress: 100, barColor: 'bg-purple-500', members: ['26', '27', '28'], extra: ''},
 ];
 
 /** Admin-Ansicht: Team-Verzeichnis mit Karten */
 function AdminTeams() {
+  const router = useRouter();
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -32,7 +34,7 @@ function AdminTeams() {
           <button className="px-4 py-2 bg-white dark:bg-[#1a1b24] border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             Sprints
           </button>
-          <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+          <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             <Plus className="w-4 h-4" /> New Team
           </button>
         </div>
@@ -57,7 +59,7 @@ function AdminTeams() {
         {adminTeams.map((team, i) => {
           const TeamIcon = team.statusIcon;
           return (
-            <div key={i} className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-slate-300 dark:hover:border-white/20 transition-all p-6 flex flex-col">
+            <div key={i} onClick={() => router.push(`/teams/${team.id}`)} className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:border-slate-300 dark:hover:border-white/20 transition-all p-6 flex flex-col cursor-pointer">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex gap-3 items-center">
                   <div className={`w-12 h-12 rounded-2xl ${team.bg} flex items-center justify-center font-outfit font-bold text-xl ${team.textColor}`}>{team.emoji}</div>
@@ -88,7 +90,7 @@ function AdminTeams() {
                       <div className="w-8 h-8 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-50 dark:bg-white/10 text-slate-500 dark:text-slate-400 text-[10px] font-medium flex items-center justify-center">{team.extra}</div>
                     )}
                   </div>
-                  <button className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">View Details</button>
+                  <button onClick={(e) => {e.stopPropagation(); router.push(`/teams/${team.id}`)}} className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">View Details</button>
                 </div>
               </div>
             </div>
@@ -418,6 +420,5 @@ function UserTeams() {
 export default function TeamsPage() {
   const {role} = useDashboard();
   if (role === 'admin') return <AdminTeams />;
-  if (role === 'participant') return <UserTeams />;
-  return null;
+  return <UserTeams />;
 }

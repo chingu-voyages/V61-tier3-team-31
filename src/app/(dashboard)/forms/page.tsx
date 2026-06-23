@@ -62,7 +62,7 @@ export default function FormsPage() {
           <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Form Builder & Templates</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm">Create and manage application forms, feedback surveys, and onboarding documents.</p>
         </div>
-        <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
+        <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
           <Plus className="w-4 h-4" /> Create Form
         </button>
       </div>

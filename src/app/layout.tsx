@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className={cn(inter.variable, outfit.variable, "font-sans", geist.variable)} suppressHydrationWarning>
-      <body className="font-sans antialiased text-slate-900 bg-stone-50">
+      <body className="px-[100px] bg-stone-900 font-sans antialiased text-slate-900">
         <ThemeProvider>
           <DashboardProvider>{children}</DashboardProvider>
         </ThemeProvider>

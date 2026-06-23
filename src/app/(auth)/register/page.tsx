@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 /** Registrierungsseite mit Formular */
 export default function RegisterPage() {
-  const {setRole, setIsAuthenticated, isAuthenticated, isInitialized} = useDashboard();
+  const {setRole, setStatus, setIsAuthenticated, isAuthenticated, isInitialized} = useDashboard();
   const router = useRouter();
 
   const [fullName, setFullName] = useState('');
@@ -65,7 +65,8 @@ export default function RegisterPage() {
     // Simulierte Registrierung
     await new Promise((r) => setTimeout(r, 1200));
 
-    setRole('applicant');
+    setRole('user');
+    setStatus('applicant');
     setIsAuthenticated(true);
     router.push('/overview');
   };
@@ -176,7 +177,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm mt-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm mt-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>

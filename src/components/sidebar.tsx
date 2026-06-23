@@ -1,9 +1,11 @@
 'use client';
 
 import {
-  Home, FileText, Users, Network, CheckCircle, FileSearch,
-  BarChart2, Settings, ChevronLeft, ChevronRight, ChevronDown,
-  Target, LogOut, UsersRound, FileCheck, ClipboardList, User,
+  Home, FileText, Users, Network, CheckCircle,
+  Settings, ChevronLeft, ChevronRight, ChevronDown,
+  Target, LogOut, UsersRound, ClipboardList, User, Compass,
+  Megaphone,
+  CalendarDays, BarChart3, Layers,
 } from 'lucide-react';
 import {NexusLogo} from '@/components/nexus-logo';
 import {GradientText} from '@/components/gradient-text';
@@ -19,6 +21,19 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+
+/** Abgeschlossene Voyage-Sprints des Benutzers */
+interface PastVoyage {
+  id: string;
+  name: string;
+  dateRange: string;
+}
+
+const PAST_VOYAGES: PastVoyage[] = [
+  {id: '50', name: 'Voyage 50', dateRange: 'Jan 10 – Mar 15, 2026'},
+  {id: '49', name: 'Voyage 49', dateRange: 'Oct 5 – Dec 20, 2025'},
+  {id: '48', name: 'Voyage 48', dateRange: 'Jul 1 – Sep 14, 2025'},
+];
 
 /** Navigations-Item in der Sidebar */
 function NavItem({
@@ -53,9 +68,10 @@ function NavItem({
 
 /** Haupt-Sidebar mit Navigation, Voyage-Karte und Profil */
 export function Sidebar() {
-  const {role, currentView, setCurrentView, isSidebarExpanded, setIsSidebarExpanded, setIsAuthenticated} = useDashboard();
+  const {role, status, currentView, setCurrentView, isSidebarExpanded, setIsSidebarExpanded, setIsAuthenticated} = useDashboard();
   const router = useRouter();
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
+  const [selectedPastVoyage, setSelectedPastVoyage] = useState<PastVoyage>(PAST_VOYAGES[0]);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -91,29 +107,32 @@ export function Sidebar() {
         {role === 'admin' && (
           <>
             <NavItem isExpanded={isSidebarExpanded} icon={<Home className="w-4 h-4" />} label="Overview" active={currentView === 'overview'} onClick={() => navigate('overview')} />
+            <NavItem isExpanded={isSidebarExpanded} icon={<Compass className="w-4 h-4" />} label="Voyages" active={currentView === 'voyages'} onClick={() => navigate('voyages')} />
             <NavItem isExpanded={isSidebarExpanded} icon={<FileText className="w-4 h-4" />} label="Applications" badge="312" active={currentView === 'applications'} onClick={() => navigate('applications')} />
-            <NavItem isExpanded={isSidebarExpanded} icon={<Users className="w-4 h-4" />} label="Participants" badge="128" />
+            <NavItem isExpanded={isSidebarExpanded} icon={<Users className="w-4 h-4" />} label="Participants" badge="128" active={currentView === 'participants'} onClick={() => navigate('participants')} />
             <NavItem isExpanded={isSidebarExpanded} icon={<Network className="w-4 h-4" />} label="Matching" active={currentView === 'matching'} onClick={() => navigate('matching')} />
+            <NavItem isExpanded={isSidebarExpanded} icon={<BarChart3 className="w-4 h-4" />} label="Analytics" active={currentView === 'analytics'} onClick={() => navigate('analytics')} />
             <NavItem isExpanded={isSidebarExpanded} icon={<UsersRound className="w-4 h-4" />} label="Teams" badge="18" active={currentView === 'teams'} onClick={() => navigate('teams')} />
-            <NavItem isExpanded={isSidebarExpanded} icon={<CheckCircle className="w-4 h-4" />} label="Onboarding" />
-            <NavItem isExpanded={isSidebarExpanded} icon={<FileSearch className="w-4 h-4" />} label="Forms" active={currentView === 'forms'} onClick={() => navigate('forms')} />
-            <NavItem isExpanded={isSidebarExpanded} icon={<BarChart2 className="w-4 h-4" />} label="Analytics" />
+            <NavItem isExpanded={isSidebarExpanded} icon={<Megaphone className="w-4 h-4" />} label="Announcements" active={currentView === 'announcements'} onClick={() => navigate('announcements')} />
+            <NavItem isExpanded={isSidebarExpanded} icon={<CalendarDays className="w-4 h-4" />} label="Calendar" active={currentView === 'calendar'} onClick={() => navigate('calendar')} />
+            <NavItem isExpanded={isSidebarExpanded} icon={<Layers className="w-4 h-4" />} label="UI Kit" active={currentView === 'ui-components'} onClick={() => navigate('ui-components')} />
           </>
         )}
 
-        {/* --- Applicant: nur Status-Uebersicht --- */}
-        {role === 'applicant' && (
+        {/* --- User mit Status "applicant": nur Status-Uebersicht --- */}
+        {role === 'user' && status === 'applicant' && (
           <>
             <NavItem isExpanded={isSidebarExpanded} icon={<Home className="w-4 h-4" />} label="Application Status" active={currentView === 'overview'} onClick={() => navigate('overview')} />
           </>
         )}
 
-        {/* --- Participant: Team, Onboarding, Einstellungen --- */}
-        {role === 'participant' && (
+        {/* --- User mit Status "participant": Team, Onboarding, Kalender --- */}
+        {role === 'user' && status === 'participant' && (
           <>
             <NavItem isExpanded={isSidebarExpanded} icon={<Home className="w-4 h-4" />} label="Dashboard" active={currentView === 'overview'} onClick={() => navigate('overview')} />
             <NavItem isExpanded={isSidebarExpanded} icon={<UsersRound className="w-4 h-4" />} label="Team Space" active={currentView === 'teams'} onClick={() => navigate('teams')} />
             <NavItem isExpanded={isSidebarExpanded} icon={<ClipboardList className="w-4 h-4" />} label="Onboarding" active={currentView === 'onboarding'} onClick={() => navigate('onboarding')} />
+            <NavItem isExpanded={isSidebarExpanded} icon={<CalendarDays className="w-4 h-4" />} label="Calendar" active={currentView === 'calendar'} onClick={() => navigate('calendar')} />
           </>
         )}
       </div>
@@ -142,10 +161,34 @@ export function Sidebar() {
                   <span className="w-3.5 h-3.5 text-slate-400">📅</span>
                   Apr 20 – Jun 1, 2026
                 </div>
-                <button className="w-full flex items-center justify-between py-2 px-3 bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-lg text-xs font-medium text-slate-200 cursor-pointer">
-                  <span>View Voyage</span>
-                  <span className="w-3.5 h-3.5 text-slate-400">↗</span>
-                </button>
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Past Voyages</span>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="w-full flex items-center justify-between py-2 px-3 bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-lg text-xs font-medium text-slate-200 cursor-pointer outline-none">
+                      <span>{selectedPastVoyage.name}</span>
+                      <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      side="top"
+                      align="start"
+                      sideOffset={4}
+                      className="min-w-[var(--anchor-width)] bg-[#1a1b24] border border-white/10 text-slate-200 p-1 shadow-xl"
+                    >
+                      {PAST_VOYAGES.map((voyage) => (
+                        <DropdownMenuItem
+                          key={voyage.id}
+                          onClick={() => setSelectedPastVoyage(voyage)}
+                          className={`text-slate-200 focus:text-white focus:bg-white/5 cursor-pointer rounded-lg px-2 py-2 text-xs ${selectedPastVoyage.id === voyage.id ? 'bg-white/5' : ''}`}
+                        >
+                          <div className="flex flex-col gap-0.5">
+                            <span>{voyage.name}</span>
+                            <span className="text-[10px] text-slate-500">{voyage.dateRange}</span>
+                          </div>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             )}
           </div>
@@ -159,22 +202,23 @@ export function Sidebar() {
           </div>
         )}
 
-        {/* Benutzerprofil + Aktionen — auf gleicher Ebene */}
+        {/* Benutzerprofil + Aktionen — im collapsed Zustand Avatar ganz unten */}
         <div className={`flex ${isSidebarExpanded ? 'flex-row justify-between' : 'flex-col items-center'} gap-1`}>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className={`flex items-center ${isSidebarExpanded ? 'gap-3 px-2 py-1' : 'p-0.5'} cursor-pointer rounded-xl transition-colors min-w-0 flex-1 outline-none`}
-            >
+          <div className={!isSidebarExpanded ? 'order-2' : undefined}>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={`flex items-center ${isSidebarExpanded ? 'gap-3 px-2 py-1' : 'p-0.5'} cursor-pointer rounded-xl transition-colors min-w-0 flex-1 outline-none`}
+              >
               <img
-                src={role === 'admin' ? 'https://i.pravatar.cc/100?img=5' : role === 'applicant' ? 'https://i.pravatar.cc/100?img=32' : 'https://i.pravatar.cc/100?img=11'}
+                src={role === 'admin' ? 'https://i.pravatar.cc/100?img=5' : 'https://i.pravatar.cc/100?img=11'}
                 className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 shrink-0"
                 alt="profile"
-                title={role === 'admin' ? 'Jane Cooper' : role === 'applicant' ? 'David Rust' : 'Mark Logic'}
+                title={role === 'admin' ? 'Jane Cooper' : 'Mark Logic'}
               />
               {isSidebarExpanded && (
                 <div className="flex-1 overflow-hidden text-left">
-                  <div className="text-sm font-medium text-white truncate">{role === 'admin' ? 'Jane Cooper' : role === 'applicant' ? 'David Rust' : 'Mark Logic'}</div>
-                  <div className="text-xs text-slate-500 capitalize">{role}</div>
+                  <div className="text-sm font-medium text-white truncate">{role === 'admin' ? 'Jane Cooper' : 'Mark Logic'}</div>
+                  <div className="text-xs text-slate-500 capitalize">{role} {status !== 'participant' && `· ${status}`}</div>
                 </div>
               )}
             </DropdownMenuTrigger>
@@ -201,10 +245,10 @@ export function Sidebar() {
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+            </DropdownMenu>
+          </div>
 
-          {/* Knopfleiste — auch im collapsed Zustand sichtbar */}
-          <div className={`flex ${isSidebarExpanded ? 'items-center justify-center' : 'flex-col items-center'} gap-0.5 shrink-0`}>
+          <div className={`flex ${isSidebarExpanded ? 'items-center justify-center' : 'flex-col items-center order-1'} gap-0.5 shrink-0`}>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('settings'); }}
               title="Settings"

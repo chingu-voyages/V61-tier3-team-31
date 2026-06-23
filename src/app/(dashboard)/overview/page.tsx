@@ -5,16 +5,8 @@ import {
   ChevronRight, AlertTriangle, FileSearch, FileSignature,
   Check, CheckCircle, Clock, Info,
 } from 'lucide-react';
-import {PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip} from 'recharts';
+import {useRouter} from 'next/navigation';
 import {useDashboard} from '@/lib/auth-context';
-
-/** Sprint-Aufgaben-Statistik fuer Pie-Chart */
-const sprintTaskData = [
-  {name: 'To Do', value: 3},
-  {name: 'In Progress', value: 2},
-  {name: 'Done', value: 6},
-];
-const TASK_COLORS = ['#e2e8f0', '#818cf8', '#77CF97'];
 
 /** Metrik-Block fuer Admin-Uebersicht */
 function MetricBlock({icon, color, value, label, subtext}: {
@@ -47,10 +39,19 @@ const deadlines = [
 ];
 
 /** Deadlinedaten fuer Admin-Uebersicht */
-const pipelineSteps = [
+/**
+ * Pipeline-Schritte fuer die Admin-Uebersicht.
+ * Jedes Schritt definiert eine Navigationsroute fuer den Klick.
+ */
+const pipelineSteps: Array<{
+  step: string; color: string; btnBg: string; barColor: string;
+  title: string; subtitle: string; route: string;
+  total: string; progressWidth: string;
+  stats: Array<{label: string; value: string; color?: string}>;
+}> = [
   {
     step: '01', color: 'text-[#77CF97]', btnBg: 'bg-[#77CF97]/10', barColor: 'bg-[#77CF97]',
-    title: 'Applications', subtitle: 'Collect & review applications',
+    title: 'Applications', subtitle: 'Collect & review applications', route: '/applications',
     total: '312 TOTAL', progressWidth: '100%',
     stats: [
       {label: 'Pending Review', value: '64', color: 'text-slate-800 dark:text-white'},
@@ -61,7 +62,7 @@ const pipelineSteps = [
   },
   {
     step: '02', color: 'text-blue-500', btnBg: 'bg-blue-500/10', barColor: 'bg-blue-500',
-    title: 'Matching', subtitle: 'Match & assign participants',
+    title: 'Matching', subtitle: 'Match & assign participants', route: '/matching',
     total: '72 REMAINING', progressWidth: '40%',
     stats: [
       {label: 'Unassigned', value: '72', color: 'text-slate-800 dark:text-white'},
@@ -71,7 +72,7 @@ const pipelineSteps = [
   },
   {
     step: '03', color: 'text-purple-600', btnBg: 'bg-purple-600/10', barColor: 'bg-purple-600',
-    title: 'Teams', subtitle: 'Form & confirm teams',
+    title: 'Teams', subtitle: 'Form & confirm teams', route: '/teams',
     total: '18 TEAMS', progressWidth: '70%',
     stats: [
       {label: 'Draft Teams', value: '12', color: 'text-purple-600'},
@@ -81,7 +82,7 @@ const pipelineSteps = [
   },
   {
     step: '04', color: 'text-rose-500', btnBg: 'bg-rose-500/10', barColor: 'bg-rose-500',
-    title: 'Onboarding', subtitle: 'Complete required steps',
+    title: 'Onboarding', subtitle: 'Complete required steps', route: '/onboarding',
     total: '61% COMPLETED', progressWidth: '61%',
     stats: [
       {label: 'Completed', value: '79', color: 'text-[#77CF97]'},
@@ -91,12 +92,15 @@ const pipelineSteps = [
   },
 ];
 
-/** Aufmerksamkeits-Eintraege fuer Admin */
-const attentionItems = [
-  {icon: <FileSearch />, color: {bg: 'bg-rose-50 dark:bg-rose-500/10', text: 'text-rose-500'}, title: 'Applications older than 7 days', desc: 'Need review', value: '24'},
-  {icon: <AlertTriangle />, color: {bg: 'bg-orange-50 dark:bg-orange-500/10', text: 'text-orange-500'}, title: 'Accepted participants without team', desc: 'Require assignment', value: '16'},
-  {icon: <UsersRound />, color: {bg: 'bg-purple-50 dark:bg-purple-500/10', text: 'text-purple-500'}, title: 'Teams missing required role', desc: 'Missing Product Owner or Developer', value: '8'},
-  {icon: <FileSignature />, color: {bg: 'bg-blue-50 dark:bg-blue-500/10', text: 'text-blue-500'}, title: 'Onboarding forms incomplete', desc: 'Participants need to complete', value: '12'},
+/** Aufmerksamkeits-Eintraege fuer Admin mit Navigationsrouten */
+const attentionItems: Array<{
+  icon: React.ReactNode; color: {bg: string; text: string};
+  title: string; desc: string; value: string; route: string;
+}> = [
+  {icon: <FileSearch />, color: {bg: 'bg-rose-50 dark:bg-rose-500/10', text: 'text-rose-500'}, title: 'Applications older than 7 days', desc: 'Need review', value: '24', route: '/applications'},
+  {icon: <AlertTriangle />, color: {bg: 'bg-orange-50 dark:bg-orange-500/10', text: 'text-orange-500'}, title: 'Accepted participants without team', desc: 'Require assignment', value: '16', route: '/participants'},
+  {icon: <UsersRound />, color: {bg: 'bg-purple-50 dark:bg-purple-500/10', text: 'text-purple-500'}, title: 'Teams missing required role', desc: 'Missing Product Owner or Developer', value: '8', route: '/teams'},
+  {icon: <FileSignature />, color: {bg: 'bg-blue-50 dark:bg-blue-500/10', text: 'text-blue-500'}, title: 'Onboarding forms incomplete', desc: 'Participants need to complete', value: '12', route: '/onboarding'},
 ];
 
 /** Aktivitaets-Eintraege */
@@ -109,6 +113,12 @@ const activityItems = [
 
 /** Admin-Uebersicht: Metriken, Deadlines, Pipeline, Aufmerksamkeit, Aktivitaet */
 export function AdminOverview() {
+  const router = useRouter();
+
+  const navigate = (route: string) => {
+    router.push(route);
+  };
+
   return (
     <>
       {/* Obere Reihe: Metriken & Deadlines */}
@@ -119,12 +129,11 @@ export function AdminOverview() {
             <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">Good morning, Jane. <span className="animate-wave">👋</span></h1>
             <p className="text-slate-500 dark:text-slate-400 text-sm">Voyage <span className="text-rose-500 font-medium">51</span> is in application review.</p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-1">
+          <div className="grid grid-cols-2 gap-3">
             <MetricBlock icon={<FileText />} color={{bg: 'bg-[#77CF97]/10', text: 'text-[#77CF97]'}} value="312" label="Applications" subtext="+24 since yesterday" />
             <MetricBlock icon={<User />} color={{bg: 'bg-blue-500/10', text: 'text-blue-500'}} value="128" label="Accepted" subtext="41% of total" />
             <MetricBlock icon={<Users />} color={{bg: 'bg-purple-500/10', text: 'text-purple-500'}} value="64" label="Pending Review" subtext="20% of total" />
             <MetricBlock icon={<XCircle />} color={{bg: 'bg-rose-500/10', text: 'text-rose-500'}} value="28" label="Rejected" subtext="9% of total" />
-            <MetricBlock icon={<UsersRound />} color={{bg: 'bg-amber-500/10', text: 'text-amber-500'}} value="18" label="Teams Drafted" subtext="65 members" />
           </div>
         </div>
 
@@ -132,7 +141,7 @@ export function AdminOverview() {
         <div className="lg:col-span-4 bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6 flex flex-col">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-semibold text-slate-800 dark:text-white">Upcoming Deadlines</h3>
-            <a href="#" className="text-xs font-medium text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">View all</a>
+            <button onClick={() => navigate('/calendar')} className="text-xs font-medium text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer">View all</button>
           </div>
           <div className="space-y-4 flex-1">
             {deadlines.map((d, i) => (
@@ -155,11 +164,11 @@ export function AdminOverview() {
       <div>
         <div className="flex justify-between items-end mb-4 px-1">
           <h2 className="font-semibold text-slate-900 dark:text-white text-lg">Voyage Pipeline</h2>
-          <a href="#" className="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">View full pipeline</a>
+          <button onClick={() => navigate('/matching')} className="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer">View full pipeline</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {pipelineSteps.map((p, i) => (
-            <div key={i} className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6 relative flex flex-col h-full hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow">
+            <div key={i} onClick={() => navigate(p.route)} className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6 relative flex flex-col h-full hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow cursor-pointer group/card">
               <div className="flex gap-3.5 items-start mb-6">
                 <div className={`font-outfit text-[40px] leading-none tracking-tighter font-light ${p.color}`}>{p.step}</div>
                 <div className="pt-1">
@@ -181,9 +190,9 @@ export function AdminOverview() {
                   </div>
                 ))}
               </div>
-              <button className={`absolute bottom-5 right-5 w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${p.btnBg} ${p.color} hover:bg-opacity-20`}>
+              <div className={`absolute bottom-5 right-5 w-8 h-8 rounded-full flex items-center justify-center transition-all ${p.btnBg} ${p.color} group-hover/card:scale-110`}>
                 <ChevronRight className="w-4 h-4" />
-              </button>
+              </div>
             </div>
           ))}
         </div>
@@ -198,7 +207,7 @@ export function AdminOverview() {
           </div>
           <div className="space-y-1">
             {attentionItems.map((item, i) => (
-              <div key={i} className="flex items-center gap-4 py-3 border-b border-slate-50 dark:border-white/5 last:border-0 last:pb-0 cursor-pointer group">
+              <div key={i} onClick={() => navigate(item.route)} className="flex items-center gap-4 py-3 border-b border-slate-50 dark:border-white/5 last:border-0 last:pb-0 cursor-pointer group">
                 <div className={`p-2.5 rounded-xl border border-rose-100/50 dark:border-white/10 shrink-0 shadow-sm ${item.color.bg} ${item.color.text}`}>
                   <span className="w-4 h-4">{item.icon}</span>
                 </div>
@@ -219,7 +228,7 @@ export function AdminOverview() {
         <div className="lg:col-span-6 bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-6">
           <div className="flex items-center justify-between mb-6 px-1">
             <h3 className="font-semibold text-slate-900 dark:text-white">Recent Activity</h3>
-            <a href="#" className="text-xs font-medium text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">View all</a>
+            <button onClick={() => navigate('/analytics')} className="text-xs font-medium text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors cursor-pointer">View all</button>
           </div>
           <div className="space-y-1">
             {activityItems.map((item, i) => {
@@ -248,319 +257,269 @@ export function AdminOverview() {
   );
 }
 
-/** Mock-Daten fuer Participant-Overview */
+/**
+ * Mock-Daten fuer den Participant-Dashboard.
+ * Enthaelt Team, Onboarding-Fortschritt, Termine, Quick Actions und Announcements.
+ */
 const MOCK_PARTICIPANT = {
   name: 'Olivia',
-  team: 'Team Atlas',
-  sprint: {name: 'Sprint 3', remaining: 8, percent: 64, todo: 8, inProgress: 5, done: 23},
-  meetings: [
-    {month: 'May', day: 12, title: 'Daily Standup', time: 'Today, 18:30', platform: 'Discord', platformIcon: '💬'},
-    {month: 'May', day: 13, title: 'Sprint Planning', time: 'Tomorrow, 19:00', platform: 'Zoom', platformIcon: '📹'},
-    {month: 'May', day: 16, title: 'Mentor Check-in', time: 'Friday, 17:00', platform: 'Google Meet', platformIcon: '🎥'},
+  team: {
+    name: 'Team Atlas',
+    status: 'active' as const,
+    members: [
+      {avatar: '32', name: 'Olivia Chen', role: 'Frontend', timezone: 'UTC-7', isYou: true},
+      {avatar: '11', name: 'Daniel Martinez', role: 'PM', timezone: 'UTC-6'},
+      {avatar: '5', name: 'Emma Wilson', role: 'Design', timezone: 'UTC-5'},
+      {avatar: '7', name: 'Michael Davis', role: 'Backend', timezone: 'UTC+1'},
+    ],
+    memberExtra: '+2',
+    roles: ['PM', 'Frontend', 'Backend', 'Design'],
+    sharedOverlap: '4.5h/day',
+  },
+  onboarding: {
+    completed: 3,
+    total: 6,
+    percent: 50,
+    nextStep: 'Confirm Availability',
+  },
+  upcomingDates: [
+    {month: 'May', day: 12, title: 'Daily Standup', time: 'Today, 18:30'},
+    {month: 'May', day: 13, title: 'Sprint Planning', time: 'Tomorrow, 19:00'},
+    {month: 'May', day: 16, title: 'Mentor Check-in', time: 'Friday, 17:00'},
+    {month: 'Jun', day: 1, title: 'Demo Day', time: '3 weeks away'},
   ],
-  tasks: {assigned: 6, inReview: 2, blocked: 1},
-  onboarding: {completed: 3, total: 6, nextStep: 'Confirm Availability'},
-  activity: [
-    {text: 'Team Atlas completed 2 tasks', sub: 'Implement user profile page and fix navigation bug', time: '7h ago', color: 'text-[#77CF97]'},
-    {text: 'Daniel commented on project board', sub: 'Left feedback on the API integration task', time: '2h ago', color: 'text-blue-500'},
-    {text: 'New commit pushed to repository', sub: 'Update auth services and add tests', time: '5h ago', color: 'text-purple-500'},
-    {text: 'Onboarding reminder sent', sub: 'Don\'t forget to confirm your availability', time: '1d ago', color: 'text-amber-500'},
+  quickActions: [
+    {label: 'Continue Onboarding', icon: CheckCircle, route: 'onboarding' as const},
+    {label: 'Update My Profile', icon: User, route: 'profile' as const},
+    {label: 'View My Team', icon: UsersRound, route: 'teams' as const},
   ],
-  teamMembers: ['32', '11', '5', '7'],
+  announcements: [
+    {text: 'Team Atlas completed onboarding', time: '2h ago'},
+    {text: 'Mentorship sessions start next week', time: '1d ago'},
+    {text: 'Voyage 51 Demo Day: Jun 1', time: '3d ago'},
+  ],
 };
 
-/** Participant-Uebersicht: Sprint-Progress, Meetings, Tasks, Onboarding, Team, Activity */
+/**
+ * Fortschrittsring fuer das Onboarding (reines SVG, kein Recharts).
+ * Zeigt den prozentualen Abschluss als Kreisbogen.
+ */
+function ProgressRing({percent, size = 80, strokeWidth = 5}: {
+  percent: number;
+  size?: number;
+  strokeWidth?: number;
+}) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (percent / 100) * circumference;
+
+  return (
+    <div className="relative shrink-0" style={{width: size, height: size}}>
+      <svg className="w-full h-full -rotate-90" viewBox={`0 0 ${size} ${size}`}>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={strokeWidth}
+          className="text-slate-100 dark:text-white/10"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="#77CF97"
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          className="transition-all duration-500"
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+        <span className="text-xl font-bold text-slate-800 dark:text-white">{percent}%</span>
+        <span className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Complete</span>
+      </div>
+    </div>
+  );
+}
+
+/** Participant-Uebersicht: Onboarding, Team, Termine, Quick Actions, Announcements */
 export function ParticipantOverview() {
   const {setCurrentView} = useDashboard();
+  const router = useRouter();
   const t = MOCK_PARTICIPANT;
+
+  /** Statusmeldung dynamisch je nach Onboarding-Fortschritt */
+  const statusMessage = t.onboarding.percent === 100
+    ? "You're all set!"
+    : `Next up: ${t.onboarding.nextStep}.`;
 
   return (
     <div className="space-y-6">
-      {/* Begruessung */}
+      {/* Begrussung + Badges */}
       <div>
         <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">
-          Welcome back, {t.name}! <span className="animate-wave">👋</span>
+          Welcome back, {t.name}! <span className="animate-wave">&#x1f44b;</span>
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">Here is what is happening with your team and tasks today.</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">{statusMessage}</p>
       </div>
 
-      {/* Badges */}
       <div className="flex flex-wrap items-center gap-3">
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#77CF97]/10 text-[#77CF97] text-xs font-semibold border border-[#77CF97]/20">
-          <CheckCircle className="w-3 h-3" /> {t.sprint.name} Active
+          <CheckCircle className="w-3 h-3" /> {t.team.name} &bull; {t.team.status}
         </span>
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold border border-blue-100 dark:border-blue-500/20">
-          <UsersRound className="w-3 h-3" /> {t.team}
+          <CheckCircle className="w-3 h-3" /> Onboarding: {t.onboarding.completed}/{t.onboarding.total}
         </span>
         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-semibold border border-purple-100 dark:border-purple-500/20">
           <User className="w-3 h-3" /> Participant
         </span>
       </div>
 
-      {/* Obere Reihe: Sprint Progress + Meetings */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Sprint Progress */}
-        <div className="lg:col-span-2 bg-white dark:bg-[#1a1b24] p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-          <div className="flex items-center justify-between mb-1">
-            <h3 className="text-sm font-semibold text-slate-800 dark:text-white">Sprint Progress</h3>
-            <Info className="w-3.5 h-3.5 text-slate-400" />
-          </div>
-          <div className="flex items-center gap-2 mb-6">
-            <span className="text-lg font-bold text-slate-900 dark:text-white">{t.sprint.name} is Active</span>
-            <span className="w-2 h-2 rounded-full bg-[#77CF97]" />
-          </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-            Your team <strong className="text-slate-800 dark:text-white">{t.team}</strong> has <strong className="text-slate-800 dark:text-white">{t.sprint.remaining} tasks</strong> remaining.
-          </p>
+      {/* Bento-Grid: asymmetrische Karten mit variablen Groessen */}
+      {/*
+        Layout (4 Spalten, 2 Zeilen):
+        ┌───────────────────┬─────────┐
+        │  Onboarding (3c)  │  Team   │
+        │                   │  (1c,   │
+        │                   │  2r)    │
+        ├────────┬──────────┤         │
+        │ Dates  │ Quick    ├─────────┤
+        │ (1c)   │ Actions  │ News    │
+        │        │ (1c)     │ (1c)    │
+        └────────┴──────────┴─────────┘
+      */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-[auto_1fr] gap-4 auto-rows-min">
 
-          <div className="flex items-center gap-8">
-            {/* Pie-Chart */}
-            <div className="relative w-40 h-40 shrink-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={sprintTaskData} cx="50%" cy="50%" innerRadius={50} outerRadius={70} paddingAngle={3} dataKey="value" stroke="none">
-                    {sprintTaskData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={TASK_COLORS[index]} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-2xl font-bold text-slate-800 dark:text-white">{t.sprint.percent}%</span>
-                <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Complete</span>
-              </div>
-            </div>
-
-            {/* Stats + Button */}
-            <div className="flex-1 space-y-4">
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-white/20" /> <span className="text-slate-600 dark:text-slate-300">To Do</span></div>
-                  <span className="font-semibold text-slate-800 dark:text-white">{t.sprint.todo}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-indigo-400" /> <span className="text-slate-600 dark:text-slate-300">In Progress</span></div>
-                  <span className="font-semibold text-slate-800 dark:text-white">{t.sprint.inProgress}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-[#77CF97]" /> <span className="text-slate-600 dark:text-slate-300">Done</span></div>
-                  <span className="font-semibold text-slate-800 dark:text-white">{t.sprint.done}</span>
-                </div>
-              </div>
-              <button
-                onClick={() => setCurrentView('teams')}
-                className="w-full py-2.5 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
-              >
-                Go to Team Space <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Upcoming Meetings */}
-        <div className="bg-white dark:bg-[#1a1b24] p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm flex flex-col">
-          <div className="flex items-center justify-between mb-5">
-            <h3 className="text-sm font-semibold text-slate-800 dark:text-white">Upcoming Meetings</h3>
-            <a href="#" className="text-xs font-medium text-[#77CF97] hover:underline">View Calendar ↗</a>
-          </div>
-          <div className="space-y-3 flex-1">
-            {t.meetings.map((m, i) => (
-              <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 transition-colors cursor-pointer">
-                <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex flex-col items-center justify-center shrink-0">
-                  <span className="text-[9px] font-bold uppercase">{m.month}</span>
-                  <span className="text-sm font-bold leading-none mt-0.5">{m.day}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold text-slate-800 dark:text-white truncate">{m.title}</div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{m.time}</div>
-                </div>
-                <span className="text-xs text-slate-400 dark:text-slate-500 shrink-0">{m.platformIcon} {m.platform}</span>
-              </div>
-            ))}
-          </div>
-          <a href="#" className="mt-4 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 text-center transition-colors">
-            View All Meetings →
-          </a>
-        </div>
-      </div>
-
-      {/* Untere Reihe: 3 Spalten */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Spalte 1: My Tasks + My Onboarding */}
-        <div className="space-y-6">
-          {/* My Tasks */}
-          <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-slate-800 dark:text-white">My Tasks</h3>
-              <a href="#" className="text-xs font-medium text-[#77CF97] hover:underline">View Tasks</a>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-500/15 flex items-center justify-center mx-auto mb-2">
-                  <User className="w-4 h-4 text-blue-500" />
-                </div>
-                <div className="text-lg font-bold text-slate-900 dark:text-white">{t.tasks.assigned}</div>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500">Assigned</div>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center mx-auto mb-2">
-                  <Clock className="w-4 h-4 text-amber-500" />
-                </div>
-                <div className="text-lg font-bold text-slate-900 dark:text-white">{t.tasks.inReview}</div>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500">In Review</div>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-500/15 flex items-center justify-center mx-auto mb-2">
-                  <AlertTriangle className="w-4 h-4 text-rose-500" />
-                </div>
-                <div className="text-lg font-bold text-slate-900 dark:text-white">{t.tasks.blocked}</div>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500">Blocked</div>
-              </div>
-            </div>
-          </div>
-
-          {/* My Onboarding */}
-          <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-slate-800 dark:text-white">My Onboarding</h3>
-              <Info className="w-3.5 h-3.5 text-slate-400" />
-            </div>
-            <div className="flex items-center gap-4 mb-3">
-              <div className="relative w-14 h-14 shrink-0">
-                <svg className="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
-                  <circle cx="28" cy="28" r="24" fill="none" stroke="currentColor" strokeWidth="4" className="text-slate-100 dark:text-white/10" />
-                  <circle cx="28" cy="28" r="24" fill="none" stroke="#77CF97" strokeWidth="4" strokeLinecap="round" strokeDasharray={`${0.5 * 2 * Math.PI * 24} ${2 * Math.PI * 24}`} />
-                </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-slate-800 dark:text-white">50%</span>
-              </div>
+        {/* Onboarding — breite Hero-Karte, 3 Spalten */}
+        <div className="lg:col-span-3 bg-white dark:bg-[#1a1b24] p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow">
+          <h3 className="text-sm font-semibold text-slate-800 dark:text-white mb-5">Onboarding Progress</h3>
+          <div className="flex items-center gap-6">
+            <ProgressRing percent={t.onboarding.percent} size={100} strokeWidth={6} />
+            <div className="flex-1 space-y-3">
               <div>
                 <div className="text-sm font-bold text-slate-900 dark:text-white">{t.onboarding.completed} of {t.onboarding.total} steps completed</div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Keep going! You&apos;re halfway there.</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
-              <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-slate-400" />
-                <div>
-                  <div className="text-[10px] text-slate-400 dark:text-slate-500">Next step</div>
-                  <div className="text-xs font-medium text-slate-700 dark:text-slate-200">{t.onboarding.nextStep}</div>
-                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{statusMessage}</p>
               </div>
               <button
                 onClick={() => setCurrentView('onboarding')}
-                className="px-3 py-1.5 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-lg text-xs font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors cursor-pointer"
+                className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-xs font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors cursor-pointer inline-flex items-center gap-1.5"
               >
-                Continue <ChevronRight className="w-3 h-3 inline" />
+                Continue <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
-            <a href="#" className="block mt-3 text-xs font-medium text-[#77CF97] hover:underline text-center">
-              View Onboarding Checklist →
-            </a>
           </div>
         </div>
 
-        {/* Spalte 2: Team Activity + My Team */}
-        <div className="space-y-6">
-          {/* Team Activity */}
-          <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-slate-800 dark:text-white">Team Activity</h3>
-              <a href="#" className="text-xs font-medium text-[#77CF97] hover:underline">View Activity</a>
+        {/* My Team — hohe Karte, 1 Spalte, 2 Zeilen */}
+        <div className="lg:col-span-1 lg:row-span-2 bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-slate-800 dark:text-white">My Team</h3>
+          </div>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/15 flex items-center justify-center shrink-0">
+              <UsersRound className="w-5 h-5 text-blue-500" />
             </div>
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#77CF97]/10 flex items-center justify-center shrink-0">
-                <CheckCircle className="w-5 h-5 text-[#77CF97]" />
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-slate-900 dark:text-white">3 updates today</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Git/PIR repo active</div>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Latest: 2 hours ago</div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-slate-900 dark:text-white truncate">{t.team.name}</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20 capitalize shrink-0">{t.team.status}</span>
               </div>
             </div>
           </div>
 
-          {/* My Team */}
-          <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-slate-800 dark:text-white">My Team</h3>
-            </div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/15 flex items-center justify-center shrink-0">
-                <UsersRound className="w-5 h-5 text-blue-500" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-slate-900 dark:text-white">{t.team}</span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20">Active</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 mb-3">
-              {t.teamMembers.map((id, i) => (
-                <img key={i} src={`https://i.pravatar.cc/100?img=${id}`} className="w-8 h-8 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-100 dark:bg-white/10" alt="" />
-              ))}
-              <span className="w-8 h-8 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 text-[10px] font-medium flex items-center justify-center">+1</span>
-            </div>
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 mb-3">
-              <span className="font-medium">Roles in team:</span>
-              <span className="px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium">Frontend</span>
-              <span className="px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 font-medium">Backend</span>
-              <span className="px-1.5 py-0.5 rounded bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 font-medium">Design</span>
-            </div>
+          {/* Avatar-Stack */}
+          <div className="flex items-center gap-1 mb-4">
+            {t.team.members.map((m, i) => (
+              <img key={i} src={`https://i.pravatar.cc/100?img=${m.avatar}`} className="w-9 h-9 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-100 dark:bg-white/10" alt={m.name} title={`${m.name} (${m.role})`} />
+            ))}
+            <span className="w-9 h-9 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 text-[10px] font-medium flex items-center justify-center">{t.team.memberExtra}</span>
+          </div>
+
+          {/* Rollen-Tags */}
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 mb-3 flex-wrap">
+            {t.team.roles.map((role, i) => (
+              <span key={i} className="px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium">{role}</span>
+            ))}
+          </div>
+
+          {/* Shared Overlap */}
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 mb-4">
+            Shared Overlap: <span className="font-semibold text-slate-700 dark:text-slate-200">{t.team.sharedOverlap}</span>
+          </div>
+
+          <div className="mt-auto">
             <button
               onClick={() => setCurrentView('teams')}
-              className="w-full py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-xs font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-xs font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              View Team <ChevronRight className="w-3.5 h-3.5" />
+              View Team Space <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Spalte 3: Sprint Health + Recent Activity */}
-        <div className="space-y-6">
-          {/* Sprint Health */}
-          <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-slate-800 dark:text-white">Sprint Health</h3>
-              <a href="#" className="text-xs font-medium text-[#77CF97] hover:underline">View Details</a>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
-                <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Status</div>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#77CF97]" />
-                  <span className="text-sm font-bold text-[#77CF97]">On Track</span>
-                </div>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Everything looks good</div>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
-                <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Overlap</div>
-                <div className="text-sm font-bold text-slate-900 dark:text-white">4.5h</div>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Daily average</div>
-              </div>
-            </div>
+        {/* Upcoming Dates — kompakte Karte */}
+        <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-slate-800 dark:text-white">Upcoming Dates</h3>
+            <button onClick={() => setCurrentView('calendar')} className="text-[10px] font-medium text-[#77CF97] hover:underline cursor-pointer">View All</button>
           </div>
-
-          {/* Recent Activity */}
-          <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-slate-800 dark:text-white">Recent Activity</h3>
-              <a href="#" className="text-xs font-medium text-[#77CF97] hover:underline">View All Activity ↗</a>
-            </div>
-            <div className="space-y-3">
-              {t.activity.map((a, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${a.color}`} />
-                  <div className="min-w-0">
-                    <div className="text-xs font-medium text-slate-800 dark:text-white leading-snug">{a.text}</div>
-                    <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{a.sub}</div>
-                    <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{a.time}</div>
-                  </div>
+          <div className="space-y-2.5 flex-1">
+            {t.upcomingDates.slice(0, 3).map((d, i) => (
+              <div key={i} className="flex items-center gap-2.5 p-2 rounded-xl border border-slate-100 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 transition-colors cursor-pointer">
+                <div className="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100/50 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex flex-col items-center justify-center shrink-0">
+                  <span className="text-[8px] font-bold uppercase leading-none">{d.month}</span>
+                  <span className="text-xs font-bold leading-none mt-0.5">{d.day}</span>
                 </div>
-              ))}
-            </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-slate-800 dark:text-white truncate">{d.title}</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500">{d.time}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+
+        {/* Quick Actions — kompakte Karte */}
+        <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow">
+          <h3 className="text-sm font-semibold text-slate-800 dark:text-white mb-4">Quick Actions</h3>
+          <div className="space-y-2">
+            {t.quickActions.map((action, i) => {
+              const Icon = action.icon;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setCurrentView(action.route)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer group"
+                >
+                  <Icon className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#77CF97] transition-colors" />
+                  <span className="text-xs font-medium text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{action.label}</span>
+                  <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 ml-auto group-hover:text-slate-500 dark:group-hover:text-slate-300 transition-colors" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Announcements — kompakte Karte */}
+        <div className="bg-white dark:bg-[#1a1b24] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow">
+          <h3 className="text-sm font-semibold text-slate-800 dark:text-white mb-4">Announcements</h3>
+          <div className="space-y-3">
+            {t.announcements.map((item, i) => (
+              <div key={i} className="flex items-start gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 bg-[#77CF97]" />
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-medium text-slate-800 dark:text-white leading-snug">{item.text}</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{item.time}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
@@ -631,10 +590,10 @@ export function ApplicantOverview() {
   );
 }
 
-/** Haupt-Overview-Seite: waehlt Ansicht basierend auf der Rolle */
+/** Haupt-Overview-Seite: waehlt Ansicht basierend auf der Rolle und dem Status */
 export default function OverviewPage() {
-  const {role} = useDashboard();
+  const {role, status} = useDashboard();
   if (role === 'admin') return <AdminOverview />;
-  if (role === 'participant') return <ParticipantOverview />;
+  if (status === 'participant') return <ParticipantOverview />;
   return <ApplicantOverview />;
 }

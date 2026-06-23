@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 /** Login-Seite mit Formular und Quick-Login-Buttons */
 export default function LoginPage() {
-  const {setRole, setIsAuthenticated, isAuthenticated, isInitialized} = useDashboard();
+  const {setRole, setStatus, setIsAuthenticated, isAuthenticated, isInitialized} = useDashboard();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,8 +25,9 @@ export default function LoginPage() {
     return null;
   }
 
-  const handleLogin = (selectedRole: 'admin' | 'applicant' | 'participant') => {
+  const handleLogin = (selectedRole: 'admin' | 'user', selectedStatus: 'applicant' | 'participant' = 'participant') => {
     setRole(selectedRole);
+    setStatus(selectedStatus);
     setIsAuthenticated(true);
     router.push('/overview');
   };
@@ -47,7 +48,7 @@ export default function LoginPage() {
             className="space-y-4"
             onSubmit={(e) => {
               e.preventDefault();
-              handleLogin('applicant');
+              handleLogin('user', 'applicant');
             }}
           >
             <div className="space-y-1.5 text-left">
@@ -79,7 +80,7 @@ export default function LoginPage() {
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-[#0b0c10] dark:bg-[#77CF97] text-white rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm mt-2 cursor-pointer"
+              className="w-full py-3 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-semibold hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm mt-2 cursor-pointer"
             >
               Sign In
             </button>
@@ -106,7 +107,7 @@ export default function LoginPage() {
             </button>
 
             <button
-              onClick={() => handleLogin('applicant')}
+              onClick={() => handleLogin('user', 'applicant')}
               className="flex items-center justify-center gap-2 py-2 rounded-lg border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 text-xs font-medium hover:border-amber-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors cursor-pointer"
             >
               <FileCheck className="w-3.5 h-3.5" />
@@ -114,7 +115,7 @@ export default function LoginPage() {
             </button>
 
             <button
-              onClick={() => handleLogin('participant')}
+              onClick={() => handleLogin('user', 'participant')}
               className="flex items-center justify-center gap-2 py-2 rounded-lg border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 text-xs font-medium hover:border-emerald-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
