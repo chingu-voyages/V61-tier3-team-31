@@ -1,7 +1,7 @@
 'use client';
 
 import {useState} from 'react';
-import {FileText, FileSearch, Clock, CheckCircle, XCircle, X} from 'lucide-react';
+import {FileText, FileSearch, Clock, CheckCircle, XCircle, X, Download} from 'lucide-react';
 import {useRouter} from 'next/navigation';
 import type {Application, ApplicationStatus} from '@/types';
 
@@ -123,6 +123,55 @@ export default function ApplicationsPage() {
     ? MOCK_APPLICATIONS
     : MOCK_APPLICATIONS.filter((a) => a.status === activeTab);
 
+  /**
+   * Exportiert die gefilterte Bewerbungsliste als CSV-Datei.
+   * Beruecksichtigt alle sichtbaren Spalten und aktiven Filter.
+   */
+  const exportCSV = () => {
+    /** Escape-Funktion fuer CSV-Felder mit Kommas oder Anfuehrungszeichen */
+    const escape = (val: string) => {
+      if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+        return `"${val.replace(/"/g, '""')}"`;
+      }
+      return val;
+    };
+
+    /** Kopfzeile der CSV-Datei */
+    const headers = [
+      'Name', 'Email', 'Role', 'Experience', 'Years', 'Status',
+      'Voyage', 'Availability', 'Timezone', 'Skills', 'Applied Date',
+    ];
+
+    /** Datenzeilen aus den gefilterten Bewerbungen */
+    const rows = filtered.map((app) => [
+      escape(app.name),
+      escape(app.email),
+      app.role,
+      app.experience,
+      app.years,
+      STATUS_CONFIG[app.status].label,
+      app.voyage,
+      app.availability,
+      app.timezone,
+      escape(app.skills.join('; ')),
+      app.date,
+    ]);
+
+    /** CSV-String zusammenbauen (UTF-8 BOM fuer Excel-Kompatibilitaet) */
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+
+    /** Blob erstellen und Download ausloesen */
+    const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `applications-${activeTab}-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr + 'T00:00:00');
     return d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
@@ -140,8 +189,12 @@ export default function ApplicationsPage() {
           <button className="px-4 py-2 bg-white dark:bg-[#1a1b24] border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
             <FileSearch className="w-4 h-4" /> Filters
           </button>
-          <button className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer">
-            <FileText className="w-4 h-4" /> Export CSV
+          <button
+            onClick={exportCSV}
+            disabled={filtered.length === 0}
+            className="px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <Download className="w-4 h-4" /> Export CSV {filtered.length > 0 && `(${filtered.length})`}
           </button>
         </div>
       </div>

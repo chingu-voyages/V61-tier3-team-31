@@ -119,9 +119,10 @@ export function Sidebar() {
           </>
         )}
 
-        {/* --- User mit Status "applicant": nur Status-Uebersicht --- */}
+        {/* --- User mit Status "applicant": Antragsformular + Status-Uebersicht --- */}
         {role === 'user' && status === 'applicant' && (
           <>
+            <NavItem isExpanded={isSidebarExpanded} icon={<FileText className="w-4 h-4" />} label="Application Form" active={currentView === 'apply'} onClick={() => navigate('apply')} />
             <NavItem isExpanded={isSidebarExpanded} icon={<Home className="w-4 h-4" />} label="Application Status" active={currentView === 'overview'} onClick={() => navigate('overview')} />
           </>
         )}

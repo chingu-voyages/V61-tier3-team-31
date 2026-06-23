@@ -26,7 +26,8 @@ export type DashboardView =
   | 'participants'
   | 'announcements'
   | 'calendar'
-  | 'ui-components';
+  | 'ui-components'
+  | 'apply';
 
 /** Verfügbare Tabs in den Einstellungen */
 export type SettingsTab =

@@ -62,13 +62,13 @@ export default function RegisterPage() {
 
     setIsLoading(true);
 
-    // Simulierte Registrierung
+    // Simulierte Registrierung — direkt zum Bewerbungsformular
     await new Promise((r) => setTimeout(r, 1200));
 
     setRole('user');
     setStatus('applicant');
     setIsAuthenticated(true);
-    router.push('/overview');
+    router.push('/apply');
   };
 
   const inputClass = (hasError: boolean) =>
