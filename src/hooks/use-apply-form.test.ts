@@ -1,34 +1,15 @@
-/// <reference types="vitest/globals" />
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useApplyForm } from "./use-apply-form";
-import type { ApplyFormData } from "@/lib/schemas/apply-schema";
+import { describe, it, expect } from "vitest";
 
 describe("useApplyForm", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   it("initializes with step 1", () => {
     const { result } = renderHook(() => useApplyForm());
     expect(result.current.currentStep).toBe(1);
+    expect(result.current.isLoading).toBe(false);
   });
 
-  it("validates step 1 before advancing", async () => {
-    const { result } = renderHook(() => useApplyForm());
-
-    await act(async () => {
-      await result.current.nextStep();
-    });
-
-    expect(result.current.currentStep).toBe(1);
-  });
-
-  it("advances to step 2 when step 1 is valid", async () => {
+  it("can navigate to next step when fields are valid", async () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
@@ -36,22 +17,39 @@ describe("useApplyForm", () => {
       result.current.form.setValue("email", "john@example.com");
       result.current.form.setValue("password", "password123");
       result.current.form.setValue("confirmPassword", "password123");
+    });
+
+    await act(async () => {
       await result.current.nextStep();
     });
 
     expect(result.current.currentStep).toBe(2);
   });
 
-  it("goes back to previous step", async () => {
+  it("cannot navigate to next step when fields are invalid", async () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "John Doe");
-      result.current.form.setValue("email", "john@example.com");
-      result.current.form.setValue("password", "password123");
-      result.current.form.setValue("confirmPassword", "password123");
+      result.current.form.setValue("fullName", "J"); // Invalid: too short
+      result.current.form.setValue("email", "not-an-email");
+    });
+
+    await act(async () => {
       await result.current.nextStep();
     });
+
+    expect(result.current.currentStep).toBe(1);
+  });
+
+  it("can navigate to previous step", async () => {
+    const { result } = renderHook(() => useApplyForm());
+
+    // Manually set step to 2
+    act(() => {
+      result.current.setStep(2);
+    });
+
+    expect(result.current.currentStep).toBe(2);
 
     act(() => {
       result.current.prevStep();
@@ -60,86 +58,46 @@ describe("useApplyForm", () => {
     expect(result.current.currentStep).toBe(1);
   });
 
-  it("sets specific step", () => {
+  it("cannot navigate below step 1", () => {
     const { result } = renderHook(() => useApplyForm());
 
     act(() => {
-      result.current.setStep(3);
+      result.current.prevStep();
     });
 
-    expect(result.current.currentStep).toBe(3);
+    expect(result.current.currentStep).toBe(1);
   });
 
-  it("validates all steps on submit", async () => {
+  it("submits form data when valid", async () => {
     const { result } = renderHook(() => useApplyForm());
 
-    act(() => {
+    // Fill all required fields
+    await act(async () => {
       result.current.form.setValue("fullName", "John Doe");
       result.current.form.setValue("email", "john@example.com");
       result.current.form.setValue("password", "password123");
       result.current.form.setValue("confirmPassword", "password123");
-      result.current.form.setValue("role", "developer");
-      result.current.form.setValue("experienceLevel", "intermediate");
-      result.current.form.setValue("skills", ["React", "TypeScript"]);
-      result.current.form.setValue("hoursPerWeek", "15-20 hours/week");
-      result.current.form.setValue("timezone", "America/New_York");
-      result.current.form.setValue("voyage", "Voyage 51");
       result.current.form.setValue(
-        "motivation",
-        "I want to join to learn and grow with other developers.",
+        "bio",
+        "This is a test bio that is perfectly at least fifty characters long so that it passes validation properly without any issues whatsoever.",
       );
-      result.current.form.setValue("bio", "I am a passionate developer with experience.");
-      result.current.form.setValue("github", "https://github.com/johndoe");
-      result.current.form.setValue("portfolio", "https://johndoe.dev");
-    });
-
-    let submitResult: ApplyFormData | null = null;
-    await act(async () => {
-      submitResult = await result.current.submit();
-    });
-
-    expect(submitResult).not.toBeNull();
-    expect(submitResult!.fullName).toBe("John Doe");
-  });
-
-  it("returns null on invalid submit", async () => {
-    const { result } = renderHook(() => useApplyForm());
-
-    let submitResult: ApplyFormData | null = null;
-    await act(async () => {
-      submitResult = await result.current.submit();
-    });
-
-    expect(submitResult).toBeNull();
-  });
-
-  it("shows loading state during submit", async () => {
-    const { result } = renderHook(() => useApplyForm());
-
-    act(() => {
-      result.current.form.setValue("fullName", "John Doe");
-      result.current.form.setValue("email", "john@example.com");
-      result.current.form.setValue("password", "password123");
-      result.current.form.setValue("confirmPassword", "password123");
       result.current.form.setValue("role", "developer");
       result.current.form.setValue("experienceLevel", "intermediate");
       result.current.form.setValue("skills", ["React"]);
-      result.current.form.setValue("hoursPerWeek", "15-20 hours/week");
-      result.current.form.setValue("timezone", "America/New_York");
-      result.current.form.setValue("voyage", "Voyage 51");
-      result.current.form.setValue(
-        "motivation",
-        "I want to join to learn and grow with other developers.",
-      );
-      result.current.form.setValue("bio", "I am a passionate developer with experience.");
+      result.current.form.setValue("hoursPerWeek", 20);
+      result.current.form.setValue("timezone", "UTC");
+      result.current.form.setValue("daysAvailable", ["Monday"]);
+      result.current.form.setValue("timeSlotsPerDay", ["morning"]);
     });
 
+    let submittedData: ReturnType<typeof useApplyForm>["submit"] extends Promise<infer T>
+      ? T
+      : never = null;
     await act(async () => {
-      const submitPromise = result.current.submit();
-      await vi.runAllTimersAsync();
-      await submitPromise;
+      submittedData = await result.current.submit();
     });
 
-    expect(result.current.isLoading).toBe(false);
+    expect(submittedData).toBeTruthy();
+    expect(submittedData?.fullName).toBe("John Doe");
   });
 });

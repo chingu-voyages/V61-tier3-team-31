@@ -1,177 +1,132 @@
-"use client";
-
 import { useFormContext } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react";
+import { Mail, User, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { FormWrapper } from "@/components/apply/form-wrapper";
-import type { ApplyForm } from "@/hooks/use-apply-form";
+import type { ApplyFormData } from "@/lib/schemas/apply-schema";
+import { motion } from "motion/react";
 
 export default function StepAccount() {
   const {
     register,
     formState: { errors },
-  } = useFormContext<ApplyForm>();
+  } = useFormContext<ApplyFormData>();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const inputClasses =
+    "w-full h-14 pl-12 pr-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 transition-all duration-300 focus:outline-none focus:border-nexus-green focus:bg-white/10 focus:shadow-[0_0_20px_rgba(119,207,151,0.15)]";
+
+  const iconClasses =
+    "absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40 transition-colors duration-300 peer-focus:text-nexus-green";
+
   return (
-    <FormWrapper title="Create Account" description="Enter your details to get started">
-      <div className="space-y-5">
+    <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
+      <div className="text-center space-y-2">
+        <motion.h2
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-3xl font-outfit font-bold tracking-tight text-white"
+        >
+          Create your account
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-slate-400 text-sm"
+        >
+          Let&apos;s get started with your basic details
+        </motion.p>
+      </div>
+
+      <div className="space-y-8">
         {/* Full Name */}
-        <div className="space-y-2">
-          <Label htmlFor="fullName" className="text-sm font-medium text-foreground">
-            Full Name
-          </Label>
-          <Input
-            id="fullName"
-            placeholder="John Doe"
-            {...register("fullName")}
-            aria-invalid={!!errors.fullName}
-            aria-describedby={errors.fullName ? "fullName-error" : undefined}
-            className="h-11 px-4 rounded-xl bg-secondary/50 border-border focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-200"
-          />
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-slate-300">Full Name</label>
+          <div className="relative group">
+            <input
+              {...register("fullName")}
+              type="text"
+              className={`${inputClasses} peer`}
+              placeholder="e.g. John Doe"
+            />
+            <User className={iconClasses} />
+          </div>
           {errors.fullName && (
-            <p
-              id="fullName-error"
-              className="text-xs font-medium text-destructive flex items-center gap-1.5"
-              role="alert"
-            >
-              <svg className="h-3.5 w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {errors.fullName.message}
-            </p>
+            <p className="text-red-400 text-xs pl-2 pt-1 font-medium">{errors.fullName.message}</p>
           )}
         </div>
 
         {/* Email */}
-        <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-foreground">
-            Email
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="john@example.com"
-            {...register("email")}
-            aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? "email-error" : undefined}
-            className="h-11 px-4 rounded-xl bg-secondary/50 border-border focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-200"
-          />
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-slate-300">Email Address</label>
+          <div className="relative group">
+            <input
+              {...register("email")}
+              type="email"
+              className={`${inputClasses} peer`}
+              placeholder="john@example.com"
+            />
+            <Mail className={iconClasses} />
+          </div>
           {errors.email && (
-            <p
-              id="email-error"
-              className="text-xs font-medium text-destructive flex items-center gap-1.5"
-              role="alert"
-            >
-              <svg className="h-3.5 w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {errors.email.message}
-            </p>
+            <p className="text-red-400 text-xs pl-2 pt-1 font-medium">{errors.email.message}</p>
           )}
         </div>
 
-        {/* Password */}
-        <div className="space-y-2">
-          <Label htmlFor="password" className="text-sm font-medium text-foreground">
-            Password
-          </Label>
-          <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              {...register("password")}
-              aria-invalid={!!errors.password}
-              aria-describedby={errors.password ? "password-error" : undefined}
-              className="h-11 px-4 pr-11 rounded-xl bg-secondary/50 border-border focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-200"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors duration-150"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              aria-pressed={showPassword}
-            >
-              {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
-            </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Password */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-slate-300">Password</label>
+            <div className="relative group">
+              <input
+                {...register("password")}
+                type={showPassword ? "text" : "password"}
+                className={`${inputClasses} peer pr-12`}
+                placeholder="••••••••"
+              />
+              <Lock className={iconClasses} />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-red-400 text-xs pl-2 pt-1 font-medium">
+                {errors.password.message}
+              </p>
+            )}
           </div>
-          {errors.password && (
-            <p
-              id="password-error"
-              className="text-xs font-medium text-destructive flex items-center gap-1.5"
-              role="alert"
-            >
-              <svg className="h-3.5 w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {errors.password.message}
-            </p>
-          )}
-        </div>
 
-        {/* Confirm Password */}
-        <div className="space-y-2">
-          <Label htmlFor="confirmPassword" className="text-sm font-medium text-foreground">
-            Confirm Password
-          </Label>
-          <div className="relative">
-            <Input
-              id="confirmPassword"
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="••••••••"
-              {...register("confirmPassword")}
-              aria-invalid={!!errors.confirmPassword}
-              aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
-              className="h-11 px-4 pr-11 rounded-xl bg-secondary/50 border-border focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-200"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors duration-150"
-              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-              aria-pressed={showConfirmPassword}
-            >
-              {showConfirmPassword ? (
-                <EyeOff className="h-4.5 w-4.5" />
-              ) : (
-                <Eye className="h-4.5 w-4.5" />
-              )}
-            </button>
+          {/* Confirm Password */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-slate-300">Confirm Password</label>
+            <div className="relative group">
+              <input
+                {...register("confirmPassword")}
+                type={showConfirmPassword ? "text" : "password"}
+                className={`${inputClasses} peer pr-12`}
+                placeholder="••••••••"
+              />
+              <Lock className={iconClasses} />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
+              >
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-400 text-xs pl-2 pt-1 font-medium">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
-          {errors.confirmPassword && (
-            <p
-              id="confirmPassword-error"
-              className="text-xs font-medium text-destructive flex items-center gap-1.5"
-              role="alert"
-            >
-              <svg className="h-3.5 w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {errors.confirmPassword.message}
-            </p>
-          )}
         </div>
       </div>
-    </FormWrapper>
+    </div>
   );
 }

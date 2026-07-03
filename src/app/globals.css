@@ -52,6 +52,12 @@
   }
 }
 
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @layer base {
   :root {
     --background: #ffffff;
@@ -67,23 +73,37 @@
     scrollbar-gutter: stable;
   }
 
-  /* Elegant global focus states for form elements */
+  /* Reset default focus styles */
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible,
   button:focus-visible {
     outline: none;
-    box-shadow:
-      0 0 0 1px var(--color-nexus-green),
-      0 0 0 3px color-mix(in srgb, var(--color-nexus-green) 20%, transparent);
-    border-color: var(--color-nexus-green);
   }
 
-  /* Reset default ring on buttons that already handle their own active states */
-  button:focus:not(:focus-visible) {
-    outline: none;
-    box-shadow: none;
+  /* Cursor for all clickable elements */
+  button,
+  a,
+  [role="button"],
+  label:has(input[type="checkbox"]),
+  label:has(input[type="radio"]) {
+    cursor: pointer;
   }
+}
+
+/* Aggressive Fix for Chrome/Safari Autofill in Dark Mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:-webkit-autofill:first-line {
+  -webkit-box-shadow: 0 0 0px 1000px #13151a inset !important;
+  box-shadow: 0 0 0px 1000px #13151a inset !important;
+  -webkit-text-fill-color: white !important;
+  color: white !important;
+  caret-color: white !important;
+  background-color: transparent !important;
+  background-clip: content-box !important;
 }
 
 @layer utilities {

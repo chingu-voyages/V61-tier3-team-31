@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "motion/react";
 
 interface FormNavigationProps {
   currentStep: number;
@@ -23,48 +23,57 @@ export function FormNavigation({
   const isFirstStep = currentStep === 1;
 
   return (
-    <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-      <Button
+    <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-6">
+      {/* Back / Cancel Button */}
+      <motion.button
         type="button"
-        variant="ghost"
-        size="sm"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={isFirstStep ? () => window.history.back() : onBack}
-        className="gap-2 text-muted-foreground hover:text-foreground px-4 py-2.5 h-auto rounded-xl"
         disabled={isLoading}
+        className="w-full sm:w-auto group relative flex items-center justify-center gap-2 px-5 py-3 h-12 rounded-xl text-sm font-medium text-slate-300 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white transition-colors overflow-hidden cursor-pointer"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
         {isFirstStep ? "Cancel" : "Back"}
-      </Button>
+        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+      </motion.button>
 
+      {/* Continue / Submit Button */}
       {isLastStep ? (
-        <Button
+        <motion.button
           type="button"
+          whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(74,222,128,0.3)" }}
+          whileTap={{ scale: 0.98 }}
           onClick={onSubmit}
           disabled={isLoading}
-          className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] transition-all duration-200 px-6 py-2.5 h-auto rounded-xl font-semibold"
+          className="w-full sm:w-auto group relative flex items-center justify-center gap-2 px-8 py-3 h-12 rounded-xl text-sm font-bold text-black bg-nexus-green hover:bg-[#3bcf6d] transition-all overflow-hidden cursor-pointer"
         >
           {isLoading ? (
             <>
-              <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-              Submitting...
+              <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+              <span>Submitting...</span>
             </>
           ) : (
             <>
-              <Send className="h-4 w-4" />
-              Submit Application
+              <Sparkles className="h-4 w-4 transition-transform group-hover:scale-110" />
+              <span>Submit Application</span>
             </>
           )}
-        </Button>
+          <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+        </motion.button>
       ) : (
-        <Button
+        <motion.button
           type="button"
+          whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(74,222,128,0.2)" }}
+          whileTap={{ scale: 0.98 }}
           onClick={onContinue}
           disabled={isLoading}
-          className="gap-2 bg-foreground text-background hover:bg-foreground/90 hover:shadow-lg active:scale-[0.98] transition-all duration-200 px-6 py-2.5 h-auto rounded-xl font-semibold"
+          className="w-full sm:w-auto group relative flex items-center justify-center gap-2 px-8 py-3 h-12 rounded-xl text-sm font-bold text-black bg-nexus-green hover:bg-[#3bcf6d] transition-all overflow-hidden cursor-pointer"
         >
-          Continue
-          <ArrowRight className="h-4 w-4" />
-        </Button>
+          <span>Continue</span>
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+        </motion.button>
       )}
     </div>
   );

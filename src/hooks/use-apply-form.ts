@@ -4,77 +4,65 @@ import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
-import { applyFormSchema } from "@/lib/schemas/apply-schema";
+import {
+  applyFormSchema,
+  stepAccountSchema,
+  stepAboutYouSchema,
+  stepSkillsRoleSchema,
+  stepAvailabilitySchema,
+} from "@/lib/schemas/apply-schema";
 
-export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
+export type FormStep = 1 | 2 | 3 | 4;
 
-interface UseApplyFormReturn {
-  form: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  currentStep: FormStep;
-  isLoading: boolean;
-  nextStep: () => Promise<void>;
-  prevStep: () => void;
-  setStep: (step: FormStep) => void;
-  submit: () => Promise<ApplyFormData | null>;
-}
-
-export type ApplyForm = ApplyFormData;
-
-export function useApplyForm(): UseApplyFormReturn {
+export function useApplyForm() {
   const [currentStep, setCurrentStep] = useState<FormStep>(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ApplyFormData>({
-    resolver: zodResolver(applyFormSchema) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-    mode: "onBlur",
+    resolver: zodResolver(applyFormSchema),
+    mode: "onTouched",
     defaultValues: {
       fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
-      role: "developer",
-      experienceLevel: "beginner",
-      yearsExperience: undefined,
-      skills: [],
-      hoursPerWeek: "",
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
-      voyage: "",
-      motivation: "",
       bio: "",
       github: "",
       portfolio: "",
-      profilePhoto: "",
+      role: undefined,
+      experienceLevel: undefined,
+      yearsExperience: undefined,
+      skills: [],
+      hoursPerWeek: 0,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      daysAvailable: [],
+      timeSlotsPerDay: [],
     },
   });
 
-  const getStepFields = useCallback((step: FormStep): (keyof ApplyFormData)[] => {
+  const getStepFields = (step: FormStep): (keyof ApplyFormData)[] => {
     switch (step) {
       case 1:
-        return ["fullName", "email", "password", "confirmPassword"];
+        return Object.keys(stepAccountSchema.shape) as (keyof ApplyFormData)[];
       case 2:
-        return ["role", "experienceLevel", "yearsExperience"];
+        return Object.keys(stepAboutYouSchema.shape) as (keyof ApplyFormData)[];
       case 3:
-        return ["skills"];
+        return Object.keys(stepSkillsRoleSchema.shape) as (keyof ApplyFormData)[];
       case 4:
-        return ["hoursPerWeek", "timezone", "voyage"];
-      case 5:
-        return ["motivation", "bio", "github", "portfolio", "profilePhoto"];
-      case 6:
-        return []; // Review step doesn't have specific fields to validate on blur
+        return Object.keys(stepAvailabilitySchema.shape) as (keyof ApplyFormData)[];
+      default:
+        return [];
     }
-  }, []);
+  };
 
   const nextStep = useCallback(async () => {
-    const stepFields = getStepFields(currentStep);
-    let isValid = true;
-    if (stepFields.length > 0) {
-      isValid = await form.trigger(stepFields as (keyof ApplyFormData)[]);
-    }
-    if (!isValid) return;
-    if (currentStep < 6) {
+    const fields = getStepFields(currentStep);
+    const isStepValid = await form.trigger(fields);
+
+    if (isStepValid && currentStep < 4) {
       setCurrentStep((prev) => (prev + 1) as FormStep);
     }
-  }, [currentStep, form, getStepFields]);
+  }, [currentStep, form]);
 
   const prevStep = useCallback(() => {
     if (currentStep > 1) {
@@ -82,18 +70,22 @@ export function useApplyForm(): UseApplyFormReturn {
     }
   }, [currentStep]);
 
-  const setStep = useCallback((step: FormStep) => {
-    setCurrentStep(step);
-  }, []);
-
   const submit = useCallback(async () => {
     setIsLoading(true);
+    const isValid = await form.trigger();
+
+    if (!isValid) {
+      setIsLoading(false);
+      return null;
+    }
+
     try {
-      const isValid = await form.trigger();
-      if (!isValid) {
-        return null;
-      }
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return form.getValues();
+    } catch (error) {
+      console.error("Submission failed", error);
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -105,7 +97,7 @@ export function useApplyForm(): UseApplyFormReturn {
     isLoading,
     nextStep,
     prevStep,
-    setStep,
     submit,
+    setStep: (step: FormStep) => setCurrentStep(step),
   };
 }

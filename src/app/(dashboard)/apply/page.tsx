@@ -9,20 +9,15 @@ import { FormStepper } from "@/components/apply/form-stepper";
 import { FormNavigation } from "@/components/apply/form-navigation";
 
 import StepAccount from "@/app/(dashboard)/apply/steps/step-account";
-import StepRoleExperience from "@/app/(dashboard)/apply/steps/step-role-experience";
-import StepSkills from "@/app/(dashboard)/apply/steps/step-skills";
+import StepAboutYou from "@/app/(dashboard)/apply/steps/step-about-you";
+import StepSkillsRole from "@/app/(dashboard)/apply/steps/step-skills-role";
 import StepAvailability from "@/app/(dashboard)/apply/steps/step-availability";
-import StepMotivation from "@/app/(dashboard)/apply/steps/step-motivation";
-import StepReview from "@/app/(dashboard)/apply/steps/step-review";
-import StepSuccess from "@/app/(dashboard)/apply/steps/step-success";
 
 const steps = [
-  { label: "Account", description: "Basic details" },
-  { label: "Role", description: "What you do" },
-  { label: "Skills", description: "Tech stack" },
-  { label: "Availability", description: "Schedule" },
-  { label: "Motivation", description: "Why join" },
-  { label: "Review", description: "Submit" },
+  { label: "Account", description: "Create your account" },
+  { label: "About You", description: "Tell us about yourself" },
+  { label: "Skills & Role", description: "Your expertise" },
+  { label: "Availability", description: "Your schedule" },
 ];
 
 export default function ApplyPage() {
@@ -39,62 +34,150 @@ export default function ApplyPage() {
   };
 
   if (isSubmitted) {
-    return <StepSuccess />;
+    return (
+      <div className="dark min-h-screen w-full flex items-center justify-center p-4 bg-[#0b0c10]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="glass-panel rounded-3xl p-12 sm:p-16 max-w-lg w-full text-center relative overflow-hidden"
+        >
+          {/* Glow background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-nexus-green/10 via-transparent to-transparent pointer-events-none" />
+
+          {/* Animated checkmark circle */}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
+            className="relative mx-auto w-24 h-24 mb-8"
+          >
+            {/* Pulsing ring */}
+            <div className="absolute inset-0 rounded-full bg-nexus-green/20 animate-ping" />
+            {/* Static ring */}
+            <div className="absolute inset-0 rounded-full border-2 border-nexus-green/30" />
+            {/* Solid circle */}
+            <div className="relative w-24 h-24 rounded-full bg-nexus-green/15 border border-nexus-green/40 flex items-center justify-center shadow-[0_0_40px_rgba(119,207,151,0.25)]">
+              <motion.svg
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
+                className="w-10 h-10 text-nexus-green"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                viewBox="0 0 24 24"
+              >
+                <motion.path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
+                />
+              </motion.svg>
+            </div>
+          </motion.div>
+
+          {/* Text content */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+          >
+            <h2 className="text-3xl sm:text-4xl font-outfit font-bold text-white tracking-tight mb-3">
+              Application Submitted!
+            </h2>
+            <p className="text-slate-400 text-sm leading-relaxed max-w-sm mx-auto mb-10">
+              Thank you for applying to join our community. We&apos;ll review your application and
+              get back to you within 48 hours.
+            </p>
+          </motion.div>
+
+          {/* Info cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.4 }}
+            className="grid grid-cols-2 gap-3 mb-10"
+          >
+            <div className="rounded-xl bg-white/5 border border-white/10 p-4">
+              <p className="text-xs text-slate-500 mb-1">Response Time</p>
+              <p className="text-sm font-semibold text-white">~48 hours</p>
+            </div>
+            <div className="rounded-xl bg-white/5 border border-white/10 p-4">
+              <p className="text-xs text-slate-500 mb-1">Status</p>
+              <p className="text-sm font-semibold text-nexus-green flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-nexus-green animate-pulse" />
+                Pending Review
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Back to home */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.4 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => (window.location.href = "/")}
+            className="cursor-pointer w-full py-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-medium hover:bg-white/10 hover:text-white transition-all"
+          >
+            Back to Home
+          </motion.button>
+        </motion.div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-[calc(100vh-6rem)] w-full flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-[1200px] flex flex-col lg:flex-row bg-white dark:bg-[#0b0c10]/40 rounded-2xl overflow-hidden glass-panel min-h-[700px]">
-        {/* Left Sidebar - Desktop only */}
-        <ApplySidebar currentStep={currentStep} />
+    <div className="dark h-screen w-full flex flex-col lg:flex-row bg-[#0b0c10] text-white overflow-hidden">
+      {/* Left Sidebar - Desktop only */}
+      <ApplySidebar currentStep={currentStep} />
 
-        {/* Right Content Area */}
-        <div className="flex-1 flex flex-col relative overflow-hidden bg-white dark:bg-[#1a1b24]/40">
-          <FormProvider {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="flex-1 flex flex-col h-full"
-            >
-              {/* Mobile top stepper */}
-              <div className="lg:hidden p-6 border-b border-border bg-card/50 backdrop-blur-md">
-                <FormStepper currentStep={currentStep} steps={steps} />
-              </div>
+      {/* Right Content Area */}
+      <div className="flex-1 flex flex-col relative overflow-hidden bg-transparent">
+        <FormProvider {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="flex-1 flex flex-col h-full">
+            {/* Mobile top stepper */}
+            <div className="lg:hidden p-4 border-b border-white/10 bg-transparent">
+              <FormStepper currentStep={currentStep} steps={steps} />
+            </div>
 
-              {/* Form step content with animation */}
-              <div className="flex-1 overflow-y-auto overflow-x-hidden p-6 sm:p-10 lg:p-12 relative">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentStep}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="h-full"
-                  >
-                    {currentStep === 1 && <StepAccount />}
-                    {currentStep === 2 && <StepRoleExperience />}
-                    {currentStep === 3 && <StepSkills />}
-                    {currentStep === 4 && <StepAvailability />}
-                    {currentStep === 5 && <StepMotivation />}
-                    {currentStep === 6 && <StepReview />}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+            {/* Form step content with animation */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 sm:px-10 lg:px-12 py-6 relative">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={currentStep}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="h-full flex flex-col justify-center"
+                >
+                  {currentStep === 1 && <StepAccount />}
+                  {currentStep === 2 && <StepAboutYou />}
+                  {currentStep === 3 && <StepSkillsRole />}
+                  {currentStep === 4 && <StepAvailability />}
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-              {/* Footer navigation */}
-              <div className="p-6 sm:px-10 lg:px-12 bg-white/50 dark:bg-black/20 backdrop-blur-md border-t border-slate-200 dark:border-white/5">
-                <FormNavigation
-                  currentStep={currentStep}
-                  isLoading={isLoading}
-                  onBack={prevStep}
-                  onContinue={nextStep}
-                  onSubmit={handleSubmit}
-                  isLastStep={currentStep === 6}
-                />
-              </div>
-            </form>
-          </FormProvider>
-        </div>
+            {/* Footer navigation */}
+            <div className="px-6 sm:px-10 lg:px-12 pb-10 pt-2 bg-transparent">
+              <FormNavigation
+                currentStep={currentStep}
+                isLoading={isLoading}
+                onBack={prevStep}
+                onContinue={nextStep}
+                onSubmit={handleSubmit}
+                isLastStep={currentStep === 4}
+              />
+            </div>
+          </form>
+        </FormProvider>
       </div>
     </div>
   );
