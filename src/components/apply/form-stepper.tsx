@@ -18,7 +18,6 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
         <div
           className="absolute top-5 left-0 h-0.5 bg-gradient-to-r from-primary to-primary/80 transition-all duration-500 ease-out"
           style={{
-            width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
             width: `${steps.length > 1 ? ((currentStep - 1) / (steps.length - 1)) * 100 : 0}%`,
           }}
           aria-hidden="true"
