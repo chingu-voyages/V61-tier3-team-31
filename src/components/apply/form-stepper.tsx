@@ -99,11 +99,11 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
               className="flex flex-col items-center relative"
               aria-current={isActive ? "step" : undefined}
             >
-              {/* Connector line — positioned behind the circle, connecting to next step */}
+              {/* Connector line — runs between circles with 2px gap from each edge */}
               {i < steps.length - 1 && (
                 <div
                   className="absolute top-[18px] h-0.5 rounded-full bg-white/8 overflow-hidden"
-                  style={{ left: "50%", right: "-50%" }}
+                  style={{ left: "calc(50% + 20px)", right: "calc(-50% + 20px)" }}
                   aria-hidden="true"
                 >
                   <motion.div

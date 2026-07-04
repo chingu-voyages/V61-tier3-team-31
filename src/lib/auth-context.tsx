@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import type { UserRole, UserStatus, DashboardView, DashboardCtx } from "@/types";
 
 const STORAGE_KEY = "nexus-auth";
@@ -21,16 +27,48 @@ const DEFAULT_STATE: PersistedState = {
   isSidebarExpanded: false,
 };
 
-function readStoredState(): PersistedState {
-  if (typeof window === "undefined") return DEFAULT_STATE;
+/** In-memory listeners notified on every write */
+const listeners = new Set<() => void>();
+
+function emitChange() {
+  for (const listener of listeners) listener();
+}
+
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    listeners.delete(callback);
+    window.removeEventListener("storage", callback);
+  };
+}
+
+/** Cached snapshot — only re-parsed when the raw string changes */
+let cachedRaw: string | null = null;
+let cachedSnapshot: PersistedState = DEFAULT_STATE;
+
+function getSnapshot(): PersistedState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return DEFAULT_STATE;
-    const parsed = JSON.parse(raw);
-    return { ...DEFAULT_STATE, ...parsed };
+    if (raw !== cachedRaw) {
+      cachedRaw = raw;
+      cachedSnapshot = raw ? { ...DEFAULT_STATE, ...JSON.parse(raw) } : DEFAULT_STATE;
+    }
+    return cachedSnapshot;
   } catch {
     return DEFAULT_STATE;
   }
+}
+
+function getServerSnapshot(): PersistedState {
+  return DEFAULT_STATE;
+}
+
+function writeState(updater: (prev: PersistedState) => PersistedState) {
+  const current = getSnapshot();
+  const next = updater(current);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  emitChange();
 }
 
 const DashboardContext = createContext<DashboardCtx | null>(null);
@@ -42,33 +80,35 @@ export function useDashboard() {
 }
 
 export function DashboardProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<PersistedState>(DEFAULT_STATE);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const state = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage hydration on mount
-    setState(readStoredState());
-    setIsInitialized(true);
-  }, []);
-
-  useEffect(() => {
-    if (isInitialized) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-  }, [state, isInitialized]);
+  const setRole = useCallback((role: UserRole) => writeState((s) => ({ ...s, role })), []);
+  const setStatus = useCallback((status: UserStatus) => writeState((s) => ({ ...s, status })), []);
+  const setIsAuthenticated = useCallback(
+    (isAuthenticated: boolean) => writeState((s) => ({ ...s, isAuthenticated })),
+    [],
+  );
+  const setCurrentView = useCallback(
+    (currentView: DashboardView) => writeState((s) => ({ ...s, currentView })),
+    [],
+  );
+  const setIsSidebarExpanded = useCallback(
+    (isSidebarExpanded: boolean) => writeState((s) => ({ ...s, isSidebarExpanded })),
+    [],
+  );
 
   const value: DashboardCtx = {
     role: state.role,
-    setRole: (role) => setState((s) => ({ ...s, role })),
+    setRole,
     status: state.status,
-    setStatus: (status) => setState((s) => ({ ...s, status })),
+    setStatus,
     isAuthenticated: state.isAuthenticated,
-    setIsAuthenticated: (isAuthenticated) => setState((s) => ({ ...s, isAuthenticated })),
+    setIsAuthenticated,
     currentView: state.currentView,
-    setCurrentView: (currentView) => setState((s) => ({ ...s, currentView })),
+    setCurrentView,
     isSidebarExpanded: state.isSidebarExpanded,
-    setIsSidebarExpanded: (isSidebarExpanded) => setState((s) => ({ ...s, isSidebarExpanded })),
-    isInitialized,
+    setIsSidebarExpanded,
+    isInitialized: true,
   };
 
   return <DashboardContext.Provider value={value}>{children}</DashboardContext.Provider>;
