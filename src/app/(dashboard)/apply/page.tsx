@@ -128,7 +128,7 @@ export default function ApplyPage() {
 
   return (
     <div className="w-full min-h-full flex items-center justify-center p-4 text-white">
-      <div className="w-full max-w-3xl">
+      <div className="w-full max-w-2xl">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -142,52 +142,46 @@ export default function ApplyPage() {
           </p>
         </motion.div>
 
-        <div className="flex gap-10">
-          {/* Vertical Stepper */}
-          <div className="hidden sm:block shrink-0 pt-2">
-            <FormStepper currentStep={currentStep} steps={steps} />
-          </div>
-
-          {/* Form */}
-          <div className="flex-1 min-w-0">
-            <FormProvider {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className="glass-panel rounded-3xl p-8 sm:p-10"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentStep}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                  >
-                    {currentStep === 1 && <StepPersonalInfo />}
-                    {currentStep === 2 && <StepRoleExperience />}
-                    {currentStep === 3 && <StepSkills />}
-                    {currentStep === 4 && <StepAvailability />}
-                    {currentStep === 5 && <StepMotivation />}
-                    {currentStep === 6 && (
-                      <StepReview onEditStep={setStep as (step: FormStep) => void} />
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-
-                <div className="mt-8">
-                  <FormNavigation
-                    currentStep={currentStep}
-                    isLoading={isLoading}
-                    onBack={prevStep}
-                    onContinue={nextStep}
-                    onSubmit={handleSubmit}
-                    isLastStep={currentStep === 6}
-                  />
-                </div>
-              </form>
-            </FormProvider>
-          </div>
+        <div className="mb-8">
+          <FormStepper currentStep={currentStep} steps={steps} />
         </div>
+
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="glass-panel rounded-3xl p-8 sm:p-10"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                {currentStep === 1 && <StepPersonalInfo />}
+                {currentStep === 2 && <StepRoleExperience />}
+                {currentStep === 3 && <StepSkills />}
+                {currentStep === 4 && <StepAvailability />}
+                {currentStep === 5 && <StepMotivation />}
+                {currentStep === 6 && (
+                  <StepReview onEditStep={setStep as (step: FormStep) => void} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+
+            <div className="mt-8">
+              <FormNavigation
+                currentStep={currentStep}
+                isLoading={isLoading}
+                onBack={prevStep}
+                onContinue={nextStep}
+                onSubmit={handleSubmit}
+                isLastStep={currentStep === 6}
+              />
+            </div>
+          </form>
+        </FormProvider>
       </div>
     </div>
   );

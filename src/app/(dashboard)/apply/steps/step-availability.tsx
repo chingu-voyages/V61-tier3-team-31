@@ -28,32 +28,35 @@ export default function StepAvailability() {
         <p className="text-xs text-slate-400">When can you contribute?</p>
       </div>
 
-      <div className="space-y-1.5 text-left">
-        <label className="text-sm font-medium text-slate-300">Hours per Week *</label>
-        <div className="relative">
-          <Clock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-          <input
-            {...register("hoursPerWeek", { valueAsNumber: true })}
-            type="number"
-            min="1"
-            max="80"
-            placeholder="e.g. 20"
-            className={inputClasses}
+      {/* Side-by-side layout: Hours + Timezone on desktop, stacked on mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+        <div className="space-y-1.5 text-left">
+          <label className="text-sm font-medium text-slate-300">Hours per Week *</label>
+          <div className="relative">
+            <Clock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
+            <input
+              {...register("hoursPerWeek", { valueAsNumber: true })}
+              type="number"
+              min="1"
+              max="80"
+              placeholder="e.g. 20"
+              className={inputClasses}
+            />
+          </div>
+          {errors.hoursPerWeek && (
+            <p className="text-xs text-red-400 flex items-center gap-1">
+              {errors.hoursPerWeek.message}
+            </p>
+          )}
+        </div>
+
+        <div className="text-left">
+          <TimezonePicker
+            value={currentTimezone || ""}
+            onChange={(tz) => setValue("timezone", tz, { shouldValidate: true })}
+            error={errors.timezone?.message}
           />
         </div>
-        {errors.hoursPerWeek && (
-          <p className="text-xs text-red-400 flex items-center gap-1">
-            {errors.hoursPerWeek.message}
-          </p>
-        )}
-      </div>
-
-      <div className="text-left">
-        <TimezonePicker
-          value={currentTimezone || ""}
-          onChange={(tz) => setValue("timezone", tz, { shouldValidate: true })}
-          error={errors.timezone?.message}
-        />
       </div>
 
       <div className="space-y-1.5 text-left">

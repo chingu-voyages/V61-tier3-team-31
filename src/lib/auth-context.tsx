@@ -18,7 +18,7 @@ const DEFAULT_STATE: PersistedState = {
   status: "applicant",
   isAuthenticated: false,
   currentView: "overview",
-  isSidebarExpanded: true,
+  isSidebarExpanded: false,
 };
 
 function readStoredState(): PersistedState {
@@ -42,8 +42,14 @@ export function useDashboard() {
 }
 
 export function DashboardProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<PersistedState>(readStoredState);
-  const [isInitialized] = useState(true);
+  const [state, setState] = useState<PersistedState>(DEFAULT_STATE);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage hydration on mount
+    setState(readStoredState());
+    setIsInitialized(true);
+  }, []);
 
   useEffect(() => {
     if (isInitialized) {
