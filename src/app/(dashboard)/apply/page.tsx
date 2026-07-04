@@ -4,7 +4,6 @@ import { useState } from "react";
 import { FormProvider } from "react-hook-form";
 import { AnimatePresence, motion } from "motion/react";
 import { useApplyForm } from "@/hooks/use-apply-form";
-import { ApplySidebar } from "@/components/apply/apply-sidebar";
 import { FormStepper } from "@/components/apply/form-stepper";
 import { FormNavigation } from "@/components/apply/form-navigation";
 
@@ -35,7 +34,7 @@ export default function ApplyPage() {
 
   if (isSubmitted) {
     return (
-      <div className="dark min-h-screen w-full flex items-center justify-center p-4 bg-[#0b0c10]">
+      <div className="w-full min-h-full flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -133,40 +132,51 @@ export default function ApplyPage() {
   }
 
   return (
-    <div className="dark h-screen w-full flex flex-col lg:flex-row bg-[#0b0c10] text-white overflow-hidden">
-      {/* Left Sidebar - Desktop only */}
-      <ApplySidebar currentStep={currentStep} />
+    <div className="w-full min-h-full flex items-center justify-center p-4 text-white">
+      <div className="w-full max-w-2xl">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-3xl sm:text-4xl font-outfit font-bold text-white tracking-tight mb-2">
+            Apply for Voyage
+          </h1>
+          <p className="text-slate-400 text-sm">
+            Complete the form below to apply for the next Voyage cohort.
+          </p>
+        </motion.div>
 
-      {/* Right Content Area */}
-      <div className="flex-1 flex flex-col relative overflow-hidden bg-transparent">
+        {/* Progress bar */}
+        <div className="mb-8">
+          <FormStepper currentStep={currentStep} steps={steps} />
+        </div>
+
+        {/* Form card */}
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="flex-1 flex flex-col h-full">
-            {/* Mobile top stepper */}
-            <div className="lg:hidden p-4 border-b border-white/10 bg-transparent">
-              <FormStepper currentStep={currentStep} steps={steps} />
-            </div>
-
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="glass-panel rounded-3xl p-8 sm:p-10"
+          >
             {/* Form step content with animation */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 sm:px-10 lg:px-12 py-6 relative">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={currentStep}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="h-full flex flex-col justify-center"
-                >
-                  {currentStep === 1 && <StepAccount />}
-                  {currentStep === 2 && <StepAboutYou />}
-                  {currentStep === 3 && <StepSkillsRole />}
-                  {currentStep === 4 && <StepAvailability />}
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                {currentStep === 1 && <StepAccount />}
+                {currentStep === 2 && <StepAboutYou />}
+                {currentStep === 3 && <StepSkillsRole />}
+                {currentStep === 4 && <StepAvailability />}
+              </motion.div>
+            </AnimatePresence>
 
             {/* Footer navigation */}
-            <div className="px-6 sm:px-10 lg:px-12 pb-10 pt-2 bg-transparent">
+            <div className="mt-8 pt-6 border-t border-white/10">
               <FormNavigation
                 currentStep={currentStep}
                 isLoading={isLoading}

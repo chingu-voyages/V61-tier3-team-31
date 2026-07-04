@@ -3,17 +3,9 @@ import { z } from "zod/v4";
 const stepAccountBase = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters").max(100),
   email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string(),
 });
 
-export const stepAccountSchema = stepAccountBase.refine(
-  (data) => data.password === data.confirmPassword,
-  {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  },
-);
+export const stepAccountSchema = stepAccountBase;
 
 export const stepAboutYouSchema = z.object({
   bio: z.string().min(50, "Bio must be at least 50 characters").max(500),
@@ -39,17 +31,12 @@ export const stepAvailabilitySchema = z.object({
   timeSlotsPerDay: z.array(z.string()).min(1, "Select at least one preferred time slot"),
 });
 
-export const applyFormSchema = z
-  .object({
-    ...stepAccountBase.shape,
-    ...stepAboutYouSchema.shape,
-    ...stepSkillsRoleSchema.shape,
-    ...stepAvailabilitySchema.shape,
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+export const applyFormSchema = z.object({
+  ...stepAccountBase.shape,
+  ...stepAboutYouSchema.shape,
+  ...stepSkillsRoleSchema.shape,
+  ...stepAvailabilitySchema.shape,
+});
 
 export type StepAccountData = z.infer<typeof stepAccountSchema>;
 export type StepAboutYouData = z.infer<typeof stepAboutYouSchema>;

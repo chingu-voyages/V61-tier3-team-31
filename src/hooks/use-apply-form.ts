@@ -24,8 +24,6 @@ export function useApplyForm() {
     defaultValues: {
       fullName: "",
       email: "",
-      password: "",
-      confirmPassword: "",
       bio: "",
       github: "",
       portfolio: "",

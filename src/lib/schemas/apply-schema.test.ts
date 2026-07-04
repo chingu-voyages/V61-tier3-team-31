@@ -13,25 +13,18 @@ describe("Apply Form Schemas", () => {
       const validData = {
         fullName: "Jane Doe",
         email: "jane@example.com",
-        password: "password123",
-        confirmPassword: "password123",
       };
       const result = stepAccountSchema.safeParse(validData);
       expect(result.success).toBe(true);
     });
 
-    it("fails if passwords do not match", () => {
+    it("fails if email is invalid", () => {
       const invalidData = {
         fullName: "Jane Doe",
-        email: "jane@example.com",
-        password: "password123",
-        confirmPassword: "password321",
+        email: "not-an-email",
       };
       const result = stepAccountSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe("Passwords don't match");
-      }
     });
   });
 
@@ -86,8 +79,6 @@ describe("Apply Form Schemas", () => {
       const validData = {
         fullName: "Jane Doe",
         email: "jane@example.com",
-        password: "password123",
-        confirmPassword: "password123",
         bio: "This is a test bio that is perfectly at least fifty characters long so that it passes validation properly without any issues whatsoever.",
         github: "https://github.com/janedoe",
         portfolio: "https://janedoe.com",
