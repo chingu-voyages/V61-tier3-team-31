@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useApplyFormStore } from "./use-apply-form-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import {
@@ -16,7 +17,7 @@ import {
 export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
 
 export function useApplyForm() {
-  const [currentStep, setCurrentStep] = useState<FormStep>(1);
+  const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ApplyFormData>({
@@ -34,8 +35,16 @@ export function useApplyForm() {
       motivation: "",
       bio: "",
       portfolio: "",
+      ...formData,
     },
   });
+
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      setFormData(value as Partial<ApplyFormData>);
+    });
+    return () => subscription.unsubscribe();
+  }, [form, setFormData]);
 
   const getStepFields = (step: FormStep): (keyof ApplyFormData)[] => {
     switch (step) {
@@ -59,19 +68,15 @@ export function useApplyForm() {
     const isStepValid = await form.trigger(fields);
 
     if (isStepValid && currentStep < 6) {
-      setCurrentStep((prev) => (prev + 1) as FormStep);
+      setStep((currentStep + 1) as FormStep);
     }
-  }, [currentStep, form]);
+  }, [currentStep, form, setStep]);
 
   const prevStep = useCallback(() => {
     if (currentStep > 1) {
-      setCurrentStep((prev) => (prev - 1) as FormStep);
+      setStep((currentStep - 1) as FormStep);
     }
-  }, [currentStep]);
-
-  const setStep = useCallback((step: FormStep) => {
-    setCurrentStep(step);
-  }, []);
+  }, [currentStep, setStep]);
 
   const submit = useCallback(async () => {
     setIsLoading(true);
@@ -84,6 +89,7 @@ export function useApplyForm() {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
+      clearState();
       return form.getValues();
     } catch (error) {
       console.error("Submission failed", error);
@@ -91,7 +97,7 @@ export function useApplyForm() {
     } finally {
       setIsLoading(false);
     }
-  }, [form]);
+  }, [form, clearState]);
 
   return {
     form,

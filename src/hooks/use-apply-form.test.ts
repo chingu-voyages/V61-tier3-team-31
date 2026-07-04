@@ -1,8 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
 import { useApplyForm } from "./use-apply-form";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 
 describe("useApplyForm", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
   it("initializes with step 1", () => {
     const { result } = renderHook(() => useApplyForm());
     expect(result.current.currentStep).toBe(1);
@@ -92,5 +95,26 @@ describe("useApplyForm", () => {
 
     expect(submittedData).toBeTruthy();
     expect(submittedData?.fullName).toBe("Jane Cooper");
+  });
+
+  it("persists form data and current step to storage and restores on mount", async () => {
+    // 1. First render
+    const { result, unmount } = renderHook(() => useApplyForm());
+
+    // 2. Change state
+    await act(async () => {
+      result.current.form.setValue("fullName", "Jane Restored");
+      result.current.setStep(3);
+    });
+
+    // 3. Unmount to simulate page refresh
+    unmount();
+
+    // 4. Second render
+    const { result: newResult } = renderHook(() => useApplyForm());
+
+    // 5. Expect state to be restored
+    expect(newResult.current.currentStep).toBe(3);
+    expect(newResult.current.form.getValues("fullName")).toBe("Jane Restored");
   });
 });
