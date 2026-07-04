@@ -215,7 +215,7 @@ export function TimezonePicker({
           ref={triggerRef}
           type="button"
           onClick={() => (isOpen ? setIsOpen(false) : handleOpen())}
-          className="w-full h-14 pl-12 pr-10 rounded-xl bg-white/5 border border-white/10 text-white text-left transition-all duration-300 focus:outline-none focus:border-nexus-green focus:bg-white/10 focus:shadow-[0_0_20px_rgba(119,207,151,0.15)] cursor-pointer hover:bg-white/8 hover:border-white/20"
+          className="w-full py-3 pl-12 pr-10 rounded-xl bg-white/5 border border-white/10 text-white text-sm text-left transition-all duration-300 focus:outline-none focus:border-nexus-green focus:bg-white/10 focus:shadow-[0_0_20px_rgba(119,207,151,0.15)] cursor-pointer hover:bg-white/8 hover:border-white/20"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
         >
@@ -237,9 +237,9 @@ export function TimezonePicker({
               aria-label="Timezone options"
             >
               {/* Search */}
-              <div className="p-3 border-b border-white/10">
+              <div className="p-2 border-b border-white/10">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white/40" />
                   <input
                     ref={searchRef}
                     type="text"
@@ -249,25 +249,25 @@ export function TimezonePicker({
                       setHighlightIndex(-1);
                     }}
                     onKeyDown={handleKeyDown}
-                    placeholder="Search timezone... (e.g. India, New York, Tokyo)"
-                    className="w-full h-10 pl-9 pr-8 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-nexus-green/60"
+                    placeholder="Search timezone..."
+                    className="w-full h-9 pl-8 pr-7 rounded-lg bg-white/5 border border-white/10 text-white text-xs placeholder:text-white/30 focus:outline-none focus:border-nexus-green/60"
                     aria-label="Search timezones"
                   />
                   {search && (
                     <button
                       type="button"
                       onClick={() => setSearch("")}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center text-white/30 hover:text-white/60 rounded"
                       aria-label="Clear search"
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-3 w-3" />
                     </button>
                   )}
                 </div>
               </div>
 
               {/* Timezone list */}
-              <div ref={listRef} className="tz-list max-h-64 overflow-y-auto overscroll-contain">
+              <div ref={listRef} className="tz-list max-h-48 overflow-y-auto overscroll-contain">
                 {flatFiltered.length === 0 ? (
                   <div className="px-4 py-6 text-center text-sm text-white/40">
                     No timezone found for &ldquo;{search}&rdquo;
@@ -275,7 +275,7 @@ export function TimezonePicker({
                 ) : (
                   Object.entries(filteredGroups).map(([group, tzs]) => (
                     <div key={group}>
-                      <div className="sticky top-0 z-10 px-3 py-2 bg-[#1a1b24]/95 backdrop-blur-sm border-b border-white/5">
+                      <div className="sticky top-0 z-10 px-3 py-1.5 bg-[#1a1b24]/95 backdrop-blur-sm border-b border-white/5">
                         <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
                           {CONTINENT_LABELS[group] || group}
                         </span>
@@ -295,7 +295,7 @@ export function TimezonePicker({
                               triggerRef.current?.focus();
                             }}
                             onMouseEnter={() => setHighlightIndex(idx)}
-                            className={`w-full flex items-center gap-3 px-3 py-2.5 text-left text-sm transition-colors cursor-pointer ${
+                            className={`w-full flex items-center gap-3 px-3 py-2 text-left text-sm transition-colors cursor-pointer ${
                               isSelected
                                 ? "bg-nexus-green/10 text-nexus-green"
                                 : isHighlighted

@@ -76,17 +76,20 @@
   /* Thin dark scrollbar for timezone list */
   .tz-list {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
   }
   .tz-list::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
   }
   .tz-list::-webkit-scrollbar-track {
     background: transparent;
   }
   .tz-list::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+  }
+  .tz-list::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.12);
   }
 
   /* Reset default focus styles */

@@ -1,63 +1,78 @@
 import { describe, it, expect } from "vitest";
 import {
-  stepAccountSchema,
-  stepAboutYouSchema,
-  stepSkillsRoleSchema,
+  stepPersonalInfoSchema,
+  stepRoleExperienceSchema,
+  stepSkillsSchema,
   stepAvailabilitySchema,
+  stepMotivationSchema,
   applyFormSchema,
 } from "./apply-schema";
 
 describe("Apply Form Schemas", () => {
-  describe("stepAccountSchema", () => {
-    it("validates a correct account object", () => {
+  describe("stepPersonalInfoSchema", () => {
+    it("validates a correct personal info object", () => {
       const validData = {
-        fullName: "Jane Doe",
+        fullName: "Jane Cooper",
         email: "jane@example.com",
       };
-      const result = stepAccountSchema.safeParse(validData);
+      const result = stepPersonalInfoSchema.safeParse(validData);
       expect(result.success).toBe(true);
     });
 
     it("fails if email is invalid", () => {
       const invalidData = {
-        fullName: "Jane Doe",
+        fullName: "Jane Cooper",
         email: "not-an-email",
       };
-      const result = stepAccountSchema.safeParse(invalidData);
+      const result = stepPersonalInfoSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
     });
-  });
 
-  describe("stepAboutYouSchema", () => {
-    it("validates correct about you data", () => {
-      const validData = {
-        bio: "This is a test bio that is perfectly at least fifty characters long so that it passes validation properly without any issues whatsoever.",
-        github: "https://github.com/janedoe",
-        portfolio: "https://janedoe.com",
-      };
-      const result = stepAboutYouSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
-
-    it("fails if bio is too short", () => {
+    it("fails if name is too short", () => {
       const invalidData = {
-        bio: "Too short",
+        fullName: "J",
+        email: "jane@example.com",
       };
-      const result = stepAboutYouSchema.safeParse(invalidData);
+      const result = stepPersonalInfoSchema.safeParse(invalidData);
       expect(result.success).toBe(false);
     });
   });
 
-  describe("stepSkillsRoleSchema", () => {
-    it("validates correct skills and role data", () => {
+  describe("stepRoleExperienceSchema", () => {
+    it("validates correct role and experience data", () => {
       const validData = {
-        role: "developer",
-        experienceLevel: "intermediate",
-        yearsExperience: 3,
-        skills: ["React", "TypeScript"],
+        role: "Frontend",
+        experience: "Intermediate",
       };
-      const result = stepSkillsRoleSchema.safeParse(validData);
+      const result = stepRoleExperienceSchema.safeParse(validData);
       expect(result.success).toBe(true);
+    });
+
+    it("fails if role is invalid", () => {
+      const invalidData = {
+        role: "InvalidRole",
+        experience: "Intermediate",
+      };
+      const result = stepRoleExperienceSchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe("stepSkillsSchema", () => {
+    it("validates correct skills data", () => {
+      const validData = {
+        skills: ["React", "TypeScript", "Node.js"],
+      };
+      const result = stepSkillsSchema.safeParse(validData);
+      expect(result.success).toBe(true);
+    });
+
+    it("fails if no skills", () => {
+      const invalidData = {
+        skills: [],
+      };
+      const result = stepSkillsSchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
     });
   });
 
@@ -65,31 +80,58 @@ describe("Apply Form Schemas", () => {
     it("validates correct availability data", () => {
       const validData = {
         hoursPerWeek: 20,
-        timezone: "UTC",
-        daysAvailable: ["Monday", "Tuesday"],
-        timeSlotsPerDay: ["morning", "afternoon"],
+        timezone: "America/New_York",
+        voyage: "Voyage 51",
       };
       const result = stepAvailabilitySchema.safeParse(validData);
       expect(result.success).toBe(true);
+    });
+
+    it("fails if hoursPerWeek is missing", () => {
+      const invalidData = {
+        hoursPerWeek: 0,
+        timezone: "America/New_York",
+      };
+      const result = stepAvailabilitySchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
+    });
+  });
+
+  describe("stepMotivationSchema", () => {
+    it("validates correct motivation data", () => {
+      const validData = {
+        motivation: "I want to join because I am passionate about building great software.",
+        bio: "I am a software developer with 3 years of experience.",
+        portfolio: "https://github.com/janedoe",
+      };
+      const result = stepMotivationSchema.safeParse(validData);
+      expect(result.success).toBe(true);
+    });
+
+    it("fails if motivation is too short", () => {
+      const invalidData = {
+        motivation: "Short",
+        bio: "I am a software developer.",
+      };
+      const result = stepMotivationSchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
     });
   });
 
   describe("applyFormSchema", () => {
     it("validates the complete form submission correctly", () => {
       const validData = {
-        fullName: "Jane Doe",
+        fullName: "Jane Cooper",
         email: "jane@example.com",
-        bio: "This is a test bio that is perfectly at least fifty characters long so that it passes validation properly without any issues whatsoever.",
-        github: "https://github.com/janedoe",
-        portfolio: "https://janedoe.com",
-        role: "developer",
-        experienceLevel: "intermediate",
-        yearsExperience: 3,
+        role: "Frontend",
+        experience: "Intermediate",
         skills: ["React", "TypeScript"],
         hoursPerWeek: 20,
-        timezone: "UTC",
-        daysAvailable: ["Monday", "Tuesday"],
-        timeSlotsPerDay: ["morning", "afternoon"],
+        timezone: "America/New_York",
+        voyage: "Voyage 51",
+        motivation: "I want to join because I am passionate about building great software.",
+        bio: "I am a software developer with 3 years of experience.",
+        portfolio: "https://github.com/janedoe",
       };
       const result = applyFormSchema.safeParse(validData);
       expect(result.success).toBe(true);

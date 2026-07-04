@@ -6,13 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import {
   applyFormSchema,
-  stepAccountSchema,
-  stepAboutYouSchema,
-  stepSkillsRoleSchema,
+  stepPersonalInfoSchema,
+  stepRoleExperienceSchema,
+  stepSkillsSchema,
   stepAvailabilitySchema,
+  stepMotivationSchema,
 } from "@/lib/schemas/apply-schema";
 
-export type FormStep = 1 | 2 | 3 | 4;
+export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
 
 export function useApplyForm() {
   const [currentStep, setCurrentStep] = useState<FormStep>(1);
@@ -24,30 +25,30 @@ export function useApplyForm() {
     defaultValues: {
       fullName: "",
       email: "",
-      bio: "",
-      github: "",
-      portfolio: "",
       role: undefined,
-      experienceLevel: undefined,
-      yearsExperience: undefined,
+      experience: undefined,
       skills: [],
       hoursPerWeek: 0,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      daysAvailable: [],
-      timeSlotsPerDay: [],
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+      voyage: "",
+      motivation: "",
+      bio: "",
+      portfolio: "",
     },
   });
 
   const getStepFields = (step: FormStep): (keyof ApplyFormData)[] => {
     switch (step) {
       case 1:
-        return Object.keys(stepAccountSchema.shape) as (keyof ApplyFormData)[];
+        return Object.keys(stepPersonalInfoSchema.shape) as (keyof ApplyFormData)[];
       case 2:
-        return Object.keys(stepAboutYouSchema.shape) as (keyof ApplyFormData)[];
+        return Object.keys(stepRoleExperienceSchema.shape) as (keyof ApplyFormData)[];
       case 3:
-        return Object.keys(stepSkillsRoleSchema.shape) as (keyof ApplyFormData)[];
+        return Object.keys(stepSkillsSchema.shape) as (keyof ApplyFormData)[];
       case 4:
         return Object.keys(stepAvailabilitySchema.shape) as (keyof ApplyFormData)[];
+      case 5:
+        return Object.keys(stepMotivationSchema.shape) as (keyof ApplyFormData)[];
       default:
         return [];
     }
@@ -57,7 +58,7 @@ export function useApplyForm() {
     const fields = getStepFields(currentStep);
     const isStepValid = await form.trigger(fields);
 
-    if (isStepValid && currentStep < 4) {
+    if (isStepValid && currentStep < 6) {
       setCurrentStep((prev) => (prev + 1) as FormStep);
     }
   }, [currentStep, form]);
@@ -67,6 +68,10 @@ export function useApplyForm() {
       setCurrentStep((prev) => (prev - 1) as FormStep);
     }
   }, [currentStep]);
+
+  const setStep = useCallback((step: FormStep) => {
+    setCurrentStep(step);
+  }, []);
 
   const submit = useCallback(async () => {
     setIsLoading(true);
@@ -78,8 +83,7 @@ export function useApplyForm() {
     }
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       return form.getValues();
     } catch (error) {
       console.error("Submission failed", error);
@@ -96,6 +100,6 @@ export function useApplyForm() {
     nextStep,
     prevStep,
     submit,
-    setStep: (step: FormStep) => setCurrentStep(step),
+    setStep,
   };
 }

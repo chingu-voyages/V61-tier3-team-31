@@ -3,25 +3,28 @@
 import { useState } from "react";
 import { FormProvider } from "react-hook-form";
 import { AnimatePresence, motion } from "motion/react";
-import { useApplyForm } from "@/hooks/use-apply-form";
+import { useApplyForm, type FormStep } from "@/hooks/use-apply-form";
 import { FormStepper } from "@/components/apply/form-stepper";
 import { FormNavigation } from "@/components/apply/form-navigation";
 
-import StepAccount from "@/app/(dashboard)/apply/steps/step-account";
-import StepAboutYou from "@/app/(dashboard)/apply/steps/step-about-you";
-import StepSkillsRole from "@/app/(dashboard)/apply/steps/step-skills-role";
+import StepPersonalInfo from "@/app/(dashboard)/apply/steps/step-personal-info";
+import StepRoleExperience from "@/app/(dashboard)/apply/steps/step-role-experience";
+import StepSkills from "@/app/(dashboard)/apply/steps/step-skills";
 import StepAvailability from "@/app/(dashboard)/apply/steps/step-availability";
+import StepMotivation from "@/app/(dashboard)/apply/steps/step-motivation";
+import StepReview from "@/app/(dashboard)/apply/steps/step-review";
 
 const steps = [
-  { label: "Account", description: "Create your account" },
-  { label: "About You", description: "Tell us about yourself" },
-  { label: "Skills & Role", description: "Your expertise" },
-  { label: "Availability", description: "Your schedule" },
+  { label: "Personal Info", description: "Your basic details" },
+  { label: "Role & Experience", description: "What you do best" },
+  { label: "Skills", description: "Your tech stack" },
+  { label: "Availability", description: "When you can work" },
+  { label: "Motivation", description: "Why you want to join" },
+  { label: "Review", description: "Confirm & submit" },
 ];
 
 export default function ApplyPage() {
-  const { form, currentStep, isLoading, nextStep, prevStep, submit } = useApplyForm();
-
+  const { form, currentStep, isLoading, nextStep, prevStep, submit, setStep } = useApplyForm();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async () => {
@@ -41,21 +44,16 @@ export default function ApplyPage() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="glass-panel rounded-3xl p-12 sm:p-16 max-w-lg w-full text-center relative overflow-hidden"
         >
-          {/* Glow background */}
           <div className="absolute inset-0 bg-gradient-to-b from-nexus-green/10 via-transparent to-transparent pointer-events-none" />
 
-          {/* Animated checkmark circle */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
             className="relative mx-auto w-24 h-24 mb-8"
           >
-            {/* Pulsing ring */}
             <div className="absolute inset-0 rounded-full bg-nexus-green/20 animate-ping" />
-            {/* Static ring */}
             <div className="absolute inset-0 rounded-full border-2 border-nexus-green/30" />
-            {/* Solid circle */}
             <div className="relative w-24 h-24 rounded-full bg-nexus-green/15 border border-nexus-green/40 flex items-center justify-center shadow-[0_0_40px_rgba(119,207,151,0.25)]">
               <motion.svg
                 initial={{ pathLength: 0 }}
@@ -79,7 +77,6 @@ export default function ApplyPage() {
             </div>
           </motion.div>
 
-          {/* Text content */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -94,7 +91,6 @@ export default function ApplyPage() {
             </p>
           </motion.div>
 
-          {/* Info cards */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -114,7 +110,6 @@ export default function ApplyPage() {
             </div>
           </motion.div>
 
-          {/* Back to home */}
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -133,8 +128,7 @@ export default function ApplyPage() {
 
   return (
     <div className="w-full min-h-full flex items-center justify-center p-4 text-white">
-      <div className="w-full max-w-2xl">
-        {/* Header */}
+      <div className="w-full max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -144,50 +138,56 @@ export default function ApplyPage() {
             Apply for Voyage
           </h1>
           <p className="text-slate-400 text-sm">
-            Complete the form below to apply for the next Voyage cohort.
+            Complete the form below to apply for the next Amigo Voyage cohort.
           </p>
         </motion.div>
 
-        {/* Progress bar */}
-        <div className="mb-8">
-          <FormStepper currentStep={currentStep} steps={steps} />
-        </div>
+        <div className="flex gap-10">
+          {/* Vertical Stepper */}
+          <div className="hidden sm:block shrink-0 pt-2">
+            <FormStepper currentStep={currentStep} steps={steps} />
+          </div>
 
-        {/* Form card */}
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="glass-panel rounded-3xl p-8 sm:p-10"
-          >
-            {/* Form step content with animation */}
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+          {/* Form */}
+          <div className="flex-1 min-w-0">
+            <FormProvider {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="glass-panel rounded-3xl p-8 sm:p-10"
               >
-                {currentStep === 1 && <StepAccount />}
-                {currentStep === 2 && <StepAboutYou />}
-                {currentStep === 3 && <StepSkillsRole />}
-                {currentStep === 4 && <StepAvailability />}
-              </motion.div>
-            </AnimatePresence>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={currentStep}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                  >
+                    {currentStep === 1 && <StepPersonalInfo />}
+                    {currentStep === 2 && <StepRoleExperience />}
+                    {currentStep === 3 && <StepSkills />}
+                    {currentStep === 4 && <StepAvailability />}
+                    {currentStep === 5 && <StepMotivation />}
+                    {currentStep === 6 && (
+                      <StepReview onEditStep={setStep as (step: FormStep) => void} />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
 
-            {/* Footer navigation */}
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <FormNavigation
-                currentStep={currentStep}
-                isLoading={isLoading}
-                onBack={prevStep}
-                onContinue={nextStep}
-                onSubmit={handleSubmit}
-                isLastStep={currentStep === 4}
-              />
-            </div>
-          </form>
-        </FormProvider>
+                <div className="mt-8">
+                  <FormNavigation
+                    currentStep={currentStep}
+                    isLoading={isLoading}
+                    onBack={prevStep}
+                    onContinue={nextStep}
+                    onSubmit={handleSubmit}
+                    isLastStep={currentStep === 6}
+                  />
+                </div>
+              </form>
+            </FormProvider>
+          </div>
+        </div>
       </div>
     </div>
   );

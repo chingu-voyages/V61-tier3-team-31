@@ -13,10 +13,8 @@ describe("useApplyForm", () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "John Doe");
-      result.current.form.setValue("email", "john@example.com");
-      result.current.form.setValue("password", "password123");
-      result.current.form.setValue("confirmPassword", "password123");
+      result.current.form.setValue("fullName", "Jane Cooper");
+      result.current.form.setValue("email", "jane@example.com");
     });
 
     await act(async () => {
@@ -30,7 +28,7 @@ describe("useApplyForm", () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "J"); // Invalid: too short
+      result.current.form.setValue("fullName", "J");
       result.current.form.setValue("email", "not-an-email");
     });
 
@@ -44,7 +42,6 @@ describe("useApplyForm", () => {
   it("can navigate to previous step", async () => {
     const { result } = renderHook(() => useApplyForm());
 
-    // Manually set step to 2
     act(() => {
       result.current.setStep(2);
     });
@@ -71,33 +68,29 @@ describe("useApplyForm", () => {
   it("submits form data when valid", async () => {
     const { result } = renderHook(() => useApplyForm());
 
-    // Fill all required fields
     await act(async () => {
-      result.current.form.setValue("fullName", "John Doe");
-      result.current.form.setValue("email", "john@example.com");
-      result.current.form.setValue("password", "password123");
-      result.current.form.setValue("confirmPassword", "password123");
-      result.current.form.setValue(
-        "bio",
-        "This is a test bio that is perfectly at least fifty characters long so that it passes validation properly without any issues whatsoever.",
-      );
-      result.current.form.setValue("role", "developer");
-      result.current.form.setValue("experienceLevel", "intermediate");
-      result.current.form.setValue("skills", ["React"]);
+      result.current.form.setValue("fullName", "Jane Cooper");
+      result.current.form.setValue("email", "jane@example.com");
+      result.current.form.setValue("role", "Frontend");
+      result.current.form.setValue("experience", "Intermediate");
+      result.current.form.setValue("skills", ["React", "TypeScript"]);
       result.current.form.setValue("hoursPerWeek", 20);
-      result.current.form.setValue("timezone", "UTC");
-      result.current.form.setValue("daysAvailable", ["Monday"]);
-      result.current.form.setValue("timeSlotsPerDay", ["morning"]);
+      result.current.form.setValue("timezone", "America/New_York");
+      result.current.form.setValue(
+        "motivation",
+        "I want to join because I am passionate about building great software.",
+      );
+      result.current.form.setValue("bio", "I am a software developer with 3 years of experience.");
     });
 
-    let submittedData: ReturnType<typeof useApplyForm>["submit"] extends Promise<infer T>
-      ? T
-      : never = null;
+    let submittedData: Awaited<ReturnType<typeof result.current.submit>> = null as Awaited<
+      ReturnType<typeof result.current.submit>
+    >;
     await act(async () => {
       submittedData = await result.current.submit();
     });
 
     expect(submittedData).toBeTruthy();
-    expect(submittedData?.fullName).toBe("John Doe");
+    expect(submittedData?.fullName).toBe("Jane Cooper");
   });
 });

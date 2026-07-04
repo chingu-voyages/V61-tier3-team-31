@@ -1,45 +1,60 @@
 import { z } from "zod/v4";
 
-const stepAccountBase = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters").max(100),
-  email: z.string().email("Invalid email address"),
+const stepPersonalInfoSchema = z.object({
+  fullName: z.string().min(2, "Name must be at least 2 characters.").max(100),
+  email: z.string().email("Please enter a valid email."),
 });
 
-export const stepAccountSchema = stepAccountBase;
-
-export const stepAboutYouSchema = z.object({
-  bio: z.string().min(50, "Bio must be at least 50 characters").max(500),
-  github: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-  portfolio: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-  profilePhoto: z.any().optional(),
+const stepRoleExperienceSchema = z.object({
+  role: z.enum(["Frontend", "Backend", "Fullstack", "Design", "Product"], {
+    message: "Please select a role.",
+  }),
+  experience: z.enum(["Beginner", "Intermediate", "Advanced"], {
+    message: "Please select your experience level.",
+  }),
 });
 
-export const stepSkillsRoleSchema = z.object({
-  role: z.enum(["developer", "designer", "product-manager"]),
-  experienceLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
-  yearsExperience: z.number().min(0).max(50).optional(),
+const stepSkillsSchema = z.object({
   skills: z
     .array(z.string())
-    .min(1, "Please add at least one skill")
-    .max(10, "Maximum 10 skills allowed"),
+    .min(1, "Please add at least one skill.")
+    .max(15, "Maximum 15 skills allowed"),
 });
 
-export const stepAvailabilitySchema = z.object({
-  hoursPerWeek: z.number().min(1, "Please specify hours per week").max(80),
-  timezone: z.string().min(1, "Timezone is required"),
-  daysAvailable: z.array(z.string()).min(1, "Select at least one day"),
-  timeSlotsPerDay: z.array(z.string()).min(1, "Select at least one preferred time slot"),
+const stepAvailabilitySchema = z.object({
+  hoursPerWeek: z.number().min(1, "Please specify hours per week.").max(80),
+  timezone: z.string().min(1, "Please select your timezone."),
+  voyage: z.string().optional(),
+});
+
+const stepMotivationSchema = z.object({
+  motivation: z
+    .string()
+    .min(20, "Please write at least 20 characters.")
+    .max(500, "Maximum 500 characters allowed"),
+  bio: z.string().min(10, "Please write at least 10 characters."),
+  portfolio: z.string().url("Must be a valid URL").optional().or(z.literal("")),
 });
 
 export const applyFormSchema = z.object({
-  ...stepAccountBase.shape,
-  ...stepAboutYouSchema.shape,
-  ...stepSkillsRoleSchema.shape,
+  ...stepPersonalInfoSchema.shape,
+  ...stepRoleExperienceSchema.shape,
+  ...stepSkillsSchema.shape,
   ...stepAvailabilitySchema.shape,
+  ...stepMotivationSchema.shape,
 });
 
-export type StepAccountData = z.infer<typeof stepAccountSchema>;
-export type StepAboutYouData = z.infer<typeof stepAboutYouSchema>;
-export type StepSkillsRoleData = z.infer<typeof stepSkillsRoleSchema>;
+export type StepPersonalInfoData = z.infer<typeof stepPersonalInfoSchema>;
+export type StepRoleExperienceData = z.infer<typeof stepRoleExperienceSchema>;
+export type StepSkillsData = z.infer<typeof stepSkillsSchema>;
 export type StepAvailabilityData = z.infer<typeof stepAvailabilitySchema>;
+export type StepMotivationData = z.infer<typeof stepMotivationSchema>;
 export type ApplyFormData = z.infer<typeof applyFormSchema>;
+
+export {
+  stepPersonalInfoSchema,
+  stepRoleExperienceSchema,
+  stepSkillsSchema,
+  stepAvailabilitySchema,
+  stepMotivationSchema,
+};

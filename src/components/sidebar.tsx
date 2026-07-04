@@ -112,7 +112,7 @@ export function Sidebar() {
 
   return (
     <div
-      className={`bg-[#0b0c10] text-slate-300 flex flex-col shrink-0 min-h-screen border-r border-white/5 transition-all duration-300 relative ${isSidebarExpanded ? "w-[260px]" : "w-[80px]"}`}
+      className={`bg-[#0b0c10] text-slate-300 flex flex-col shrink-0 h-screen sticky top-0 border-r border-white/5 transition-all duration-300 relative ${isSidebarExpanded ? "w-[260px]" : "w-[80px]"}`}
     >
       {/* Toggle Button */}
       <button
