@@ -1,20 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import { Clock, Calendar, Globe, Sun, Moon, Sunset, Sunrise } from "lucide-react";
+import { Clock, Calendar, Sun, Moon, Sunset, Sunrise } from "lucide-react";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import { motion } from "motion/react";
+import { TimezonePicker } from "@/components/ui/timezone-picker";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const TIMEZONES = [
-  "UTC",
-  "EST (UTC-5)",
-  "CST (UTC-6)",
-  "PST (UTC-8)",
-  "GMT (UTC+0)",
-  "CET (UTC+1)",
-  "IST (UTC+5:30)",
-  "JST (UTC+9)",
-  "AEST (UTC+10)",
-];
 const TIME_SLOTS = [
   { id: "morning", label: "Morning", icon: Sunrise },
   { id: "afternoon", label: "Afternoon", icon: Sun },
@@ -107,30 +97,11 @@ export default function StepAvailability() {
           </div>
 
           {/* Timezone */}
-          <div className="space-y-3">
-            <label className="text-sm font-medium text-slate-300">Timezone</label>
-            <div className="relative group">
-              <select
-                {...register("timezone")}
-                className={`${inputClasses} cursor-pointer peer [&>option]:bg-[#1a1b24] [&>option]:text-white`}
-              >
-                <option value="" disabled className="text-white/30">
-                  Select your timezone
-                </option>
-                {TIMEZONES.map((tz) => (
-                  <option key={tz} value={tz}>
-                    {tz}
-                  </option>
-                ))}
-              </select>
-              <Globe className={iconClasses} />
-            </div>
-            {errors.timezone && (
-              <p className="text-red-400 text-xs pl-2 pt-1 font-medium">
-                {errors.timezone.message}
-              </p>
-            )}
-          </div>
+          <TimezonePicker
+            value={watch("timezone") || ""}
+            onChange={(tz) => setValue("timezone", tz, { shouldValidate: true })}
+            error={errors.timezone?.message}
+          />
         </div>
 
         {/* Days Available */}
