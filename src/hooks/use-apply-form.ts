@@ -19,6 +19,7 @@ export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
 export function useApplyForm() {
   const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const form = useForm<ApplyFormData>({
     resolver: zodResolver(applyFormSchema),
@@ -64,6 +65,7 @@ export function useApplyForm() {
   };
 
   const nextStep = useCallback(async () => {
+    setSubmitError("");
     const fields = getStepFields(currentStep);
     const isStepValid = await form.trigger(fields);
 
@@ -73,12 +75,14 @@ export function useApplyForm() {
   }, [currentStep, form, setStep]);
 
   const prevStep = useCallback(() => {
+    setSubmitError("");
     if (currentStep > 1) {
       setStep((currentStep - 1) as FormStep);
     }
   }, [currentStep, setStep]);
 
   const submit = useCallback(async () => {
+    setSubmitError("");
     setIsLoading(true);
     const isValid = await form.trigger();
 
@@ -88,11 +92,27 @@ export function useApplyForm() {
     }
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const data = form.getValues();
+      const res = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const body = await res.json();
+        if (res.status === 409) {
+          setSubmitError(body.error || "An application with this email already exists.");
+        } else {
+          setSubmitError(body.error || "Something went wrong. Please try again.");
+        }
+        return null;
+      }
+
       clearState();
-      return form.getValues();
-    } catch (error) {
-      console.error("Submission failed", error);
+      return data;
+    } catch {
+      setSubmitError("Network error. Please check your connection and try again.");
       return null;
     } finally {
       setIsLoading(false);
@@ -103,6 +123,7 @@ export function useApplyForm() {
     form,
     currentStep,
     isLoading,
+    submitError,
     nextStep,
     prevStep,
     submit,

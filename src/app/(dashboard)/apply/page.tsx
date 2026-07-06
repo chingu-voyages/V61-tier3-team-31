@@ -24,13 +24,13 @@ const steps = [
 ];
 
 export default function ApplyPage() {
-  const { form, currentStep, isLoading, nextStep, prevStep, submit, setStep } = useApplyForm();
+  const { form, currentStep, isLoading, submitError, nextStep, prevStep, submit, setStep } =
+    useApplyForm();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async () => {
     const data = await submit();
     if (data) {
-      console.log("Form submitted:", data);
       setIsSubmitted(true);
     }
   };
@@ -165,7 +165,10 @@ export default function ApplyPage() {
                 {currentStep === 4 && <StepAvailability />}
                 {currentStep === 5 && <StepMotivation />}
                 {currentStep === 6 && (
-                  <StepReview onEditStep={setStep as (step: FormStep) => void} />
+                  <StepReview
+                    onEditStep={setStep as (step: FormStep) => void}
+                    error={submitError}
+                  />
                 )}
               </motion.div>
             </AnimatePresence>

@@ -20,6 +20,27 @@ export type DashboardView =
 
 export type ParticipantRole = "Frontend" | "Backend" | "Fullstack" | "Design" | "Product";
 export type ExperienceLevel = "Beginner" | "Intermediate" | "Advanced";
+export type ApplicationStatus = "pending_review" | "accepted" | "rejected" | "incomplete";
+
+export interface Application {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  role: ParticipantRole;
+  experience: ExperienceLevel;
+  years: string;
+  status: ApplicationStatus;
+  date: string;
+  voyage: string;
+  bio: string;
+  skills: string[];
+  availability: string;
+  motivation: string;
+  portfolio: string;
+  timezone: string;
+  reviewNotes: string;
+}
 
 export interface DashboardCtx {
   role: UserRole;

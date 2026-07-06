@@ -1,10 +1,12 @@
 import { useFormContext } from "react-hook-form";
+import { AlertCircle } from "lucide-react";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 interface StepReviewProps {
   onEditStep: (step: 1 | 2 | 3 | 4 | 5) => void;
+  error?: string;
 }
 
-export default function StepReview({ onEditStep }: StepReviewProps) {
+export default function StepReview({ onEditStep, error }: StepReviewProps) {
   const { watch } = useFormContext<ApplyFormData>();
 
   const form = {
@@ -29,6 +31,13 @@ export default function StepReview({ onEditStep }: StepReviewProps) {
         </h2>
         <p className="text-xs text-slate-400">Please review your information before submitting.</p>
       </div>
+
+      {error && (
+        <div className="flex items-start gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-sm text-rose-400">
+          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+          <span>{error}</span>
+        </div>
+      )}
 
       <div className="space-y-4">
         <div className="bg-white/5 rounded-xl border border-white/10 p-4">
