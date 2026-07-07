@@ -483,6 +483,9 @@ function ApplicantOverview() {
 export default function OverviewPage() {
   const { role } = useAuth();
 
-  if (role === "admin") return <AdminOverview />;
+  if (role === "admin" || role === "moderator") {
+    return <AdminOverview />;
+  }
+
   return <ApplicantOverview />;
 }

@@ -44,8 +44,7 @@ type DashboardView =
 interface SidebarProps {
   role: string;
   status?: string;
-  currentView: string;
-  setCurrentView: (view: DashboardView) => void;
+  currentView: DashboardView;
 }
 
 function NavItem({
@@ -93,14 +92,21 @@ function NavItem({
   );
 }
 
-export function Sidebar({ role, status, currentView, setCurrentView }: SidebarProps) {
+export function Sidebar({ role, status, currentView }: SidebarProps) {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
+  const isStaff = role === "admin" || role === "moderator";
 
   const navigate = (view: DashboardView) => {
-    setCurrentView(view);
-    router.push(`/${view}`);
+    const nextPath =
+      view === "overview"
+        ? isStaff
+          ? "/admin"
+          : "/app/overview"
+        : `${isStaff ? "/admin" : "/app"}/${view}`;
+
+    router.push(nextPath);
   };
 
   return (
@@ -129,7 +135,7 @@ export function Sidebar({ role, status, currentView, setCurrentView }: SidebarPr
 
       {/* Navigation */}
       <div className="flex-1 px-4 py-2 space-y-1 overflow-hidden">
-        {role === "admin" && (
+        {isStaff && (
           <>
             <NavItem
               isExpanded={isExpanded}
@@ -207,7 +213,7 @@ export function Sidebar({ role, status, currentView, setCurrentView }: SidebarPr
           </>
         )}
 
-        {role === "user" && status === "applicant" && (
+        {!isStaff && status === "applicant" && (
           <>
             <NavItem
               isExpanded={isExpanded}
@@ -226,7 +232,7 @@ export function Sidebar({ role, status, currentView, setCurrentView }: SidebarPr
           </>
         )}
 
-        {role === "user" && status === "participant" && (
+        {!isStaff && status === "participant" && (
           <>
             <NavItem
               isExpanded={isExpanded}
@@ -255,6 +261,46 @@ export function Sidebar({ role, status, currentView, setCurrentView }: SidebarPr
               label="Calendar"
               active={currentView === "calendar"}
               onClick={() => navigate("calendar")}
+            />
+          </>
+        )}
+
+        {!isStaff && !status && (
+          <>
+            <NavItem
+              isExpanded={isExpanded}
+              icon={<Home className="w-4 h-4" />}
+              label="Overview"
+              active={currentView === "overview"}
+              onClick={() => navigate("overview")}
+            />
+            <NavItem
+              isExpanded={isExpanded}
+              icon={<FileText className="w-4 h-4" />}
+              label="Apply"
+              active={currentView === "apply"}
+              onClick={() => navigate("apply")}
+            />
+            <NavItem
+              isExpanded={isExpanded}
+              icon={<ClipboardList className="w-4 h-4" />}
+              label="Onboarding"
+              active={currentView === "onboarding"}
+              onClick={() => navigate("onboarding")}
+            />
+            <NavItem
+              isExpanded={isExpanded}
+              icon={<CalendarDays className="w-4 h-4" />}
+              label="Calendar"
+              active={currentView === "calendar"}
+              onClick={() => navigate("calendar")}
+            />
+            <NavItem
+              isExpanded={isExpanded}
+              icon={<User className="w-4 h-4" />}
+              label="Profile"
+              active={currentView === "profile"}
+              onClick={() => navigate("profile")}
             />
           </>
         )}

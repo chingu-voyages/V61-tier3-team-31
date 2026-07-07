@@ -20,7 +20,7 @@ test("keeps safe internal redirects", () => {
 test("routes staff and participants after login", () => {
   assert.equal(getPostLoginRedirect("admin", null), "/admin");
   assert.equal(getPostLoginRedirect("moderator", null), "/admin");
-  assert.equal(getPostLoginRedirect("user", null), "/dashboard");
+  assert.equal(getPostLoginRedirect("user", null), "/app");
   assert.equal(
     getPostLoginRedirect("user", "/projects/alpha?tab=members"),
     "/projects/alpha?tab=members",
@@ -30,15 +30,16 @@ test("routes staff and participants after login", () => {
 test("routes authenticated users away from dashboard landing", () => {
   assert.equal(getDashboardRedirect("admin"), "/admin");
   assert.equal(getDashboardRedirect("moderator"), "/admin");
-  assert.equal(getDashboardRedirect("user"), "/overview");
+  assert.equal(getDashboardRedirect("user"), "/app/overview");
 });
 
 test("does not let non-staff land on admin redirects", () => {
-  assert.equal(getPostLoginRedirect("user", "/admin"), "/dashboard");
-  assert.equal(getPostLoginRedirect("user", "/admin/settings"), "/dashboard");
+  assert.equal(getPostLoginRedirect("user", "/admin"), "/app");
+  assert.equal(getPostLoginRedirect("user", "/admin/settings"), "/app");
 });
 
 test("allows reset-password for authenticated users", () => {
+  assert.equal(shouldRedirectAuthenticatedUsersAwayFrom("/"), false);
   assert.equal(shouldRedirectAuthenticatedUsersAwayFrom("/login"), true);
   assert.equal(shouldRedirectAuthenticatedUsersAwayFrom("/register"), true);
   assert.equal(shouldRedirectAuthenticatedUsersAwayFrom("/forgot-password"), true);

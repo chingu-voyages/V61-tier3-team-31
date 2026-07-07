@@ -2,7 +2,7 @@ import type { UserRole } from "@/lib/auth/guards";
 
 const INTERNAL_ORIGIN = "http://localhost";
 const STAFF_ROLES: UserRole[] = ["admin", "moderator"];
-const AUTH_REDIRECT_PATHS = new Set(["/", "/login", "/register", "/forgot-password"]);
+const AUTH_REDIRECT_PATHS = new Set(["/login", "/register", "/forgot-password"]);
 
 export function isStaffRole(role: UserRole): boolean {
   return STAFF_ROLES.includes(role);
@@ -39,15 +39,15 @@ export function getPostLoginRedirect(role: UserRole, redirect: string | null | u
 
   if (safeRedirect) {
     if (safeRedirect === "/admin" || safeRedirect.startsWith("/admin/")) {
-      return isStaffRole(role) ? safeRedirect : "/dashboard";
+      return isStaffRole(role) ? safeRedirect : "/app";
     }
 
     return safeRedirect;
   }
 
-  return isStaffRole(role) ? "/admin" : "/dashboard";
+  return isStaffRole(role) ? "/admin" : "/app";
 }
 
 export function getDashboardRedirect(role: UserRole): string {
-  return isStaffRole(role) ? "/admin" : "/overview";
+  return isStaffRole(role) ? "/admin" : "/app/overview";
 }

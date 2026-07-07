@@ -1,9 +1,9 @@
 "use client";
 
-import { useAuth } from "@/lib/auth/auth-context";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
+import { useAuth } from "@/lib/auth/auth-context";
 
 type DashboardView =
   | "overview"
@@ -16,21 +16,32 @@ type DashboardView =
   | "announcements"
   | "calendar"
   | "ui-components"
-  | "apply"
-  | "onboarding"
-  | "profile"
   | "settings";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+function getCurrentView(pathname: string): DashboardView {
+  if (pathname === "/admin") {
+    return "overview";
+  }
+
+  return (pathname.split("/").pop() ?? "overview") as DashboardView;
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, role, isLoading } = useAuth();
   const router = useRouter();
-  const [currentView, setCurrentView] = useState<DashboardView>("overview");
+  const pathname = usePathname();
+  const currentView = getCurrentView(pathname);
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push("/login");
+      router.replace("/login");
+      return;
     }
-  }, [isLoading, user, router]);
+
+    if (!isLoading && role !== "admin" && role !== "moderator") {
+      router.replace("/app");
+    }
+  }, [isLoading, role, router, user]);
 
   if (isLoading || !user) {
     return (
@@ -42,7 +53,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex bg-background text-foreground min-h-screen font-sans transition-colors">
-      <Sidebar role={role ?? "user"} currentView={currentView} setCurrentView={setCurrentView} />
+      <Sidebar role={role ?? "admin"} currentView={currentView} />
       <div className="flex-1 flex flex-col items-stretch overflow-hidden h-screen overflow-y-auto">
         <main className="p-8 max-w-[1400px] w-full mx-auto space-y-8 pb-12">{children}</main>
       </div>

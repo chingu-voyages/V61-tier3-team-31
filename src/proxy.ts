@@ -69,24 +69,15 @@ export async function proxy(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages
   if (isAuthenticated && isAuth) {
-    // Check if user is admin
-    if (isAdmin || pathname === "/") {
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (roleData?.role && isStaffRole(roleData.role)) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/admin";
-        return NextResponse.redirect(url);
-      }
-    }
+    const { data: roleData } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle();
 
     if (pathname !== "/reset-password") {
       const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
+      url.pathname = roleData?.role && isStaffRole(roleData.role) ? "/admin" : "/app";
       return NextResponse.redirect(url);
     }
   }
@@ -103,7 +94,7 @@ export async function proxy(request: NextRequest) {
 
     if (!isStaffRole(role)) {
       const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
+      url.pathname = "/app";
       return NextResponse.redirect(url);
     }
   }
