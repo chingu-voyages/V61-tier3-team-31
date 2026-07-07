@@ -6,8 +6,11 @@ import Link from "next/link";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { getPostLoginRedirect } from "@/lib/auth/navigation";
-import { cn } from "@/lib/utils";
-import { Loader2, Mail } from "lucide-react";
+import { NexusLogo } from "@/components/nexus-logo";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Mail, Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -94,108 +97,99 @@ function LoginForm() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">Sign in to your account</p>
+    <>
+      {/* Header */}
+      <div className="p-8 pb-6 border-b border-border flex flex-col items-center text-center">
+        <div className="w-16 h-16 rounded-2xl bg-nexus-dark flex items-center justify-center mb-6 shadow-sm">
+          <NexusLogo className="w-8 h-8" />
+        </div>
+        <h1 className="text-2xl font-outfit font-bold text-card-foreground mb-2">Welcome back</h1>
+        <p className="text-sm text-muted-foreground">Sign in to your Nexus workspace.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Form */}
+      <div className="p-8">
         {justVerified && (
-          <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 p-3 text-sm text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+          <div className="mb-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-sm text-emerald-400 flex items-center gap-2">
             <Mail className="h-4 w-4 shrink-0" />
             Email verified successfully. You can now sign in.
           </div>
         )}
 
         {serverError && (
-          <div className="rounded-lg bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 p-3 text-sm text-red-700 dark:text-red-400">
+          <div className="mb-4 rounded-xl bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
             {serverError}
           </div>
         )}
 
-        <div className="space-y-2">
-          <label htmlFor="email" className="text-sm font-medium leading-none">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="john@example.com"
-            required
-            disabled={isLoading}
-            className={cn(
-              "flex h-10 w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-2 text-sm ring-offset-white dark:ring-offset-zinc-950 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              fieldErrors.email && "border-red-500 dark:border-red-500 focus-visible:ring-red-500",
-            )}
-          />
-          {fieldErrors.email && (
-            <p className="text-sm text-red-600 dark:text-red-400">{fieldErrors.email}</p>
-          )}
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1.5 text-left">
+            <Label>Email address</Label>
+            <Input
+              name="email"
+              type="email"
+              placeholder="name@company.com"
+              autoComplete="email"
+              required
+              disabled={isLoading}
+              className="h-auto rounded-xl py-3 px-4"
+              aria-invalid={!!fieldErrors.email}
+            />
+            {fieldErrors.email && <p className="text-xs text-destructive">{fieldErrors.email}</p>}
+          </div>
 
-        <div className="space-y-2">
-          <label htmlFor="password" className="text-sm font-medium leading-none">
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Enter your password"
-            required
-            disabled={isLoading}
-            className={cn(
-              "flex h-10 w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-2 text-sm ring-offset-white dark:ring-offset-zinc-950 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              fieldErrors.password &&
-                "border-red-500 dark:border-red-500 focus-visible:ring-red-500",
+          <div className="space-y-1.5 text-left">
+            <div className="flex items-center justify-between">
+              <Label>Password</Label>
+              <Link
+                href="/forgot-password"
+                className="text-xs font-semibold text-primary hover:underline underline-offset-4"
+              >
+                Forgot password?
+              </Link>
+            </div>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+              disabled={isLoading}
+              className="h-auto rounded-xl py-3 px-4"
+              aria-invalid={!!fieldErrors.password}
+            />
+            {fieldErrors.password && (
+              <p className="text-xs text-destructive">{fieldErrors.password}</p>
             )}
-          />
-          {fieldErrors.password && (
-            <p className="text-sm text-red-600 dark:text-red-400">{fieldErrors.password}</p>
-          )}
-        </div>
+          </div>
 
-        <div className="flex items-center justify-end">
-          <Link
-            href="/forgot-password"
-            className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4"
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full h-11 rounded-xl text-sm font-semibold bg-nexus-dark text-white hover:bg-slate-800 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/80"
           >
-            Forgot password?
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              "Sign In"
+            )}
+          </Button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="font-semibold text-primary hover:underline underline-offset-4"
+          >
+            Sign up
           </Link>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={cn(
-            "inline-flex h-10 w-full items-center justify-center rounded-lg bg-zinc-950 dark:bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-50 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors",
-          )}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Signing in...
-            </>
-          ) : (
-            "Sign in"
-          )}
-        </button>
-      </form>
-
-      <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
-        Don&apos;t have an account?{" "}
-        <Link
-          href="/register"
-          className="font-medium text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4"
-        >
-          Create one
-        </Link>
-      </p>
-    </div>
+        </p>
+      </div>
+    </>
   );
 }
 
@@ -204,7 +198,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="flex justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-zinc-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       }
     >

@@ -31,17 +31,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const fetchProfileAndRole = useCallback(async (userId: string) => {
-    const supabase = createClient();
+    try {
+      const supabase = createClient();
 
-    const [profileResult, roleResult] = await Promise.all([
-      supabase.from("profiles").select("*").eq("id", userId).single(),
-      supabase.from("user_roles").select("role").eq("user_id", userId).maybeSingle(),
-    ]);
+      const [profileResult, roleResult] = await Promise.all([
+        supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
+        supabase.from("user_roles").select("role").eq("user_id", userId).maybeSingle(),
+      ]);
 
-    return {
-      profile: profileResult.data ?? null,
-      role: (roleResult.data?.role ?? "user") as PlatformRole | "user",
-    };
+      return {
+        profile: profileResult.data ?? null,
+        role: (roleResult.data?.role ?? "user") as PlatformRole | "user",
+      };
+    } catch {
+      return { profile: null, role: "user" as PlatformRole | "user" };
+    }
   }, []);
 
   const refresh = useCallback(async () => {
@@ -63,15 +67,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const supabase = createClient();
 
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
-      if (!user) {
-        setState({ user: null, profile: null, role: "user", isLoading: false });
-        return;
-      }
+    supabase.auth
+      .getUser()
+      .then(async ({ data: { user }, error }) => {
+        if (error || !user) {
+          setState({ user: null, profile: null, role: "user", isLoading: false });
+          return;
+        }
 
-      const { profile, role } = await fetchProfileAndRole(user.id);
-      setState({ user, profile, role, isLoading: false });
-    });
+        const { profile, role } = await fetchProfileAndRole(user.id);
+        setState({ user, profile, role, isLoading: false });
+      })
+      .catch(() => {
+        setState({ user: null, profile: null, role: "user", isLoading: false });
+      });
 
     const {
       data: { subscription },

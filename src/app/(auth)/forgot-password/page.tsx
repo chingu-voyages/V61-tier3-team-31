@@ -4,8 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
-import { cn } from "@/lib/utils";
-import { Loader2, CheckCircle2 } from "lucide-react";
+import { NexusLogo } from "@/components/nexus-logo";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Mail, Send, CheckCircle, Loader2 } from "lucide-react";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -16,6 +19,7 @@ type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -48,6 +52,7 @@ export default function ForgotPasswordPage() {
         return;
       }
 
+      setSubmittedEmail(data.email);
       setIsSuccess(true);
     } catch {
       setError("An unexpected error occurred. Please try again.");
@@ -58,87 +63,123 @@ export default function ForgotPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="text-center space-y-4">
-        <div className="rounded-full bg-emerald-100 dark:bg-emerald-900/50 w-16 h-16 flex items-center justify-center mx-auto">
-          <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+      <>
+        <div className="p-8 pb-6 border-b border-border flex flex-col items-center text-center">
+          <div className="w-16 h-16 rounded-2xl bg-nexus-dark flex items-center justify-center mb-6 shadow-sm">
+            <NexusLogo className="w-8 h-8" />
+          </div>
+          <h1 className="text-2xl font-outfit font-bold text-card-foreground mb-2">
+            Check your email
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            We sent a reset link to{" "}
+            <span className="font-medium text-card-foreground">{submittedEmail}</span>
+          </p>
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight">Check your email</h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          If an account with that email exists, we&apos;ve sent a password reset link. It expires in
-          1 hour.
-        </p>
-        <Link
-          href="/login"
-          className="inline-block text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4"
-        >
-          Back to sign in
-        </Link>
-      </div>
+
+        <div className="p-8 space-y-6">
+          <div className="flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <CheckCircle className="w-8 h-8 text-primary" />
+            </div>
+          </div>
+
+          <div className="bg-muted rounded-xl border border-border p-4">
+            <p className="text-xs text-muted-foreground text-center leading-relaxed">
+              Didn&apos;t receive the email? Check your spam folder or{" "}
+              <button
+                onClick={() => {
+                  setIsSuccess(false);
+                  setSubmittedEmail("");
+                }}
+                className="font-semibold text-primary hover:underline cursor-pointer"
+              >
+                try another email address
+              </button>
+              .
+            </p>
+          </div>
+
+          <Link
+            href="/login"
+            className="flex items-center justify-center gap-2 w-full py-3 bg-card border border-border rounded-xl text-sm font-medium text-card-foreground hover:bg-muted transition-colors shadow-sm cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Sign In
+          </Link>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Reset your password</h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Enter your email and we&apos;ll send you a reset link
+    <>
+      <div className="p-8 pb-6 border-b border-border flex flex-col items-center text-center">
+        <div className="w-16 h-16 rounded-2xl bg-nexus-dark flex items-center justify-center mb-6 shadow-sm">
+          <NexusLogo className="w-8 h-8" />
+        </div>
+        <h1 className="text-2xl font-outfit font-bold text-card-foreground mb-2">
+          Forgot password?
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Enter your email and we&apos;ll send you a reset link.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="p-8">
         {error && (
-          <div className="rounded-lg bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 p-3 text-sm text-red-700 dark:text-red-400">
+          <div className="mb-4 rounded-xl bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
             {error}
           </div>
         )}
 
-        <div className="space-y-2">
-          <label
-            htmlFor="email"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="john@example.com"
-            required
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1.5 text-left">
+            <Label>Email address</Label>
+            <div className="relative">
+              <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                name="email"
+                type="email"
+                placeholder="name@company.com"
+                autoComplete="email"
+                required
+                autoFocus
+                disabled={isLoading}
+                className="h-auto rounded-xl py-3 pl-10 pr-4"
+              />
+            </div>
+          </div>
+
+          <Button
+            type="submit"
             disabled={isLoading}
-            className="flex h-10 w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-2 text-sm ring-offset-white dark:ring-offset-zinc-950 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          />
+            className="w-full h-11 rounded-xl text-sm font-semibold bg-nexus-dark text-white hover:bg-slate-800 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/80"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              <>
+                <Send className="mr-2 h-4 w-4" />
+                Send Reset Link
+              </>
+            )}
+          </Button>
+        </form>
+
+        <div className="mt-6 text-center">
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Sign In
+          </Link>
         </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={cn(
-            "inline-flex h-10 w-full items-center justify-center rounded-lg bg-zinc-950 dark:bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-50 dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition-colors",
-          )}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Sending reset link...
-            </>
-          ) : (
-            "Send reset link"
-          )}
-        </button>
-      </form>
-
-      <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
-        Remember your password?{" "}
-        <Link
-          href="/login"
-          className="font-medium text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4"
-        >
-          Sign in
-        </Link>
-      </p>
-    </div>
+      </div>
+    </>
   );
 }

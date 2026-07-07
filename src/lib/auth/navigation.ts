@@ -47,3 +47,7 @@ export function getPostLoginRedirect(role: UserRole, redirect: string | null | u
 
   return isStaffRole(role) ? "/admin" : "/dashboard";
 }
+
+export function getDashboardRedirect(role: UserRole): string {
+  return isStaffRole(role) ? "/admin" : "/overview";
+}

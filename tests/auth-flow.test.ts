@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  getDashboardRedirect,
   getPostLoginRedirect,
   getSafeInternalRedirect,
   shouldRedirectAuthenticatedUsersAwayFrom,
@@ -24,6 +25,12 @@ test("routes staff and participants after login", () => {
     getPostLoginRedirect("user", "/projects/alpha?tab=members"),
     "/projects/alpha?tab=members",
   );
+});
+
+test("routes authenticated users away from dashboard landing", () => {
+  assert.equal(getDashboardRedirect("admin"), "/admin");
+  assert.equal(getDashboardRedirect("moderator"), "/admin");
+  assert.equal(getDashboardRedirect("user"), "/overview");
 });
 
 test("does not let non-staff land on admin redirects", () => {
