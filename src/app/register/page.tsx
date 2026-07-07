@@ -33,6 +33,7 @@ export default function Register() {
       name: '',
       email: '',
       password: '',
+      confirmPassword: '',
       timezone: '',
     },
   });
@@ -80,7 +81,10 @@ export default function Register() {
   }
 
   return (
-    <AuthCard title='Registration'>
+    <AuthCard
+      title='Create account'
+      descr='Join Cohorix and start your journey'
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex flex-col gap-4'
@@ -88,19 +92,17 @@ export default function Register() {
         <InputForm
           name='name'
           control={control}
-          label='Name'
+          label='Full Name'
           placeholder='Enter your name'
           autoComplete='name'
         />
-
         <InputForm
           name='email'
           control={control}
-          label='Email'
+          label='Email address'
           placeholder='Enter your email'
           autoComplete='email'
         />
-
         <InputForm
           name='password'
           control={control}
@@ -109,39 +111,44 @@ export default function Register() {
           placeholder='Enter your password'
           autoComplete='new-password'
         />
-
+        <InputForm
+          name='confirmPassword'
+          control={control}
+          label='Confirm password'
+          type='password'
+          placeholder='Repeat password'
+        />
         <SelectForm
           name='timezone'
           control={control}
           label='Time zone'
           options={timezones}
         />
-
         {errors.root && (
           <div className='rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700'>
             {errors.root.message}
           </div>
         )}
-
         {successMessage && (
           <div className='rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-700'>
             {successMessage}
           </div>
         )}
-
         <Button
           type='submit'
           disabled={loading}
         >
           {loading ? 'Creating account...' : 'Create account'}
         </Button>
-
-        <Link
-          href='/login'
-          className='text-sm text-center underline'
-        >
-          Already have an account? Login
-        </Link>
+        <p className='text-center'>
+          Already have an account?
+          <Link
+            href='/login'
+            className='text-sm text-center text-ring font-semibold ml-1'
+          >
+            Sign in
+          </Link>
+        </p>
       </form>
     </AuthCard>
   );

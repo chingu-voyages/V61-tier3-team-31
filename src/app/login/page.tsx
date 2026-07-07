@@ -16,7 +16,12 @@ export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const { control, handleSubmit, setError } = useForm<LoginFormData>({
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: 'onBlur',
 
@@ -36,12 +41,7 @@ export default function Login() {
       });
 
       if (error) {
-        setError('email', {
-          type: 'server',
-          message: 'Invalid email or password',
-        });
-
-        setError('password', {
+        setError('root', {
           type: 'server',
           message: 'Invalid email or password',
         });
@@ -56,7 +56,10 @@ export default function Login() {
   }
 
   return (
-    <AuthCard title='Log In'>
+    <AuthCard
+      title='Welcome back'
+      descr='Sign in to your Cohorix workspace.'
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='flex flex-col gap-4'
@@ -64,7 +67,7 @@ export default function Login() {
         <InputForm
           name='email'
           control={control}
-          label='Email'
+          label='Email address'
           placeholder='Enter your email'
           autoComplete='email'
         />
@@ -77,19 +80,27 @@ export default function Login() {
           placeholder='Enter your password'
           autoComplete='current-password'
         />
+        {errors.root && (
+          <div className='rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700'>
+            {errors.root.message}
+          </div>
+        )}
 
         <Button
           type='submit'
           disabled={loading}
         >
-          {loading ? 'Loading...' : 'Login'}
+          {loading ? 'Loading...' : 'Sign in'}
         </Button>
-        <Link
-          href='/register'
-          className='text-sm text-center underline'
-        >
-          Don't have an account? Register
-        </Link>
+        <p className='text-center'>
+          Don't have an account?
+          <Link
+            href='/register'
+            className='text-sm text-center text-ring font-semibold ml-1'
+          >
+            Sign up
+          </Link>
+        </p>
       </form>
     </AuthCard>
   );
