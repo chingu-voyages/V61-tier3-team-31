@@ -3,22 +3,50 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ── Static tokens (fonts, animations, radius) ── */
 @theme {
   --font-sans:
     var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", "Noto Color Emoji";
-  --font-outfit:
-    var(--font-outfit), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  --color-nexus-green: #77cf97;
-  --color-nexus-green-dark: #5ab87e;
-  --color-nexus-dark: #0b0c10;
-  --color-nexus-sidebar: #13151a;
-  --color-nexus-page: #f8f9fc;
+  --font-outfit: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  --radius: 0.75rem;
 
   --animate-wave: wave 0.8s ease-in-out 1;
   --animate-gradient-sweep: gradient-sweep 3s linear infinite;
 }
 
+/* ── Semantic color tokens → Tailwind utilities ── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Custom brand colors */
+  --color-nexus-green: var(--nexus-green);
+  --color-nexus-green-dark: var(--nexus-green-dark);
+  --color-nexus-dark: var(--nexus-dark);
+  --color-nexus-sidebar: var(--nexus-sidebar);
+  --color-nexus-page: var(--nexus-page);
+}
+
+/* ── Keyframes ── */
 @keyframes wave {
   0% {
     transform: rotate(0deg);
@@ -52,31 +80,75 @@
   }
 }
 
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
+/* ── Light theme ── */
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 7% 4%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(240 7% 4%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(240 7% 4%);
+  --primary: hsl(240 7% 4%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(220 14% 96%);
+  --secondary-foreground: hsl(240 7% 4%);
+  --muted: hsl(220 14% 96%);
+  --muted-foreground: hsl(215 16% 47%);
+  --accent: hsl(220 14% 96%);
+  --accent-foreground: hsl(240 7% 4%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(214 32% 91%);
+  --input: hsl(214 32% 91%);
+  --ring: hsl(240 7% 4%);
+
+  /* Brand colors */
+  --nexus-green: hsl(145 37% 69%);
+  --nexus-green-dark: hsl(145 29% 54%);
+  --nexus-dark: hsl(240 11% 6%);
+  --nexus-sidebar: hsl(220 13% 10%);
+  --nexus-page: hsl(228 33% 97%);
 }
 
+/* ── Dark theme ── */
+.dark {
+  --background: hsl(240 7% 4%);
+  --foreground: hsl(210 20% 98%);
+  --card: hsl(235 8% 12%);
+  --card-foreground: hsl(210 20% 98%);
+  --popover: hsl(235 8% 12%);
+  --popover-foreground: hsl(210 20% 98%);
+  --primary: hsl(145 37% 69%);
+  --primary-foreground: hsl(240 11% 6%);
+  --secondary: hsl(235 8% 12%);
+  --secondary-foreground: hsl(210 20% 98%);
+  --muted: hsl(0 0% 100% / 0.05);
+  --muted-foreground: hsl(215 16% 57%);
+  --accent: hsl(0 0% 100% / 0.05);
+  --accent-foreground: hsl(210 20% 98%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 100% / 0.1);
+  --input: hsl(0 0% 100% / 0.1);
+  --ring: hsl(145 37% 69%);
+
+  /* Brand colors */
+  --nexus-green: hsl(145 37% 69%);
+  --nexus-green-dark: hsl(145 29% 54%);
+  --nexus-dark: hsl(240 11% 6%);
+  --nexus-sidebar: hsl(220 13% 10%);
+  --nexus-page: hsl(228 33% 97%);
+}
+
+/* ── Base styles ── */
 @layer base {
-  :root {
-    --background: #ffffff;
-    --foreground: #171717;
-  }
-
-  .dark {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-
   html {
     scrollbar-gutter: stable;
   }
 
-  /* Thin dark scrollbar for timezone list */
   .tz-list {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+    scrollbar-color: hsl(0 0% 100% / 0.06) transparent;
   }
   .tz-list::-webkit-scrollbar {
     width: 3px;
@@ -85,14 +157,13 @@
     background: transparent;
   }
   .tz-list::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: hsl(0 0% 100% / 0.06);
     border-radius: 8px;
   }
   .tz-list::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.12);
+    background-color: hsl(0 0% 100% / 0.12);
   }
 
-  /* Reset default focus styles */
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible,
@@ -100,7 +171,6 @@
     outline: none;
   }
 
-  /* Cursor for all clickable elements */
   button,
   a,
   [role="button"],
@@ -110,14 +180,14 @@
   }
 }
 
-/* Aggressive Fix for Chrome/Safari Autofill in Dark Mode */
+/* Chrome/Safari Autofill Dark Mode Fix */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active,
 input:-webkit-autofill:first-line {
-  -webkit-box-shadow: 0 0 0px 1000px #13151a inset !important;
-  box-shadow: 0 0 0px 1000px #13151a inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px hsl(220 13% 10%) inset !important;
+  box-shadow: 0 0 0px 1000px hsl(220 13% 10%) inset !important;
   -webkit-text-fill-color: white !important;
   color: white !important;
   caret-color: white !important;
@@ -126,12 +196,10 @@ input:-webkit-autofill:first-line {
 }
 
 @layer utilities {
-  /* Premium Glassmorphic Panel */
   .glass-panel {
     @apply bg-white/70 dark:bg-[#1a1b24]/60 backdrop-blur-xl border border-slate-200/50 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.2)];
   }
 
-  /* Active glow effect for selected cards */
   .active-glow {
     @apply border-nexus-green bg-nexus-green/5 dark:bg-nexus-green/10 shadow-[0_0_15px_rgba(119,207,151,0.15)] dark:shadow-[0_0_20px_rgba(119,207,151,0.2)];
   }
