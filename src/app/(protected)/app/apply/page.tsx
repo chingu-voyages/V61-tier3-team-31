@@ -7,12 +7,12 @@ import { useApplyForm, type FormStep } from "@/hooks/use-apply-form";
 import { FormStepper } from "@/components/apply/form-stepper";
 import { FormNavigation } from "@/components/apply/form-navigation";
 
-import StepPersonalInfo from "@/app/(dashboard)/apply/steps/step-personal-info";
-import StepRoleExperience from "@/app/(dashboard)/apply/steps/step-role-experience";
-import StepSkills from "@/app/(dashboard)/apply/steps/step-skills";
-import StepAvailability from "@/app/(dashboard)/apply/steps/step-availability";
-import StepMotivation from "@/app/(dashboard)/apply/steps/step-motivation";
-import StepReview from "@/app/(dashboard)/apply/steps/step-review";
+import StepPersonalInfo from "@/app/(protected)/app/apply/steps/step-personal-info";
+import StepRoleExperience from "@/app/(protected)/app/apply/steps/step-role-experience";
+import StepSkills from "@/app/(protected)/app/apply/steps/step-skills";
+import StepAvailability from "@/app/(protected)/app/apply/steps/step-availability";
+import StepMotivation from "@/app/(protected)/app/apply/steps/step-motivation";
+import StepReview from "@/app/(protected)/app/apply/steps/step-review";
 
 const steps = [
   { label: "Personal Info", description: "Your basic details" },
@@ -116,10 +116,10 @@ export default function ApplyPage() {
             transition={{ delay: 1, duration: 0.4 }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => (window.location.href = "/")}
+            onClick={() => (window.location.href = "/app/overview")}
             className="cursor-pointer w-full py-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-medium hover:bg-white/10 hover:text-white transition-all"
           >
-            Back to Home
+            Back to Workspace
           </motion.button>
         </motion.div>
       </div>
