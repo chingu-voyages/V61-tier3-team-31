@@ -3,7 +3,6 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { getSafeInternalRedirect } from "@/lib/auth/navigation";
 import { NexusLogo } from "@/components/nexus-logo";
@@ -11,13 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Mail, Loader2 } from "lucide-react";
+import { LoginFormData } from "@/schemas/login.schema";
 
-const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
 type FieldErrors = Partial<Record<keyof LoginFormData, string>>;
 
 function LoginForm() {
