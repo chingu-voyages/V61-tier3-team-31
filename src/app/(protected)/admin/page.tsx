@@ -1,27 +1,8 @@
-"use client";
+import { Shield } from "lucide-react";
+import { requireStaff } from "@/lib/auth/queries";
 
-import { useAuth } from "@/lib/auth/auth-context";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Loader2, Shield } from "lucide-react";
-
-export default function AdminPage() {
-  const { user, profile, role, isLoading, signOut } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoading && (!user || (role !== "admin" && role !== "moderator"))) {
-      router.push("/login");
-    }
-  }, [isLoading, user, role, router]);
-
-  if (isLoading || !user) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin text-zinc-500" />
-      </div>
-    );
-  }
+export default async function AdminPage() {
+  const user = await requireStaff();
 
   return (
     <div className="flex-1 flex flex-col">
@@ -32,13 +13,7 @@ export default function AdminPage() {
             <h1 className="text-xl font-semibold">Nexus Admin</h1>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-zinc-600 dark:text-zinc-400 capitalize">{role}</span>
-            <button
-              onClick={() => signOut()}
-              className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-4"
-            >
-              Sign out
-            </button>
+            <span className="text-sm text-zinc-600 dark:text-zinc-400 capitalize">{user.role}</span>
           </div>
         </div>
       </header>
@@ -48,8 +23,8 @@ export default function AdminPage() {
 
         <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-6">
           <p className="text-zinc-600 dark:text-zinc-400">
-            Welcome, {profile?.full_name ?? "Admin"}! The admin panel is ready. Management features
-            coming soon.
+            Welcome, {user.profile?.full_name ?? "Admin"}! The admin panel is ready. Management
+            features coming soon.
           </p>
         </div>
       </main>

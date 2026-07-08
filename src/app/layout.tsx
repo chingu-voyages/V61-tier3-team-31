@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Geist } from "next/font/google";
 import { Providers } from "./providers";
+import { getCurrentUser } from "@/lib/auth/queries";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -24,11 +25,13 @@ export const metadata: Metadata = {
   description: "Manage your tech voyage experience",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currentUser = await getCurrentUser();
+
   return (
     <html
       lang="en"
@@ -43,7 +46,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans antialiased text-foreground">
-        <Providers>{children}</Providers>
+        <Providers initialUser={currentUser}>{children}</Providers>
       </body>
     </html>
   );

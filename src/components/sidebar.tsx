@@ -22,6 +22,14 @@ import {
 } from "lucide-react";
 import { NexusLogo } from "@/components/nexus-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuth } from "@/lib/auth/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -93,10 +101,12 @@ function NavItem({
 }
 
 export function Sidebar({ role, status, currentView }: SidebarProps) {
+  const { profile, signOut } = useAuth();
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
   const isStaff = role === "admin" || role === "moderator";
+  const userName = profile?.full_name ?? (isStaff ? "Jane Cooper" : "Mark Logic");
 
   const navigate = (view: DashboardView) => {
     const nextPath =
@@ -107,6 +117,11 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
         : `${isStaff ? "/admin" : "/app"}/${view}`;
 
     router.push(nextPath);
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    router.replace("/login");
   };
 
   return (
@@ -364,23 +379,54 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
           } gap-1`}
         >
           <div className={!isExpanded ? "order-2" : undefined}>
-            <div
-              className={`flex items-center ${
-                isExpanded ? "gap-3 px-2 py-1" : "p-0.5"
-              } cursor-pointer rounded-xl transition-colors min-w-0 flex-1`}
-            >
-              <img
-                src="https://i.pravatar.cc/100?img=5"
-                className="w-8 h-8 rounded-full bg-muted border border-border shrink-0"
-                alt="profile"
-              />
-              {isExpanded && (
-                <div className="flex-1 overflow-hidden text-left">
-                  <div className="text-sm font-medium text-white truncate">Jane Cooper</div>
-                  <div className="text-xs text-muted-foreground capitalize">{role}</div>
-                </div>
-              )}
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={`flex items-center ${
+                  isExpanded ? "gap-3 px-2 py-1" : "p-0.5"
+                } cursor-pointer rounded-xl transition-colors min-w-0 flex-1 outline-none hover:bg-white/5`}
+              >
+                <img
+                  src={
+                    isStaff ? "https://i.pravatar.cc/100?img=5" : "https://i.pravatar.cc/100?img=11"
+                  }
+                  className="w-8 h-8 rounded-full bg-muted border border-border shrink-0"
+                  alt="profile"
+                  title={userName}
+                />
+                {isExpanded && (
+                  <div className="flex-1 overflow-hidden text-left">
+                    <div className="text-sm font-medium text-white truncate">{userName}</div>
+                    <div className="text-xs text-muted-foreground capitalize">
+                      {role}
+                      {!isStaff && status ? ` · ${status}` : ""}
+                    </div>
+                  </div>
+                )}
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                side={isExpanded ? "top" : "right"}
+                align="start"
+                sideOffset={8}
+                className="min-w-[180px] bg-[#1a1b24] border border-white/10 text-slate-200 p-1 shadow-xl"
+              >
+                <DropdownMenuItem
+                  onClick={() => navigate("profile")}
+                  className="text-slate-200 focus:text-white focus:bg-white/5 cursor-pointer rounded-lg px-2 py-2 text-sm"
+                >
+                  <User className="w-4 h-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-rose-400 focus:text-rose-300 focus:bg-white/5 cursor-pointer rounded-lg px-2 py-2 text-sm"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div

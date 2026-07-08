@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
-import { getPostLoginRedirect } from "@/lib/auth/navigation";
+import { getSafeInternalRedirect } from "@/lib/auth/navigation";
 import { NexusLogo } from "@/components/nexus-logo";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -76,19 +76,8 @@ function LoginForm() {
         return;
       }
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (user) {
-        const { data: roleData } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-        router.push(getPostLoginRedirect(roleData?.role ?? "user", redirect));
-      }
+      const destination = getSafeInternalRedirect(redirect) ?? "/app/overview";
+      router.replace(destination);
     } catch {
       setServerError("An unexpected error occurred. Please try again.");
     } finally {

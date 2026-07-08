@@ -1,5 +1,7 @@
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import type { Database } from "@/types/database";
+import { isStaffRole } from "@/lib/auth/navigation";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
@@ -36,6 +38,26 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     profile,
     role: userRole,
   };
+}
+
+export async function requireUser(): Promise<AuthUser> {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return user;
+}
+
+export async function requireStaff(): Promise<AuthUser> {
+  const user = await requireUser();
+
+  if (!isStaffRole(user.role)) {
+    redirect("/app/overview");
+  }
+
+  return user;
 }
 
 export async function getUserRole(userId: string): Promise<"admin" | "moderator" | "user"> {

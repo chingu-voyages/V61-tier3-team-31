@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isStaffRole, shouldRedirectAuthenticatedUsersAwayFrom } from "@/lib/auth/navigation";
+import { shouldRedirectAuthenticatedUsersAwayFrom } from "@/lib/auth/navigation";
 
 const publicRoutes = new Set([
   "/login",
@@ -9,12 +9,6 @@ const publicRoutes = new Set([
   "/reset-password",
   "/auth/callback",
 ]);
-
-const adminRoutes = ["/admin"];
-
-function isAdminRoute(pathname: string): boolean {
-  return adminRoutes.some((route) => pathname === route || pathname.startsWith(route + "/"));
-}
 
 function isPublicRoute(pathname: string): boolean {
   if (pathname === "/") return true;
@@ -50,51 +44,24 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const isAuthenticated = !!user;
+  const { data } = await supabase.auth.getClaims();
+  const isAuthenticated = !!data?.claims?.sub;
   const isPublic = isPublicRoute(pathname);
   const isAuth = isAuthRoute(pathname);
-  const isAdmin = isAdminRoute(pathname);
 
   // Redirect unauthenticated users to login for protected routes
   if (!isAuthenticated && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    url.searchParams.set("redirect", pathname);
+    url.searchParams.set("redirect", `${pathname}${request.nextUrl.search}`);
     return NextResponse.redirect(url);
   }
 
   // Redirect authenticated users away from auth pages
   if (isAuthenticated && isAuth) {
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
     if (pathname !== "/reset-password") {
       const url = request.nextUrl.clone();
-      url.pathname = roleData?.role && isStaffRole(roleData.role) ? "/admin" : "/app";
-      return NextResponse.redirect(url);
-    }
-  }
-
-  // For admin routes, check role
-  if (isAuthenticated && isAdmin) {
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    const role = roleData?.role ?? "user";
-
-    if (!isStaffRole(role)) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/app";
+      url.pathname = "/app/overview";
       return NextResponse.redirect(url);
     }
   }

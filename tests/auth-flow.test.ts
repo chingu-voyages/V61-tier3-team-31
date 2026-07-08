@@ -12,6 +12,10 @@ test("keeps safe internal redirects", () => {
     getSafeInternalRedirect("/projects/alpha?tab=members"),
     "/projects/alpha?tab=members",
   );
+  assert.equal(
+    getSafeInternalRedirect("/app/overview?tab=profile#details"),
+    "/app/overview?tab=profile#details",
+  );
   assert.equal(getSafeInternalRedirect("https://evil.example.com"), null);
   assert.equal(getSafeInternalRedirect("//evil.example.com"), null);
   assert.equal(getSafeInternalRedirect(null), null);
@@ -20,7 +24,7 @@ test("keeps safe internal redirects", () => {
 test("routes staff and participants after login", () => {
   assert.equal(getPostLoginRedirect("admin", null), "/admin");
   assert.equal(getPostLoginRedirect("moderator", null), "/admin");
-  assert.equal(getPostLoginRedirect("user", null), "/app");
+  assert.equal(getPostLoginRedirect("user", null), "/app/overview");
   assert.equal(
     getPostLoginRedirect("user", "/projects/alpha?tab=members"),
     "/projects/alpha?tab=members",
@@ -34,8 +38,8 @@ test("routes authenticated users away from dashboard landing", () => {
 });
 
 test("does not let non-staff land on admin redirects", () => {
-  assert.equal(getPostLoginRedirect("user", "/admin"), "/app");
-  assert.equal(getPostLoginRedirect("user", "/admin/settings"), "/app");
+  assert.equal(getPostLoginRedirect("user", "/admin"), "/app/overview");
+  assert.equal(getPostLoginRedirect("user", "/admin/settings"), "/app/overview");
 });
 
 test("allows reset-password for authenticated users", () => {

@@ -15,7 +15,6 @@ import {
   CheckCircle,
   Clock,
 } from "lucide-react";
-import { useAuth } from "@/lib/auth/auth-context";
 
 function MetricBlock({
   icon,
@@ -481,11 +480,5 @@ function ApplicantOverview() {
 }
 
 export default function OverviewPage() {
-  const { role } = useAuth();
-
-  if (role === "admin" || role === "moderator") {
-    return <AdminOverview />;
-  }
-
   return <ApplicantOverview />;
 }

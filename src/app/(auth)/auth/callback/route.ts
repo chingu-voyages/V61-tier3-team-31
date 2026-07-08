@@ -1,10 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { getSafeInternalRedirect } from "@/lib/auth/navigation";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/app";
+  const next = getSafeInternalRedirect(searchParams.get("next")) ?? "/app/overview";
 
   if (code) {
     const supabase = await createClient();

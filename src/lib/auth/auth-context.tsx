@@ -2,17 +2,16 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { User } from "@supabase/supabase-js";
 import type { Database } from "@/types/database";
+import type { AuthUser } from "@/lib/auth/queries";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type PlatformRole = Database["public"]["Enums"]["platform_role"];
 
 type AuthState = {
-  user: User | null;
+  user: Pick<AuthUser, "id" | "email"> | null;
   profile: Profile | null;
   role: PlatformRole | "user";
-  isLoading: boolean;
 };
 
 type AuthContextValue = AuthState & {
@@ -22,13 +21,37 @@ type AuthContextValue = AuthState & {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({
-    user: null,
-    profile: null,
-    role: "user",
-    isLoading: true,
-  });
+const EMPTY_STATE: AuthState = {
+  user: null,
+  profile: null,
+  role: "user",
+};
+
+function toClientUser(user: AuthUser | null): AuthState {
+  if (!user) {
+    return EMPTY_STATE;
+  }
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+    },
+    profile: user.profile,
+    role: user.role,
+  };
+}
+
+export function AuthProvider({
+  children,
+  initialUser = null,
+  clearStaleClientSession = false,
+}: {
+  children: ReactNode;
+  initialUser?: AuthUser | null;
+  clearStaleClientSession?: boolean;
+}) {
+  const [state, setState] = useState<AuthState>(() => toClientUser(initialUser));
 
   const fetchProfileAndRole = useCallback(async (userId: string) => {
     try {
@@ -56,55 +79,84 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      setState({ user: null, profile: null, role: "user", isLoading: false });
+      setState(EMPTY_STATE);
       return;
     }
 
     const { profile, role } = await fetchProfileAndRole(user.id);
-    setState({ user, profile, role, isLoading: false });
+    setState({
+      user: {
+        id: user.id,
+        email: user.email ?? "",
+      },
+      profile,
+      role,
+    });
   }, [fetchProfileAndRole]);
 
   useEffect(() => {
     const supabase = createClient();
 
+    if (clearStaleClientSession && !initialUser) {
+      void supabase.auth.signOut().finally(() => {
+        setState(EMPTY_STATE);
+      });
+
+      return;
+    }
+
     supabase.auth
       .getUser()
       .then(async ({ data: { user }, error }) => {
         if (error || !user) {
-          setState({ user: null, profile: null, role: "user", isLoading: false });
+          setState(EMPTY_STATE);
           return;
         }
 
         const { profile, role } = await fetchProfileAndRole(user.id);
-        setState({ user, profile, role, isLoading: false });
+        setState({
+          user: {
+            id: user.id,
+            email: user.email ?? "",
+          },
+          profile,
+          role,
+        });
       })
       .catch(() => {
-        setState({ user: null, profile: null, role: "user", isLoading: false });
+        setState(EMPTY_STATE);
       });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_OUT") {
-        setState({ user: null, profile: null, role: "user", isLoading: false });
+        setState(EMPTY_STATE);
         return;
       }
 
       if (session?.user) {
         const { profile, role } = await fetchProfileAndRole(session.user.id);
-        setState({ user: session.user, profile, role, isLoading: false });
+        setState({
+          user: {
+            id: session.user.id,
+            email: session.user.email ?? "",
+          },
+          profile,
+          role,
+        });
       }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [fetchProfileAndRole]);
+  }, [clearStaleClientSession, fetchProfileAndRole, initialUser]);
 
   const signOut = useCallback(async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    setState({ user: null, profile: null, role: "user", isLoading: false });
+    setState(EMPTY_STATE);
   }, []);
 
   return (

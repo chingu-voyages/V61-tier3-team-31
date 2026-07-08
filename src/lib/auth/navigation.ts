@@ -39,13 +39,13 @@ export function getPostLoginRedirect(role: UserRole, redirect: string | null | u
 
   if (safeRedirect) {
     if (safeRedirect === "/admin" || safeRedirect.startsWith("/admin/")) {
-      return isStaffRole(role) ? safeRedirect : "/app";
+      return isStaffRole(role) ? safeRedirect : "/app/overview";
     }
 
     return safeRedirect;
   }
 
-  return isStaffRole(role) ? "/admin" : "/app";
+  return isStaffRole(role) ? "/admin" : "/app/overview";
 }
 
 export function getDashboardRedirect(role: UserRole): string {
