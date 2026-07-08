@@ -1,13 +1,15 @@
-type MessageFromProps = {
+type MessageFormProps = {
+  type: "error" | "success";
   message?: string | null;
 };
 
-export function MessageForm({ message }: MessageFromProps) {
+export function MessageForm({ type, message }: MessageFormProps) {
   if (!message) return null;
 
-  return (
-    <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
-      {message}
-    </div>
-  );
+  const styles = {
+    error: "bg-destructive/10 border-destructive/20 text-destructive",
+    success: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600",
+  };
+
+  return <div className={`rounded-xl border p-3 text-sm ${styles[type]}`}>{message}</div>;
 }

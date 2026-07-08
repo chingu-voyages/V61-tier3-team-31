@@ -3,6 +3,7 @@ import { Controller, Control, FieldValues, Path } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { PasswordEyeBtn } from "./PasswordEyeBtn";
+import Link from "next/link";
 
 type FormInputProps<T extends FieldValues> = {
   name: Path<T>;
@@ -13,6 +14,10 @@ type FormInputProps<T extends FieldValues> = {
   disabled?: boolean;
   autoComplete?: string;
   eyeBtn?: boolean;
+  link?: {
+    text: string;
+    href: string;
+  };
 };
 
 export function InputForm<T extends FieldValues>({
@@ -24,6 +29,7 @@ export function InputForm<T extends FieldValues>({
   disabled = false,
   autoComplete,
   eyeBtn = false,
+  link,
 }: FormInputProps<T>) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -33,7 +39,18 @@ export function InputForm<T extends FieldValues>({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid} className="relative">
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+          <div className="flex items-center justify-between">
+            <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+
+            {link && (
+              <Link
+                href={link.href}
+                className="text-xs font-semibold text-primary hover:underline underline-offset-4"
+              >
+                {link.text}
+              </Link>
+            )}
+          </div>
           <div className="relative">
             <Input
               {...field}

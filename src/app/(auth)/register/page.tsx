@@ -4,14 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, CheckCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormData } from "@/schemas/register.schema";
 import { InputForm } from "@/components/form/InputForm";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { MessageForm } from "@/components/form/MessageForm";
-import { registerFields } from "@/constants/register-fields";
+import { registerFields } from "@/constants/auth/register-fields";
 import { CheckEmailScreen } from "@/components/auth/CheckEmailScreen";
 
 export default function RegisterPage() {
@@ -79,7 +79,7 @@ export default function RegisterPage() {
 
   return (
     <AuthCard title="Create account" descr="Join Cohorix and start your journey.">
-      {errors.root && <MessageForm message={errors.root.message} />}
+      {errors.root && <MessageForm type="error" message={errors.root.message} />}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {registerFields.map((field) => (
