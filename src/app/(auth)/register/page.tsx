@@ -12,7 +12,7 @@ import { InputForm } from "@/components/form/InputForm";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { MessageForm } from "@/components/form/MessageForm";
 import { registerFields } from "@/constants/auth/register-fields";
-import { CheckEmailScreen } from "@/components/auth/CheckEmailScreen";
+import { EmailSentScreen } from "@/components/auth/EmailSentScreen";
 
 export default function RegisterPage() {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -74,7 +74,13 @@ export default function RegisterPage() {
   }
 
   if (isSuccess) {
-    return <CheckEmailScreen />;
+    return (
+      <EmailSentScreen
+        title="Check your email"
+        descr="We sent a verification link to your email. Click the link to activate your account."
+        textBtn="Go to Sign In"
+      />
+    );
   }
 
   return (

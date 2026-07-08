@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { PasswordEyeBtn } from "./PasswordEyeBtn";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 type FormInputProps<T extends FieldValues> = {
   name: Path<T>;
@@ -13,6 +14,7 @@ type FormInputProps<T extends FieldValues> = {
   type?: React.ComponentProps<"input">["type"];
   disabled?: boolean;
   autoComplete?: string;
+  leftIcon?: React.ReactNode;
   eyeBtn?: boolean;
   link?: {
     text: string;
@@ -28,6 +30,7 @@ export function InputForm<T extends FieldValues>({
   type = "text",
   disabled = false,
   autoComplete,
+  leftIcon,
   eyeBtn = false,
   link,
 }: FormInputProps<T>) {
@@ -52,6 +55,11 @@ export function InputForm<T extends FieldValues>({
             )}
           </div>
           <div className="relative">
+            {leftIcon && (
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                {leftIcon}
+              </div>
+            )}
             <Input
               {...field}
               id={field.name}
@@ -60,7 +68,7 @@ export function InputForm<T extends FieldValues>({
               disabled={disabled}
               autoComplete={autoComplete}
               aria-invalid={fieldState.invalid}
-              className={eyeBtn ? "pr-10" : ""}
+              className={cn(leftIcon && "pl-10", eyeBtn && "pr-10")}
             />
             {eyeBtn && (
               <PasswordEyeBtn
