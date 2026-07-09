@@ -3,29 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { NexusLogo } from "@/components/nexus-logo";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Lock, Eye, EyeOff, CheckCircle, Shield, Loader2 } from "lucide-react";
+import { resetPasswordSchema, type ResetPasswordForm } from "@/schemas/reset-password.schema";
 
-const resetPasswordSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[0-9]/, "Password must contain at least one number")
-      .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
 type FieldErrors = Partial<Record<keyof ResetPasswordForm, string>>;
 
 export default function ResetPasswordPage() {
