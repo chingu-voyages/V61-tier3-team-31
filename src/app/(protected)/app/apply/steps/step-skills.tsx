@@ -4,25 +4,7 @@ import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import { motion } from "motion/react";
 import { useState } from "react";
 
-const POPULAR_SKILLS = [
-  "React",
-  "TypeScript",
-  "Node.js",
-  "Python",
-  "PostgreSQL",
-  "Docker",
-  "AWS",
-  "Figma",
-  "Next.js",
-  "Go",
-  "GraphQL",
-  "Tailwind CSS",
-  "Redis",
-  "Kubernetes",
-  "Swift",
-];
-
-export default function StepSkills() {
+export default function StepSkills({ popularSkills }: { popularSkills: string[] }) {
   const {
     setValue,
     watch,
@@ -104,33 +86,37 @@ export default function StepSkills() {
         <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">
           Popular Skills
         </span>
-        <div className="flex flex-wrap gap-1.5">
-          {POPULAR_SKILLS.map((skill) => {
-            const isAdded = currentSkills.includes(skill);
-            return (
-              <button
-                type="button"
-                key={skill}
-                onClick={() => addSkill(skill)}
-                disabled={isAdded}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${
-                  isAdded
-                    ? "bg-nexus-green/10 text-nexus-green border-nexus-green/20 cursor-default"
-                    : "border-white/10 text-slate-400 hover:bg-white/5"
-                }`}
-              >
-                {isAdded ? (
-                  <span className="flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3" />
-                    {skill}
-                  </span>
-                ) : (
-                  `+ ${skill}`
-                )}
-              </button>
-            );
-          })}
-        </div>
+        {popularSkills.length === 0 ? (
+          <span className="text-xs text-white/40">No skills available</span>
+        ) : (
+          <div className="flex flex-wrap gap-1.5">
+            {popularSkills.map((skill) => {
+              const isAdded = currentSkills.includes(skill);
+              return (
+                <button
+                  type="button"
+                  key={skill}
+                  onClick={() => addSkill(skill)}
+                  disabled={isAdded}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${
+                    isAdded
+                      ? "bg-nexus-green/10 text-nexus-green border-nexus-green/20 cursor-default"
+                      : "border-white/10 text-slate-400 hover:bg-white/5"
+                  }`}
+                >
+                  {isAdded ? (
+                    <span className="flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" />
+                      {skill}
+                    </span>
+                  ) : (
+                    `+ ${skill}`
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {errors.skills && (

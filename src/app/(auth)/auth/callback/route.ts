@@ -5,7 +5,7 @@ import { getSafeInternalRedirect } from "@/lib/auth/navigation";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = getSafeInternalRedirect(searchParams.get("next")) ?? "/app/overview";
+  const next = getSafeInternalRedirect(searchParams.get("next")) ?? "/app";
 
   if (code) {
     const supabase = await createClient();

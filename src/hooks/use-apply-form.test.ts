@@ -2,6 +2,16 @@ import { renderHook, act } from "@testing-library/react";
 import { useApplyForm } from "./use-apply-form";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
+vi.mock("@/lib/auth/auth-context", () => ({
+  useAuth: () => ({
+    user: null,
+    profile: null,
+    role: "user" as const,
+    signOut: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
+
 describe("useApplyForm", () => {
   beforeEach(() => {
     window.localStorage.clear();

@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useApplyFormStore } from "./use-apply-form-store";
+import { useAuth } from "@/lib/auth/auth-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import {
@@ -13,10 +14,12 @@ import {
   stepAvailabilitySchema,
   stepMotivationSchema,
 } from "@/lib/schemas/apply-schema";
+import { submitApplication } from "@/app/(protected)/app/apply/actions";
 
 export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
 
 export function useApplyForm() {
+  const { user, profile } = useAuth();
   const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -25,8 +28,8 @@ export function useApplyForm() {
     resolver: zodResolver(applyFormSchema),
     mode: "onTouched",
     defaultValues: {
-      fullName: "",
-      email: "",
+      fullName: profile?.full_name ?? "",
+      email: user?.email ?? "",
       role: undefined,
       experience: undefined,
       skills: [],
@@ -39,6 +42,26 @@ export function useApplyForm() {
       ...formData,
     },
   });
+
+  useEffect(() => {
+    if (!profile?.full_name && !user?.email) {
+      return;
+    }
+
+    const current = form.getValues();
+    const updates: Partial<ApplyFormData> = {};
+
+    if (!current.fullName && profile?.full_name) {
+      updates.fullName = profile.full_name;
+    }
+    if (!current.email && user?.email) {
+      updates.email = user.email;
+    }
+
+    if (Object.keys(updates).length > 0) {
+      form.reset({ ...current, ...updates });
+    }
+  }, [form, profile?.full_name, user?.email]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {
@@ -93,19 +116,10 @@ export function useApplyForm() {
 
     try {
       const data = form.getValues();
-      const res = await fetch("/api/applications", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const result = await submitApplication(data);
 
-      if (!res.ok) {
-        const body = await res.json();
-        if (res.status === 409) {
-          setSubmitError(body.error || "An application with this email already exists.");
-        } else {
-          setSubmitError(body.error || "Something went wrong. Please try again.");
-        }
+      if ("error" in result) {
+        setSubmitError(result.error);
         return null;
       }
 
