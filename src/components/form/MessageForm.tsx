@@ -11,5 +11,9 @@ export function MessageForm({ type, message }: MessageFormProps) {
     success: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600",
   };
 
-  return <div className={`rounded-xl border p-3 text-sm ${styles[type]}`}>{message}</div>;
+  return (
+    <div className={`rounded-xl border p-3 mb-6 text-sm text-center ${styles[type]}`}>
+      {message}
+    </div>
+  );
 }
