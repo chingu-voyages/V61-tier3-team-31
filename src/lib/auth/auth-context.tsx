@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { signOutAction } from "@/lib/auth/actions";
 import type { Database } from "@/types/database";
 import type { AuthUser } from "@/lib/auth/queries";
 
@@ -155,7 +156,13 @@ export function AuthProvider({
 
   const signOut = useCallback(async () => {
     const supabase = createClient();
-    await supabase.auth.signOut();
+    const serverResult = await signOutAction();
+
+    if ("error" in serverResult) {
+      throw new Error(serverResult.error);
+    }
+
+    await supabase.auth.signOut({ scope: "local" });
     setState(EMPTY_STATE);
   }, []);
 

@@ -41,6 +41,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const isStaff = role === "admin" || role === "moderator";
   const userName = profile?.full_name ?? (isStaff ? "Jane Cooper" : "Mark Logic");
   const avatarUrl = useAvatar(profile?.id, profile?.avatar_path);
@@ -65,9 +66,19 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
   };
 
   const handleLogout = async () => {
-    await signOut();
+    if (isLoggingOut) {
+      return;
+    }
 
-    router.replace("/login");
+    setIsLoggingOut(true);
+
+    try {
+      await signOut();
+      window.location.replace("/login");
+    } catch {
+      setIsLoggingOut(false);
+      router.replace("/login");
+    }
   };
 
   return (
@@ -210,7 +221,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
                   className="text-rose-400 focus:text-rose-300 focus:bg-white/5 cursor-pointer rounded-lg px-2 py-2 text-sm"
                 >
                   <LogOut className="w-4 h-4" />
-                  Sign Out
+                  {isLoggingOut ? "Signing out..." : "Sign Out"}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
