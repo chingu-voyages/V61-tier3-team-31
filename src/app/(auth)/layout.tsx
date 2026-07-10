@@ -10,7 +10,7 @@ export default function AuthLayout({
       </div>
 
       <div className="mt-8 text-center text-xs font-medium text-muted-foreground">
-        Protected by Nexus Identity Management
+        Protected by Cohorix Identity Management
       </div>
     </div>
   );
