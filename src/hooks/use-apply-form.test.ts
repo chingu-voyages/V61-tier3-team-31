@@ -36,7 +36,8 @@ describe("useApplyForm", () => {
 
     await act(async () => {
       result.current.form.setValue("fullName", "Jane Cooper");
-      result.current.form.setValue("email", "jane@example.com");
+      result.current.form.setValue("role", "Frontend");
+      result.current.form.setValue("experience", "Intermediate");
     });
 
     await act(async () => {
@@ -51,7 +52,8 @@ describe("useApplyForm", () => {
 
     await act(async () => {
       result.current.form.setValue("fullName", "J");
-      result.current.form.setValue("email", "not-an-email");
+      result.current.form.setValue("role", "Frontend");
+      result.current.form.setValue("experience", "Intermediate");
     });
 
     await act(async () => {
@@ -92,7 +94,6 @@ describe("useApplyForm", () => {
 
     await act(async () => {
       result.current.form.setValue("fullName", "Jane Cooper");
-      result.current.form.setValue("email", "jane@example.com");
       result.current.form.setValue("role", "Frontend");
       result.current.form.setValue("experience", "Intermediate");
       result.current.form.setValue("skills", ["React", "TypeScript"]);
@@ -127,7 +128,6 @@ describe("useApplyForm", () => {
 
     await act(async () => {
       result.current.form.setValue("fullName", "Jane Cooper");
-      result.current.form.setValue("email", "jane@example.com");
       result.current.form.setValue("role", "Frontend");
       result.current.form.setValue("experience", "Intermediate");
       result.current.form.setValue("skills", ["React", "TypeScript"]);

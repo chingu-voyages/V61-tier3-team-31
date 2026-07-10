@@ -9,7 +9,6 @@ import { FormStepper } from "@/components/apply/form-stepper";
 import { FormNavigation } from "@/components/apply/form-navigation";
 import { ProfileSyncDialog } from "@/components/apply/profile-sync-dialog";
 
-import StepPersonalInfo from "@/app/(protected)/app/apply/steps/step-personal-info";
 import StepRoleExperience from "@/app/(protected)/app/apply/steps/step-role-experience";
 import StepSkills from "@/app/(protected)/app/apply/steps/step-skills";
 import StepAvailability from "@/app/(protected)/app/apply/steps/step-availability";
@@ -24,8 +23,7 @@ import {
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 
 const steps = [
-  { label: "Personal Info", description: "Your basic details" },
-  { label: "Role & Experience", description: "What you do best" },
+  { label: "Role & Experience", description: "Your profile basics" },
   { label: "Skills", description: "Your tech stack" },
   { label: "Availability", description: "When you can work" },
   { label: "Motivation", description: "Why you want to join" },
@@ -231,12 +229,11 @@ export function ApplyPageClient({
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
                 >
-                  {currentStep === 1 && <StepPersonalInfo />}
-                  {currentStep === 2 && <StepRoleExperience />}
-                  {currentStep === 3 && <StepSkills popularSkills={popularSkills} />}
-                  {currentStep === 4 && <StepAvailability voyages={openVoyages} />}
-                  {currentStep === 5 && <StepMotivation />}
-                  {currentStep === 6 && (
+                  {currentStep === 1 && <StepRoleExperience />}
+                  {currentStep === 2 && <StepSkills popularSkills={popularSkills} />}
+                  {currentStep === 3 && <StepAvailability voyages={openVoyages} />}
+                  {currentStep === 4 && <StepMotivation />}
+                  {currentStep === 5 && (
                     <StepReview
                       onEditStep={setStep as (step: FormStep) => void}
                       error={submitError}
@@ -252,7 +249,7 @@ export function ApplyPageClient({
                   onBack={prevStep}
                   onContinue={nextStep}
                   onSubmit={handleSubmit}
-                  isLastStep={currentStep === 6}
+                  isLastStep={currentStep === 5}
                 />
               </div>
             </form>

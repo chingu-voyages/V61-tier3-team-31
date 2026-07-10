@@ -1,22 +1,14 @@
 "use client";
 
 import { motion } from "motion/react";
-import {
-  CheckCircle2,
-  User,
-  Briefcase,
-  Code,
-  Clock,
-  MessageSquare,
-  CheckCircle,
-} from "lucide-react";
+import { CheckCircle2, Briefcase, Code, Clock, MessageSquare, CheckCircle } from "lucide-react";
 
 interface FormStepperProps {
   currentStep: number;
   steps: { label: string; description?: string }[];
 }
 
-const STEP_ICONS = [User, Briefcase, Code, Clock, MessageSquare, CheckCircle];
+const STEP_ICONS = [Briefcase, Code, Clock, MessageSquare, CheckCircle];
 
 export function FormStepper({ currentStep, steps }: FormStepperProps) {
   return (

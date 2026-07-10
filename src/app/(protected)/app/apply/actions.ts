@@ -44,10 +44,6 @@ export async function submitApplication(data: ApplyFormData): Promise<SubmitAppl
     return { error: parsed.error.issues[0]?.message ?? "Please review your application fields." };
   }
 
-  if (parsed.data.email.trim().toLowerCase() !== user.email.trim().toLowerCase()) {
-    return { error: "The email on the form must match the signed-in account." };
-  }
-
   const normalizedSkills = Array.from(
     new Map(
       parsed.data.skills

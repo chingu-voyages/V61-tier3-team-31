@@ -17,10 +17,10 @@ import {
 import { submitApplication } from "@/app/(protected)/app/apply/actions";
 import type { ApplyProfileDraft } from "@/lib/applications/profile-sync";
 
-export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
+export type FormStep = 1 | 2 | 3 | 4 | 5;
 
 export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -30,7 +30,6 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
     mode: "onTouched",
     defaultValues: {
       fullName: initialProfileDraft?.fullName ?? profile?.full_name ?? "",
-      email: user?.email ?? "",
       role: initialProfileDraft?.role,
       experience: undefined,
       skills: initialProfileDraft?.skills ?? [],
@@ -46,7 +45,7 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
   });
 
   useEffect(() => {
-    if (!profile?.full_name && !user?.email && !initialProfileDraft) {
+    if (!profile?.full_name && !initialProfileDraft) {
       return;
     }
 
@@ -55,9 +54,6 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
 
     if (!current.fullName && profile?.full_name) {
       updates.fullName = profile.full_name;
-    }
-    if (!current.email && user?.email) {
-      updates.email = user.email;
     }
     if (!current.role && initialProfileDraft?.role) {
       updates.role = initialProfileDraft.role;
@@ -78,7 +74,7 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
     if (Object.keys(updates).length > 0) {
       form.reset({ ...current, ...updates });
     }
-  }, [form, initialProfileDraft, profile?.full_name, user?.email]);
+  }, [form, initialProfileDraft, profile?.full_name]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {
@@ -90,15 +86,18 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
   const getStepFields = (step: FormStep): (keyof ApplyFormData)[] => {
     switch (step) {
       case 1:
-        return Object.keys(stepPersonalInfoSchema.shape) as (keyof ApplyFormData)[];
+        return [
+          ...(Object.keys(stepPersonalInfoSchema.shape) as (keyof ApplyFormData)[]),
+          ...(Object.keys(stepRoleExperienceSchema.shape) as (keyof ApplyFormData)[]),
+        ];
       case 2:
-        return Object.keys(stepRoleExperienceSchema.shape) as (keyof ApplyFormData)[];
-      case 3:
         return Object.keys(stepSkillsSchema.shape) as (keyof ApplyFormData)[];
-      case 4:
+      case 3:
         return Object.keys(stepAvailabilitySchema.shape) as (keyof ApplyFormData)[];
-      case 5:
+      case 4:
         return Object.keys(stepMotivationSchema.shape) as (keyof ApplyFormData)[];
+      case 5:
+        return [];
       default:
         return [];
     }
@@ -109,7 +108,7 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
     const fields = getStepFields(currentStep);
     const isStepValid = await form.trigger(fields);
 
-    if (isStepValid && currentStep < 6) {
+    if (isStepValid && currentStep < 5) {
       setStep((currentStep + 1) as FormStep);
     }
   }, [currentStep, form, setStep]);
