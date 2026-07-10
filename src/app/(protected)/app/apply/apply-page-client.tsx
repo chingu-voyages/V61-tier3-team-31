@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useApplyForm, type FormStep } from "@/hooks/use-apply-form";
 import { FormStepper } from "@/components/apply/form-stepper";
 import { FormNavigation } from "@/components/apply/form-navigation";
+import { ProfileSyncDialog } from "@/components/apply/profile-sync-dialog";
 
 import StepPersonalInfo from "@/app/(protected)/app/apply/steps/step-personal-info";
 import StepRoleExperience from "@/app/(protected)/app/apply/steps/step-role-experience";
@@ -15,6 +16,12 @@ import StepAvailability from "@/app/(protected)/app/apply/steps/step-availabilit
 import StepMotivation from "@/app/(protected)/app/apply/steps/step-motivation";
 import StepReview from "@/app/(protected)/app/apply/steps/step-review";
 import type { OpenVoyage } from "@/lib/applications/voyages";
+import type { ApplyProfileDraft, ProfileSyncDiff } from "@/lib/applications/profile-sync";
+import {
+  prepareProfileSyncFromApplication,
+  syncProfileFromApplication,
+} from "@/app/(protected)/app/apply/actions";
+import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 
 const steps = [
   { label: "Personal Info", description: "Your basic details" },
@@ -28,21 +35,67 @@ const steps = [
 export function ApplyPageClient({
   popularSkills,
   openVoyages,
+  initialProfileDraft,
 }: {
   popularSkills: string[];
   openVoyages: OpenVoyage[];
+  initialProfileDraft: ApplyProfileDraft;
 }) {
   const router = useRouter();
   const { form, currentStep, isLoading, submitError, nextStep, prevStep, submit, setStep } =
-    useApplyForm();
+    useApplyForm(initialProfileDraft);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [profileSyncCandidate, setProfileSyncCandidate] = useState<ProfileSyncDiff[] | null>(null);
+  const [profileSyncLoading, setProfileSyncLoading] = useState(false);
+  const [submittedApplication, setSubmittedApplication] = useState<ApplyFormData | null>(null);
 
   const handleSubmit = async () => {
     const data = await submit();
     if (data) {
-      router.refresh();
-      setIsSubmitted(true);
+      setSubmittedApplication(data);
+
+      const syncPreparation = await prepareProfileSyncFromApplication(data);
+
+      if ("error" in syncPreparation) {
+        finalizeSuccess();
+        return;
+      }
+
+      if (syncPreparation.syncCandidate) {
+        setProfileSyncCandidate(syncPreparation.syncCandidate);
+        return;
+      }
+
+      finalizeSuccess();
     }
+  };
+
+  const finalizeSuccess = () => {
+    router.refresh();
+    setProfileSyncCandidate(null);
+    setIsSubmitted(true);
+  };
+
+  const handleProfileSyncConfirm = async () => {
+    if (!submittedApplication) {
+      finalizeSuccess();
+      return;
+    }
+
+    setProfileSyncLoading(true);
+    try {
+      await syncProfileFromApplication(
+        submittedApplication,
+        profileSyncCandidate?.map((difference) => difference.field),
+      );
+      finalizeSuccess();
+    } finally {
+      setProfileSyncLoading(false);
+    }
+  };
+
+  const handleProfileSyncSkip = () => {
+    finalizeSuccess();
   };
 
   if (isSubmitted) {
@@ -137,65 +190,75 @@ export function ApplyPageClient({
   }
 
   return (
-    <div className="w-full min-h-full flex items-center justify-center p-4 text-white">
-      <div className="w-full max-w-2xl">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <h1 className="text-3xl sm:text-4xl font-outfit font-bold text-white tracking-tight mb-2">
-            Apply for Voyage
-          </h1>
-          <p className="text-slate-400 text-sm">
-            Complete the form below to apply for the next Amigo Voyage cohort.
-          </p>
-        </motion.div>
+    <>
+      <ProfileSyncDialog
+        open={profileSyncCandidate !== null}
+        differences={profileSyncCandidate ?? []}
+        isLoading={profileSyncLoading}
+        onConfirm={handleProfileSyncConfirm}
+        onSkip={handleProfileSyncSkip}
+      />
 
-        <div className="mb-8">
-          <FormStepper currentStep={currentStep} steps={steps} />
-        </div>
-
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="glass-panel rounded-3xl p-8 sm:p-10"
+      <div className="w-full min-h-full flex items-center justify-center p-4 text-white">
+        <div className="w-full max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-              >
-                {currentStep === 1 && <StepPersonalInfo />}
-                {currentStep === 2 && <StepRoleExperience />}
-                {currentStep === 3 && <StepSkills popularSkills={popularSkills} />}
-                {currentStep === 4 && <StepAvailability voyages={openVoyages} />}
-                {currentStep === 5 && <StepMotivation />}
-                {currentStep === 6 && (
-                  <StepReview
-                    onEditStep={setStep as (step: FormStep) => void}
-                    error={submitError}
-                  />
-                )}
-              </motion.div>
-            </AnimatePresence>
+            <h1 className="text-3xl sm:text-4xl font-outfit font-bold text-white tracking-tight mb-2">
+              Apply for Voyage
+            </h1>
+            <p className="text-slate-400 text-sm">
+              Complete the form below to apply for the next Amigo Voyage cohort.
+            </p>
+          </motion.div>
 
-            <div className="mt-8">
-              <FormNavigation
-                currentStep={currentStep}
-                isLoading={isLoading}
-                onBack={prevStep}
-                onContinue={nextStep}
-                onSubmit={handleSubmit}
-                isLastStep={currentStep === 6}
-              />
-            </div>
-          </form>
-        </FormProvider>
+          <div className="mb-8">
+            <FormStepper currentStep={currentStep} steps={steps} />
+          </div>
+
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="glass-panel rounded-3xl p-8 sm:p-10"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={currentStep}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  {currentStep === 1 && <StepPersonalInfo />}
+                  {currentStep === 2 && <StepRoleExperience />}
+                  {currentStep === 3 && <StepSkills popularSkills={popularSkills} />}
+                  {currentStep === 4 && <StepAvailability voyages={openVoyages} />}
+                  {currentStep === 5 && <StepMotivation />}
+                  {currentStep === 6 && (
+                    <StepReview
+                      onEditStep={setStep as (step: FormStep) => void}
+                      error={submitError}
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="mt-8">
+                <FormNavigation
+                  currentStep={currentStep}
+                  isLoading={isLoading}
+                  onBack={prevStep}
+                  onContinue={nextStep}
+                  onSubmit={handleSubmit}
+                  isLastStep={currentStep === 6}
+                />
+              </div>
+            </form>
+          </FormProvider>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

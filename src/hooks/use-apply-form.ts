@@ -15,10 +15,11 @@ import {
   stepMotivationSchema,
 } from "@/lib/schemas/apply-schema";
 import { submitApplication } from "@/app/(protected)/app/apply/actions";
+import type { ApplyProfileDraft } from "@/lib/applications/profile-sync";
 
 export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
 
-export function useApplyForm() {
+export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
   const { user, profile } = useAuth();
   const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
@@ -28,23 +29,24 @@ export function useApplyForm() {
     resolver: zodResolver(applyFormSchema),
     mode: "onTouched",
     defaultValues: {
-      fullName: profile?.full_name ?? "",
+      fullName: initialProfileDraft?.fullName ?? profile?.full_name ?? "",
       email: user?.email ?? "",
-      role: undefined,
+      role: initialProfileDraft?.role,
       experience: undefined,
-      skills: [],
+      skills: initialProfileDraft?.skills ?? [],
       hoursPerWeek: 0,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+      timezone:
+        initialProfileDraft?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
       voyage: "",
       motivation: "",
-      bio: "",
-      portfolio: "",
+      bio: initialProfileDraft?.bio ?? "",
+      portfolio: initialProfileDraft?.portfolio ?? "",
       ...formData,
     },
   });
 
   useEffect(() => {
-    if (!profile?.full_name && !user?.email) {
+    if (!profile?.full_name && !user?.email && !initialProfileDraft) {
       return;
     }
 
@@ -57,11 +59,26 @@ export function useApplyForm() {
     if (!current.email && user?.email) {
       updates.email = user.email;
     }
+    if (!current.role && initialProfileDraft?.role) {
+      updates.role = initialProfileDraft.role;
+    }
+    if ((current.skills?.length ?? 0) === 0 && (initialProfileDraft?.skills.length ?? 0) > 0) {
+      updates.skills = initialProfileDraft?.skills;
+    }
+    if (!current.timezone && initialProfileDraft?.timezone) {
+      updates.timezone = initialProfileDraft.timezone;
+    }
+    if (!current.bio && initialProfileDraft?.bio) {
+      updates.bio = initialProfileDraft.bio;
+    }
+    if (!current.portfolio && initialProfileDraft?.portfolio) {
+      updates.portfolio = initialProfileDraft.portfolio;
+    }
 
     if (Object.keys(updates).length > 0) {
       form.reset({ ...current, ...updates });
     }
-  }, [form, profile?.full_name, user?.email]);
+  }, [form, initialProfileDraft, profile?.full_name, user?.email]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {

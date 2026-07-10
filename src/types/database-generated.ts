@@ -1082,6 +1082,7 @@ export type Database = {
           github_url: string | null;
           id: string;
           portfolio_url: string | null;
+          preferred_role: Database["public"]["Enums"]["participant_role"] | null;
           timezone: string;
           updated_at: string;
         };
@@ -1093,6 +1094,7 @@ export type Database = {
           github_url?: string | null;
           id: string;
           portfolio_url?: string | null;
+          preferred_role?: Database["public"]["Enums"]["participant_role"] | null;
           timezone?: string;
           updated_at?: string;
         };
@@ -1104,6 +1106,7 @@ export type Database = {
           github_url?: string | null;
           id?: string;
           portfolio_url?: string | null;
+          preferred_role?: Database["public"]["Enums"]["participant_role"] | null;
           timezone?: string;
           updated_at?: string;
         };

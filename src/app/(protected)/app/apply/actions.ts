@@ -5,6 +5,8 @@ import { requireUser } from "@/lib/auth/queries";
 import { createClient } from "@/lib/supabase/server";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import { applyFormSchema } from "@/lib/schemas/apply-schema";
+import { applyProfileSync, prepareProfileSync } from "@/lib/applications/profile-draft";
+import type { ProfileSyncDiff, ProfileSyncField } from "@/lib/applications/profile-sync";
 import { normalizeSkillKey } from "@/lib/applications/skill-normalization";
 
 const submitApplicationSchema = applyFormSchema.extend({
@@ -26,6 +28,13 @@ const experienceMap = {
 } as const;
 
 export type SubmitApplicationResult = { ok: true } | { error: string };
+export type PrepareProfileSyncResult =
+  | {
+      ok: true;
+      autoSyncedFields: ProfileSyncField[];
+      syncCandidate: ProfileSyncDiff[] | null;
+    }
+  | { error: string };
 
 export async function submitApplication(data: ApplyFormData): Promise<SubmitApplicationResult> {
   const user = await requireUser();
@@ -78,4 +87,57 @@ export async function submitApplication(data: ApplyFormData): Promise<SubmitAppl
   }
 
   return { ok: true };
+}
+
+export async function prepareProfileSyncFromApplication(
+  data: ApplyFormData,
+): Promise<PrepareProfileSyncResult> {
+  const user = await requireUser();
+  const parsed = submitApplicationSchema.safeParse(data);
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Please review your application fields." };
+  }
+
+  try {
+    const syncPlan = await prepareProfileSync(user.id, parsed.data);
+
+    if (syncPlan.autoSyncedFields.length > 0) {
+      await applyProfileSync(user.id, parsed.data, syncPlan.autoSyncedFields);
+    }
+
+    return {
+      ok: true,
+      autoSyncedFields: syncPlan.autoSyncedFields,
+      syncCandidate: syncPlan.differentFields.length > 0 ? syncPlan.differentFields : null,
+    };
+  } catch {
+    return { error: "Application submitted, but we could not prepare profile sync right now." };
+  }
+}
+
+export async function syncProfileFromApplication(
+  data: ApplyFormData,
+  fields?: ProfileSyncField[],
+): Promise<SubmitApplicationResult> {
+  const user = await requireUser();
+  const parsed = submitApplicationSchema.safeParse(data);
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Please review your application fields." };
+  }
+
+  try {
+    const syncPlan = await prepareProfileSync(user.id, parsed.data);
+    const fieldsToSync = fields ?? syncPlan.differentFields.map((field) => field.field);
+
+    if (fieldsToSync.length === 0) {
+      return { ok: true };
+    }
+
+    await applyProfileSync(user.id, parsed.data, fieldsToSync);
+    return { ok: true };
+  } catch {
+    return { error: "We could not update your profile right now." };
+  }
 }
