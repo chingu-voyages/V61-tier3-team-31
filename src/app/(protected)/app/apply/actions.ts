@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth/queries";
 import { createClient } from "@/lib/supabase/server";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import { applyFormSchema } from "@/lib/schemas/apply-schema";
+import { normalizeSkillKey } from "@/lib/applications/skill-normalization";
 
 const submitApplicationSchema = applyFormSchema.extend({
   voyage: z.string().uuid().or(z.literal("")).optional(),
@@ -39,8 +40,17 @@ export async function submitApplication(data: ApplyFormData): Promise<SubmitAppl
   }
 
   const normalizedSkills = Array.from(
-    new Set(parsed.data.skills.map((skill) => skill.trim()).filter((skill) => skill.length > 0)),
+    new Map(
+      parsed.data.skills
+        .map((skill) => skill.trim())
+        .filter((skill) => normalizeSkillKey(skill).length > 0)
+        .map((skill) => [normalizeSkillKey(skill), skill] as const),
+    ).values(),
   );
+
+  if (normalizedSkills.length === 0) {
+    return { error: "Please add at least one valid skill." };
+  }
 
   const supabase = await createClient();
   const { data: applicationId, error } = await supabase.rpc("submit_application", {

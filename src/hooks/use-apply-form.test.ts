@@ -2,6 +2,8 @@ import { renderHook, act } from "@testing-library/react";
 import { useApplyForm } from "./use-apply-form";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
+const submitApplicationMock = vi.hoisted(() => vi.fn());
+
 vi.mock("@/lib/auth/auth-context", () => ({
   useAuth: () => ({
     user: null,
@@ -12,10 +14,16 @@ vi.mock("@/lib/auth/auth-context", () => ({
   }),
 }));
 
+vi.mock("@/app/(protected)/app/apply/actions", () => ({
+  submitApplication: (...args: unknown[]) => submitApplicationMock(...args),
+}));
+
 describe("useApplyForm", () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.restoreAllMocks();
+    submitApplicationMock.mockReset();
+    submitApplicationMock.mockResolvedValue({ ok: true });
   });
   it("initializes with step 1", () => {
     const { result } = renderHook(() => useApplyForm());
@@ -80,13 +88,6 @@ describe("useApplyForm", () => {
   });
 
   it("submits form data when valid", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
-      new Response(JSON.stringify({ application: { id: "app-123" } }), {
-        status: 201,
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
-
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
@@ -114,15 +115,13 @@ describe("useApplyForm", () => {
     expect(submittedData).toBeTruthy();
     expect(submittedData?.fullName).toBe("Jane Cooper");
     expect(result.current.submitError).toBe("");
+    expect(submitApplicationMock).toHaveBeenCalledTimes(1);
   });
 
   it("sets submitError on duplicate email (409)", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
-      new Response(JSON.stringify({ error: "An application with this email already exists." }), {
-        status: 409,
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
+    submitApplicationMock.mockResolvedValueOnce({
+      error: "An application with this email already exists.",
+    });
 
     const { result } = renderHook(() => useApplyForm());
 

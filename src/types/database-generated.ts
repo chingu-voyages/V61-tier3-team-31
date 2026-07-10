@@ -1112,18 +1112,21 @@ export type Database = {
       skills: {
         Row: {
           active: boolean;
+          custom: boolean;
           id: number;
           name: string;
           slug: string;
         };
         Insert: {
           active?: boolean;
+          custom?: boolean;
           id?: never;
           name: string;
           slug: string;
         };
         Update: {
           active?: boolean;
+          custom?: boolean;
           id?: never;
           name?: string;
           slug?: string;

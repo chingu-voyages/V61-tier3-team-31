@@ -6,6 +6,7 @@ export async function listActiveSkills(): Promise<string[]> {
     .from("skills")
     .select("name")
     .eq("active", true)
+    .eq("custom", false)
     .order("name");
 
   if (error) {

@@ -3,6 +3,7 @@ import { CheckCircle } from "lucide-react";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { normalizeSkillKey } from "@/lib/applications/skill-normalization";
 
 export default function StepSkills({ popularSkills }: { popularSkills: string[] }) {
   const {
@@ -16,29 +17,44 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
 
   const addSkill = (skill: string) => {
     const trimmed = skill.trim();
-    if (trimmed && !currentSkills.includes(trimmed) && currentSkills.length < 15) {
+    const skillKey = normalizeSkillKey(trimmed);
+
+    if (
+      trimmed &&
+      skillKey &&
+      !currentSkills.some((existingSkill) => normalizeSkillKey(existingSkill) === skillKey) &&
+      currentSkills.length < 15
+    ) {
       setValue("skills", [...currentSkills, trimmed], { shouldValidate: true });
+      return true;
     }
+
+    return false;
   };
 
   const removeSkill = (skillToRemove: string) => {
     setValue(
       "skills",
-      currentSkills.filter((s) => s !== skillToRemove),
+      currentSkills.filter((s) => normalizeSkillKey(s) !== normalizeSkillKey(skillToRemove)),
       { shouldValidate: true },
     );
   };
 
   const handleAddSkill = () => {
-    addSkill(skillInput);
-    setSkillInput("");
+    const wasAdded = addSkill(skillInput);
+    if (wasAdded) {
+      setSkillInput("");
+    }
   };
 
   return (
     <div className="space-y-5">
       <div>
         <h2 className="text-lg font-semibold text-white mb-1 font-outfit">Skills & Tech Stack</h2>
-        <p className="text-xs text-slate-400">Add the technologies and skills you work with.</p>
+        <p className="text-xs text-slate-400">
+          Add the technologies and skills you work with. If something is missing from the
+          recommendations, type it yourself and press Enter.
+        </p>
       </div>
 
       {currentSkills.length > 0 && (
@@ -84,14 +100,16 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
 
       <div className="space-y-1.5 text-left">
         <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">
-          Popular Skills
+          Recommended Skills
         </span>
         {popularSkills.length === 0 ? (
-          <span className="text-xs text-white/40">No skills available</span>
+          <span className="text-xs text-white/40">No recommended skills available</span>
         ) : (
           <div className="flex flex-wrap gap-1.5">
             {popularSkills.map((skill) => {
-              const isAdded = currentSkills.includes(skill);
+              const isAdded = currentSkills.some(
+                (existingSkill) => normalizeSkillKey(existingSkill) === normalizeSkillKey(skill),
+              );
               return (
                 <button
                   type="button"

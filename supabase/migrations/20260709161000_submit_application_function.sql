@@ -1,9 +1,22 @@
--- Atomic application submission from the apply form.
+-- Custom skills support + atomic application submission from the apply form.
 --
--- This function keeps the write path on the server while letting the caller
+-- This migration adds the `custom` flag to the skills catalog so recommended
+-- skills and user-created skills live in the same table, then updates the
+-- application submission function to create missing custom skills on submit.
+-- The function keeps the write path on the server while letting the caller
 -- stay authenticated through Supabase cookies. It inserts the application,
 -- links the selected skills, and records the initial status transition in one
 -- database-side transaction.
+
+alter table public.skills
+  add column if not exists custom boolean not null default false;
+
+comment on column public.skills.custom is
+  'Marks a user-created skill. Recommended catalog skills keep custom = false.';
+
+create index if not exists skills_recommended_active_name_idx
+  on public.skills (name)
+  where active = true and custom = false;
 
 create or replace function public.submit_application(
   p_user_id uuid,
@@ -71,23 +84,55 @@ begin
     and full_name is distinct from p_full_name;
 
   with normalized_skills as (
-    select distinct trim(skill_name) as skill_name
-    from unnest(p_skills) as skill_name
-    where nullif(trim(skill_name), '') is not null
+    select distinct on (skill_key)
+      skill_name,
+      skill_key,
+      skill_slug
+    from (
+      select
+        trim(skill_name) as skill_name,
+        regexp_replace(lower(trim(skill_name)), '[^a-z0-9]+', '', 'g') as skill_key,
+        regexp_replace(lower(trim(skill_name)), '[^a-z0-9]+', '-', 'g') as skill_slug,
+        skill_order
+      from unnest(p_skills) with ordinality as skill_input(skill_name, skill_order)
+      where nullif(trim(skill_name), '') is not null
+    ) ranked_skills
+    where skill_key <> ''
+    order by skill_key, skill_order
   ),
   resolved_skills as (
-    select ns.skill_name, s.id as skill_id
+    select ns.skill_key, ns.skill_name, s.id as skill_id
     from normalized_skills ns
     join public.skills s
-      on lower(s.name) = lower(ns.skill_name)
-     and s.active = true
+      on s.active = true
+     and (
+      regexp_replace(lower(s.name), '[^a-z0-9]+', '', 'g') = ns.skill_key
+      or regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g') = ns.skill_key
+     )
+  ),
+  inserted_skills as (
+    insert into public.skills (slug, name, active, custom)
+    select ns.skill_slug, ns.skill_name, true, true
+    from normalized_skills ns
+    where not exists (
+      select 1
+      from public.skills s
+      where regexp_replace(lower(s.name), '[^a-z0-9]+', '', 'g') = ns.skill_key
+         or regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g') = ns.skill_key
+    )
+    on conflict (slug) do nothing
+    returning id, regexp_replace(lower(slug), '[^a-z0-9]+', '', 'g') as skill_key
   ),
   missing_skills as (
     select coalesce(array_agg(ns.skill_name order by ns.skill_name), '{}'::text[]) as skill_names
     from normalized_skills ns
-    left join resolved_skills rs
-      on rs.skill_name = ns.skill_name
-    where rs.skill_name is null
+    left join (
+      select skill_key from resolved_skills
+      union
+      select skill_key from inserted_skills
+    ) rs
+      on rs.skill_key = ns.skill_key
+    where rs.skill_key is null
   )
   select skill_names
   into v_missing_skills
@@ -129,12 +174,25 @@ begin
   select v_application_id, s.id
   from public.skills s
   join (
-    select distinct trim(skill_name) as skill_name
-    from unnest(p_skills) as skill_name
-    where nullif(trim(skill_name), '') is not null
+    select distinct on (skill_key)
+      skill_name,
+      skill_key
+    from (
+      select
+        trim(skill_name) as skill_name,
+        regexp_replace(lower(trim(skill_name)), '[^a-z0-9]+', '', 'g') as skill_key,
+        skill_order
+      from unnest(p_skills) with ordinality as skill_input(skill_name, skill_order)
+      where nullif(trim(skill_name), '') is not null
+    ) ranked_skills
+    where skill_key <> ''
+    order by skill_key, skill_order
   ) input_skills
-    on lower(s.name) = lower(input_skills.skill_name)
-  where s.active = true;
+    on s.active = true
+   and (
+    regexp_replace(lower(s.name), '[^a-z0-9]+', '', 'g') = input_skills.skill_key
+    or regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g') = input_skills.skill_key
+   );
 
   insert into public.application_status_history (
     application_id,
