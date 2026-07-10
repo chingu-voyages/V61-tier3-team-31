@@ -38,7 +38,6 @@ export default function StepRoleExperience() {
     formState: { errors },
   } = useFormContext<ApplyFormData>();
 
-  const currentFullName = watch("fullName");
   const currentRole = watch("role");
   const currentExperience = watch("experience");
 
@@ -46,22 +45,7 @@ export default function StepRoleExperience() {
     <div className="space-y-5">
       <div>
         <h2 className="text-lg font-semibold text-white mb-1 font-outfit">Role & Experience</h2>
-        <p className="text-xs text-slate-400">
-          Your name comes from your profile. Pick the role you want to contribute in.
-        </p>
-      </div>
-
-      <div className="space-y-1.5 text-left">
-        <label className="text-sm font-medium text-slate-300">Full Name</label>
-        <div className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white">
-          {currentFullName || "Not set in profile"}
-        </div>
-        {errors.fullName && (
-          <p className="text-xs text-red-400 flex items-center gap-1">{errors.fullName.message}</p>
-        )}
-        <p className="text-xs text-slate-500">
-          If this is blank, update your profile first and then come back here.
-        </p>
+        <p className="text-xs text-slate-400">Pick the role you want to contribute in.</p>
       </div>
 
       <div className="space-y-1.5 text-left">
