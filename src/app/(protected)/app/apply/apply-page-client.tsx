@@ -45,9 +45,14 @@ export function ApplyPageClient({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [profileSyncCandidate, setProfileSyncCandidate] = useState<ProfileSyncDiff[] | null>(null);
   const [profileSyncLoading, setProfileSyncLoading] = useState(false);
+  const [profileSyncError, setProfileSyncError] = useState("");
+  const [profileSyncWarning, setProfileSyncWarning] = useState("");
   const [submittedApplication, setSubmittedApplication] = useState<ApplyFormData | null>(null);
 
   const handleSubmit = async () => {
+    setProfileSyncError("");
+    setProfileSyncWarning("");
+
     const data = await submit();
     if (data) {
       setSubmittedApplication(data);
@@ -55,6 +60,7 @@ export function ApplyPageClient({
       const syncPreparation = await prepareProfileSyncFromApplication(data);
 
       if ("error" in syncPreparation) {
+        setProfileSyncWarning(syncPreparation.error);
         finalizeSuccess();
         return;
       }
@@ -71,6 +77,7 @@ export function ApplyPageClient({
   const finalizeSuccess = () => {
     router.refresh();
     setProfileSyncCandidate(null);
+    setProfileSyncError("");
     setIsSubmitted(true);
   };
 
@@ -81,11 +88,18 @@ export function ApplyPageClient({
     }
 
     setProfileSyncLoading(true);
+    setProfileSyncError("");
     try {
-      await syncProfileFromApplication(
+      const result = await syncProfileFromApplication(
         submittedApplication,
         profileSyncCandidate?.map((difference) => difference.field),
       );
+
+      if ("error" in result) {
+        setProfileSyncError(result.error);
+        return;
+      }
+
       finalizeSuccess();
     } finally {
       setProfileSyncLoading(false);
@@ -150,6 +164,12 @@ export function ApplyPageClient({
               Thank you for applying to join our community. We&apos;ll review your application and
               get back to you within 48 hours.
             </p>
+            {profileSyncWarning && (
+              <div className="mb-8 rounded-2xl border border-amber-400/25 bg-amber-400/10 p-4 text-left text-sm text-amber-100">
+                <p className="font-semibold text-amber-50">Profile update needs attention</p>
+                <p className="mt-1 text-amber-100/80">{profileSyncWarning}</p>
+              </div>
+            )}
           </motion.div>
 
           <motion.div
@@ -193,6 +213,7 @@ export function ApplyPageClient({
         open={profileSyncCandidate !== null}
         differences={profileSyncCandidate ?? []}
         isLoading={profileSyncLoading}
+        error={profileSyncError}
         onConfirm={handleProfileSyncConfirm}
         onSkip={handleProfileSyncSkip}
       />

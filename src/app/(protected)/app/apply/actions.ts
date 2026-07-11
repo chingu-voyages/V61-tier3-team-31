@@ -61,7 +61,6 @@ export async function submitApplication(data: ApplyFormData): Promise<SubmitAppl
   const { data: applicationId, error } = await supabase.rpc("submit_application", {
     p_user_id: user.id,
     p_voyage_id: parsed.data.voyage?.trim() || null,
-    p_full_name: parsed.data.fullName.trim(),
     p_preferred_role: roleMap[parsed.data.role],
     p_experience: experienceMap[parsed.data.experience],
     p_skills: normalizedSkills,

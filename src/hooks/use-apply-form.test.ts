@@ -35,7 +35,6 @@ describe("useApplyForm", () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Cooper");
       result.current.form.setValue("role", "Frontend");
       result.current.form.setValue("experience", "Intermediate");
     });
@@ -51,9 +50,7 @@ describe("useApplyForm", () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "J");
       result.current.form.setValue("role", "Frontend");
-      result.current.form.setValue("experience", "Intermediate");
     });
 
     await act(async () => {
@@ -93,7 +90,6 @@ describe("useApplyForm", () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Cooper");
       result.current.form.setValue("role", "Frontend");
       result.current.form.setValue("experience", "Intermediate");
       result.current.form.setValue("skills", ["React", "TypeScript"]);
@@ -114,20 +110,19 @@ describe("useApplyForm", () => {
     });
 
     expect(submittedData).toBeTruthy();
-    expect(submittedData?.fullName).toBe("Jane Cooper");
+    expect(submittedData?.role).toBe("Frontend");
     expect(result.current.submitError).toBe("");
     expect(submitApplicationMock).toHaveBeenCalledTimes(1);
   });
 
-  it("sets submitError on duplicate email (409)", async () => {
+  it("sets submitError when submit action returns an error", async () => {
     submitApplicationMock.mockResolvedValueOnce({
-      error: "An application with this email already exists.",
+      error: "You already have an application for this voyage.",
     });
 
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Cooper");
       result.current.form.setValue("role", "Frontend");
       result.current.form.setValue("experience", "Intermediate");
       result.current.form.setValue("skills", ["React", "TypeScript"]);
@@ -144,7 +139,7 @@ describe("useApplyForm", () => {
       await result.current.submit();
     });
 
-    expect(result.current.submitError).toBe("An application with this email already exists.");
+    expect(result.current.submitError).toBe("You already have an application for this voyage.");
   });
 
   it("persists form data and current step to storage and restores on mount", async () => {
@@ -153,7 +148,7 @@ describe("useApplyForm", () => {
 
     // 2. Change state
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Restored");
+      result.current.form.setValue("role", "Backend");
       result.current.setStep(3);
     });
 
@@ -165,6 +160,6 @@ describe("useApplyForm", () => {
 
     // 5. Expect state to be restored
     expect(newResult.current.currentStep).toBe(3);
-    expect(newResult.current.form.getValues("fullName")).toBe("Jane Restored");
+    expect(newResult.current.form.getValues("role")).toBe("Backend");
   });
 });

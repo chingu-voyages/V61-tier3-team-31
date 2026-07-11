@@ -95,7 +95,7 @@ export async function getApplyProfileDraft(userId: string): Promise<ApplyProfile
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, bio, timezone, portfolio_url, preferred_role")
+    .select("bio, timezone, portfolio_url, preferred_role")
     .eq("id", userId)
     .maybeSingle();
 
@@ -103,7 +103,6 @@ export async function getApplyProfileDraft(userId: string): Promise<ApplyProfile
   const skillNames = await listSkillNamesByIds(supabase, skillIds);
 
   return {
-    fullName: profile?.full_name ?? "",
     role: normalizeRole(profile?.preferred_role),
     skills: skillNames,
     timezone: profile?.timezone ?? "UTC",
@@ -118,13 +117,6 @@ function buildProfileUpdatePatch(
   fieldsToSync: Set<ProfileSyncField>,
 ): Database["public"]["Tables"]["profiles"]["Update"] {
   const patch: Database["public"]["Tables"]["profiles"]["Update"] = {};
-
-  if (
-    fieldsToSync.has("fullName") &&
-    normalizeProfileText(profile.fullName) !== normalizeProfileText(application.fullName)
-  ) {
-    patch.full_name = normalizeProfileText(application.fullName);
-  }
 
   if (
     fieldsToSync.has("bio") &&

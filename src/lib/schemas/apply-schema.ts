@@ -1,9 +1,5 @@
 import { z } from "zod/v4";
 
-const stepPersonalInfoSchema = z.object({
-  fullName: z.string().min(2, "Name must be at least 2 characters.").max(100),
-});
-
 const stepRoleExperienceSchema = z.object({
   role: z.enum(["Frontend", "Backend", "Fullstack", "Design", "Product"], {
     message: "Please select a role.",
@@ -36,24 +32,16 @@ const stepMotivationSchema = z.object({
 });
 
 export const applyFormSchema = z.object({
-  ...stepPersonalInfoSchema.shape,
   ...stepRoleExperienceSchema.shape,
   ...stepSkillsSchema.shape,
   ...stepAvailabilitySchema.shape,
   ...stepMotivationSchema.shape,
 });
 
-export type StepPersonalInfoData = z.infer<typeof stepPersonalInfoSchema>;
 export type StepRoleExperienceData = z.infer<typeof stepRoleExperienceSchema>;
 export type StepSkillsData = z.infer<typeof stepSkillsSchema>;
 export type StepAvailabilityData = z.infer<typeof stepAvailabilitySchema>;
 export type StepMotivationData = z.infer<typeof stepMotivationSchema>;
 export type ApplyFormData = z.infer<typeof applyFormSchema>;
 
-export {
-  stepPersonalInfoSchema,
-  stepRoleExperienceSchema,
-  stepSkillsSchema,
-  stepAvailabilitySchema,
-  stepMotivationSchema,
-};
+export { stepRoleExperienceSchema, stepSkillsSchema, stepAvailabilitySchema, stepMotivationSchema };

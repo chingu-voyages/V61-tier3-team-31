@@ -1,7 +1,6 @@
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 
 export type ApplyProfileDraft = {
-  fullName: string;
   role?: ApplyFormData["role"];
   skills: string[];
   timezone: string;
@@ -9,7 +8,7 @@ export type ApplyProfileDraft = {
   portfolio: string;
 };
 
-export type ProfileSyncField = "fullName" | "role" | "skills" | "timezone" | "bio" | "portfolio";
+export type ProfileSyncField = "role" | "skills" | "timezone" | "bio" | "portfolio";
 
 export type ProfileSyncDiff = {
   field: ProfileSyncField;
@@ -24,7 +23,6 @@ export type ProfileSyncPlan = {
 };
 
 export const PROFILE_SYNC_FIELD_LABELS: Record<ProfileSyncField, string> = {
-  fullName: "Full name",
   role: "Preferred role",
   skills: "Skills",
   timezone: "Timezone",
@@ -110,15 +108,6 @@ export function buildProfileSyncPlan(
 ): ProfileSyncPlan {
   const autoSyncedFields: ProfileSyncField[] = [];
   const differentFields: ProfileSyncDiff[] = [];
-
-  const fullNameComparison = compareTextField(
-    "fullName",
-    normalizeProfileText(profile.fullName),
-    normalizeProfileText(application.fullName),
-    true,
-  );
-  autoSyncedFields.push(...fullNameComparison.autoSyncedFields);
-  differentFields.push(...fullNameComparison.differentFields);
 
   const bioComparison = compareTextField(
     "bio",

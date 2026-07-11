@@ -3,12 +3,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useApplyFormStore } from "./use-apply-form-store";
-import { useAuth } from "@/lib/auth/auth-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import {
   applyFormSchema,
-  stepPersonalInfoSchema,
   stepRoleExperienceSchema,
   stepSkillsSchema,
   stepAvailabilitySchema,
@@ -20,7 +18,6 @@ import type { ApplyProfileDraft } from "@/lib/applications/profile-sync";
 export type FormStep = 1 | 2 | 3 | 4 | 5;
 
 export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
-  const { profile } = useAuth();
   const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -29,7 +26,6 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
     resolver: zodResolver(applyFormSchema),
     mode: "onTouched",
     defaultValues: {
-      fullName: initialProfileDraft?.fullName ?? profile?.full_name ?? "",
       role: initialProfileDraft?.role,
       experience: undefined,
       skills: initialProfileDraft?.skills ?? [],
@@ -45,16 +41,13 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
   });
 
   useEffect(() => {
-    if (!profile?.full_name && !initialProfileDraft) {
+    if (!initialProfileDraft) {
       return;
     }
 
     const current = form.getValues();
     const updates: Partial<ApplyFormData> = {};
 
-    if (!current.fullName && profile?.full_name) {
-      updates.fullName = profile.full_name;
-    }
     if (!current.role && initialProfileDraft?.role) {
       updates.role = initialProfileDraft.role;
     }
@@ -74,7 +67,7 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
     if (Object.keys(updates).length > 0) {
       form.reset({ ...current, ...updates });
     }
-  }, [form, initialProfileDraft, profile?.full_name]);
+  }, [form, initialProfileDraft]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {
@@ -86,10 +79,7 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
   const getStepFields = (step: FormStep): (keyof ApplyFormData)[] => {
     switch (step) {
       case 1:
-        return [
-          ...(Object.keys(stepPersonalInfoSchema.shape) as (keyof ApplyFormData)[]),
-          ...(Object.keys(stepRoleExperienceSchema.shape) as (keyof ApplyFormData)[]),
-        ];
+        return Object.keys(stepRoleExperienceSchema.shape) as (keyof ApplyFormData)[];
       case 2:
         return Object.keys(stepSkillsSchema.shape) as (keyof ApplyFormData)[];
       case 3:

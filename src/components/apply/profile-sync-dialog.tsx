@@ -15,12 +15,14 @@ export function ProfileSyncDialog({
   open,
   differences,
   isLoading,
+  error,
   onConfirm,
   onSkip,
 }: {
   open: boolean;
   differences: ProfileSyncDiff[];
   isLoading: boolean;
+  error?: string;
   onConfirm: () => void | Promise<void>;
   onSkip: () => void | Promise<void>;
 }) {
@@ -59,6 +61,12 @@ export function ProfileSyncDialog({
               </div>
             ))}
           </div>
+
+          {error && (
+            <div className="rounded-2xl border border-rose-400/25 bg-rose-400/10 p-4 text-sm text-rose-100">
+              {error}
+            </div>
+          )}
         </div>
 
         <DialogFooter>
