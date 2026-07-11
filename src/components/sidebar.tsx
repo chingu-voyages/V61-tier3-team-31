@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAvatar } from "@/hooks/use-avatar";
 
 type DashboardView =
   | "overview"
@@ -107,6 +108,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
   const isStaff = role === "admin" || role === "moderator";
   const userName = profile?.full_name ?? (isStaff ? "Jane Cooper" : "Mark Logic");
+  const avatarUrl = useAvatar(profile?.id, profile?.avatar_path);
 
   const navigate = (view: DashboardView) => {
     const nextPath =
@@ -121,6 +123,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
 
   const handleLogout = async () => {
     await signOut();
+
     router.replace("/login");
   };
 
@@ -386,13 +389,12 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
                 } cursor-pointer rounded-xl transition-colors min-w-0 flex-1 outline-none hover:bg-white/5`}
               >
                 <img
-                  src={
-                    isStaff ? "https://i.pravatar.cc/100?img=5" : "https://i.pravatar.cc/100?img=11"
-                  }
-                  className="w-8 h-8 rounded-full bg-muted border border-border shrink-0"
+                  src={avatarUrl}
+                  className="w-8 h-8 rounded-full object-cover bg-muted border border-border shrink-0"
                   alt="profile"
                   title={userName}
                 />
+
                 {isExpanded && (
                   <div className="flex-1 overflow-hidden text-left">
                     <div className="text-sm font-medium text-white truncate">{userName}</div>
