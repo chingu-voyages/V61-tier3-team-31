@@ -1,28 +1,23 @@
 "use client";
-
 import {
-  Home,
-  FileText,
-  Users,
-  Network,
   Settings,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
   Target,
   LogOut,
-  UsersRound,
-  ClipboardList,
   User,
-  Compass,
-  Megaphone,
-  CalendarDays,
-  BarChart3,
-  Layers,
 } from "lucide-react";
 import { NexusLogo } from "@/components/nexus-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/auth/auth-context";
+import {
+  adminMenu,
+  applicantMenu,
+  participantMenu,
+  defaultMenu,
+  type DashboardView,
+} from "@/constants/sidebar-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,72 +27,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-type DashboardView =
-  | "overview"
-  | "voyages"
-  | "applications"
-  | "participants"
-  | "matching"
-  | "analytics"
-  | "teams"
-  | "announcements"
-  | "calendar"
-  | "ui-components"
-  | "apply"
-  | "onboarding"
-  | "profile"
-  | "settings";
+import { useAvatar } from "@/hooks/use-avatar";
+import { NavItem } from "./sidebar/NavItem";
 
 interface SidebarProps {
   role: string;
   status?: string;
   currentView: DashboardView;
-}
-
-function NavItem({
-  icon,
-  label,
-  active = false,
-  badge = "",
-  onClick,
-  isExpanded = true,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-  badge?: string;
-  onClick?: () => void;
-  isExpanded?: boolean;
-}) {
-  return (
-    <button
-      title={!isExpanded ? label : undefined}
-      onClick={onClick}
-      className={`w-full flex items-center ${isExpanded ? "justify-between px-3" : "justify-center px-0"} py-2.5 rounded-xl transition-colors cursor-pointer relative ${
-        active
-          ? "bg-white/10 text-white font-medium"
-          : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-      }`}
-    >
-      {active && (
-        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-primary rounded-r-full" />
-      )}
-      <div className={`flex items-center ${isExpanded ? "gap-3" : ""}`}>
-        {icon}
-        {isExpanded && <span className="text-sm">{label}</span>}
-      </div>
-      {isExpanded && badge && (
-        <span
-          className={`text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full ${
-            active ? "bg-primary/20 text-primary" : "bg-white/10 text-muted-foreground"
-          }`}
-        >
-          {badge}
-        </span>
-      )}
-    </button>
-  );
 }
 
 export function Sidebar({ role, status, currentView }: SidebarProps) {
@@ -107,6 +43,15 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
   const isStaff = role === "admin" || role === "moderator";
   const userName = profile?.full_name ?? (isStaff ? "Jane Cooper" : "Mark Logic");
+  const avatarUrl = useAvatar(profile?.id, profile?.avatar_path);
+
+  const menuItems = isStaff
+    ? adminMenu
+    : status === "applicant"
+      ? applicantMenu
+      : status === "participant"
+        ? participantMenu
+        : defaultMenu;
 
   const navigate = (view: DashboardView) => {
     const nextPath =
@@ -121,6 +66,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
 
   const handleLogout = async () => {
     await signOut();
+
     router.replace("/login");
   };
 
@@ -150,175 +96,17 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
 
       {/* Navigation */}
       <div className="flex-1 px-4 py-2 space-y-1 overflow-hidden">
-        {isStaff && (
-          <>
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Home className="w-4 h-4" />}
-              label="Overview"
-              active={currentView === "overview"}
-              onClick={() => navigate("overview")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Compass className="w-4 h-4" />}
-              label="Voyages"
-              active={currentView === "voyages"}
-              onClick={() => navigate("voyages")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<FileText className="w-4 h-4" />}
-              label="Applications"
-              badge="312"
-              active={currentView === "applications"}
-              onClick={() => navigate("applications")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Users className="w-4 h-4" />}
-              label="Participants"
-              badge="128"
-              active={currentView === "participants"}
-              onClick={() => navigate("participants")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Network className="w-4 h-4" />}
-              label="Matching"
-              active={currentView === "matching"}
-              onClick={() => navigate("matching")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<BarChart3 className="w-4 h-4" />}
-              label="Analytics"
-              active={currentView === "analytics"}
-              onClick={() => navigate("analytics")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<UsersRound className="w-4 h-4" />}
-              label="Teams"
-              badge="18"
-              active={currentView === "teams"}
-              onClick={() => navigate("teams")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Megaphone className="w-4 h-4" />}
-              label="Announcements"
-              active={currentView === "announcements"}
-              onClick={() => navigate("announcements")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<CalendarDays className="w-4 h-4" />}
-              label="Calendar"
-              active={currentView === "calendar"}
-              onClick={() => navigate("calendar")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Layers className="w-4 h-4" />}
-              label="UI Kit"
-              active={currentView === "ui-components"}
-              onClick={() => navigate("ui-components")}
-            />
-          </>
-        )}
-
-        {!isStaff && status === "applicant" && (
-          <>
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<FileText className="w-4 h-4" />}
-              label="Application Form"
-              active={currentView === "apply"}
-              onClick={() => navigate("apply")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Home className="w-4 h-4" />}
-              label="Application Status"
-              active={currentView === "overview"}
-              onClick={() => navigate("overview")}
-            />
-          </>
-        )}
-
-        {!isStaff && status === "participant" && (
-          <>
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Home className="w-4 h-4" />}
-              label="Dashboard"
-              active={currentView === "overview"}
-              onClick={() => navigate("overview")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<UsersRound className="w-4 h-4" />}
-              label="Team Space"
-              active={currentView === "teams"}
-              onClick={() => navigate("teams")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<ClipboardList className="w-4 h-4" />}
-              label="Onboarding"
-              active={currentView === "onboarding"}
-              onClick={() => navigate("onboarding")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<CalendarDays className="w-4 h-4" />}
-              label="Calendar"
-              active={currentView === "calendar"}
-              onClick={() => navigate("calendar")}
-            />
-          </>
-        )}
-
-        {!isStaff && !status && (
-          <>
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<Home className="w-4 h-4" />}
-              label="Overview"
-              active={currentView === "overview"}
-              onClick={() => navigate("overview")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<FileText className="w-4 h-4" />}
-              label="Apply"
-              active={currentView === "apply"}
-              onClick={() => navigate("apply")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<ClipboardList className="w-4 h-4" />}
-              label="Onboarding"
-              active={currentView === "onboarding"}
-              onClick={() => navigate("onboarding")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<CalendarDays className="w-4 h-4" />}
-              label="Calendar"
-              active={currentView === "calendar"}
-              onClick={() => navigate("calendar")}
-            />
-            <NavItem
-              isExpanded={isExpanded}
-              icon={<User className="w-4 h-4" />}
-              label="Profile"
-              active={currentView === "profile"}
-              onClick={() => navigate("profile")}
-            />
-          </>
-        )}
+        {menuItems.map((item) => (
+          <NavItem
+            key={item.view}
+            isExpanded={isExpanded}
+            icon={<item.icon />}
+            label={item.label}
+            badge={item.badge}
+            active={currentView === item.view}
+            onClick={() => navigate(item.view)}
+          />
+        ))}
       </div>
 
       {/* Bottom section */}
@@ -352,10 +140,10 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
                 </div>
                 <div className="space-y-1.5">
                   <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-                    Past Voyages
+                    Past Сourse
                   </span>
                   <div className="w-full flex items-center justify-between py-2 px-3 bg-white/5 hover:bg-white/10 transition-colors border border-border rounded-lg text-xs font-medium text-foreground cursor-pointer">
-                    <span>Voyage 50</span>
+                    <span>Сourse 50</span>
                     <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
                   </div>
                 </div>
@@ -365,7 +153,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
         )}
 
         {!isExpanded && (
-          <div className="flex justify-center" title="Voyage 51">
+          <div className="flex justify-center" title="Сourse 51">
             <div className="w-8 h-8 rounded-full border border-border bg-nexus-sidebar flex items-center justify-center">
               <Target className="w-4 h-4 text-primary" />
             </div>
@@ -386,13 +174,12 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
                 } cursor-pointer rounded-xl transition-colors min-w-0 flex-1 outline-none hover:bg-white/5`}
               >
                 <img
-                  src={
-                    isStaff ? "https://i.pravatar.cc/100?img=5" : "https://i.pravatar.cc/100?img=11"
-                  }
-                  className="w-8 h-8 rounded-full bg-muted border border-border shrink-0"
+                  src={avatarUrl}
+                  className="w-8 h-8 rounded-full object-cover bg-muted border border-border shrink-0"
                   alt="profile"
                   title={userName}
                 />
+
                 {isExpanded && (
                   <div className="flex-1 overflow-hidden text-left">
                     <div className="text-sm font-medium text-white truncate">{userName}</div>
