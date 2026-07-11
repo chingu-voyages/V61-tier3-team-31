@@ -59,7 +59,7 @@ function LoginForm() {
         return;
       }
 
-      const destination = getSafeInternalRedirect(redirect) ?? "/app/overview";
+      const destination = getSafeInternalRedirect(redirect) ?? "/app";
       router.replace(destination);
     } catch {
       setError("root", {

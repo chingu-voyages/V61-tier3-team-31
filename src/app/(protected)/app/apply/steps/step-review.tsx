@@ -2,7 +2,7 @@ import { useFormContext } from "react-hook-form";
 import { AlertCircle } from "lucide-react";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 interface StepReviewProps {
-  onEditStep: (step: 1 | 2 | 3 | 4 | 5) => void;
+  onEditStep: (step: 1 | 2 | 3 | 4) => void;
   error?: string;
 }
 
@@ -10,8 +10,6 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
   const { watch } = useFormContext<ApplyFormData>();
 
   const form = {
-    fullName: watch("fullName"),
-    email: watch("email"),
     role: watch("role"),
     experience: watch("experience"),
     skills: watch("skills") || [],
@@ -43,36 +41,11 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
         <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Personal Info
-            </h3>
-            <button
-              type="button"
-              onClick={() => onEditStep(1)}
-              className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
-            >
-              Edit
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div>
-              <span className="text-slate-400">Name:</span>{" "}
-              <span className="font-medium text-white ml-1">{form.fullName}</span>
-            </div>
-            <div>
-              <span className="text-slate-400">Email:</span>{" "}
-              <span className="font-medium text-white ml-1">{form.email}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               Role & Experience
             </h3>
             <button
               type="button"
-              onClick={() => onEditStep(2)}
+              onClick={() => onEditStep(1)}
               className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
             >
               Edit
@@ -97,7 +70,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             </h3>
             <button
               type="button"
-              onClick={() => onEditStep(3)}
+              onClick={() => onEditStep(2)}
               className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
             >
               Edit
@@ -122,7 +95,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             </h3>
             <button
               type="button"
-              onClick={() => onEditStep(4)}
+              onClick={() => onEditStep(3)}
               className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
             >
               Edit
@@ -155,7 +128,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             </h3>
             <button
               type="button"
-              onClick={() => onEditStep(5)}
+              onClick={() => onEditStep(4)}
               className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
             >
               Edit

@@ -6,10 +6,11 @@ interface ApplySidebarProps {
 }
 
 const steps = [
-  { id: 1, title: "Account", description: "Create your account" },
-  { id: 2, title: "About You", description: "Tell us about yourself" },
-  { id: 3, title: "Skills & Role", description: "Your expertise" },
-  { id: 4, title: "Availability", description: "Your schedule" },
+  { id: 1, title: "Role & Experience", description: "Your profile basics" },
+  { id: 2, title: "Skills", description: "Your expertise" },
+  { id: 3, title: "Availability", description: "Your schedule" },
+  { id: 4, title: "Motivation", description: "Why you want to join" },
+  { id: 5, title: "Review", description: "Confirm your application" },
 ];
 
 export function ApplySidebar({ currentStep }: ApplySidebarProps) {

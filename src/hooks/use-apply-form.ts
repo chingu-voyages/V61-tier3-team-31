@@ -7,16 +7,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import {
   applyFormSchema,
-  stepPersonalInfoSchema,
   stepRoleExperienceSchema,
   stepSkillsSchema,
   stepAvailabilitySchema,
   stepMotivationSchema,
 } from "@/lib/schemas/apply-schema";
+import { submitApplication } from "@/app/(protected)/app/apply/actions";
+import type { ApplyProfileDraft } from "@/lib/applications/profile-sync";
 
-export type FormStep = 1 | 2 | 3 | 4 | 5 | 6;
+export type FormStep = 1 | 2 | 3 | 4 | 5;
 
-export function useApplyForm() {
+export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
   const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -25,20 +26,48 @@ export function useApplyForm() {
     resolver: zodResolver(applyFormSchema),
     mode: "onTouched",
     defaultValues: {
-      fullName: "",
-      email: "",
-      role: undefined,
+      role: initialProfileDraft?.role,
       experience: undefined,
-      skills: [],
+      skills: initialProfileDraft?.skills ?? [],
       hoursPerWeek: 0,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+      timezone:
+        initialProfileDraft?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
       voyage: "",
       motivation: "",
-      bio: "",
-      portfolio: "",
+      bio: initialProfileDraft?.bio ?? "",
+      portfolio: initialProfileDraft?.portfolio ?? "",
       ...formData,
     },
   });
+
+  useEffect(() => {
+    if (!initialProfileDraft) {
+      return;
+    }
+
+    const current = form.getValues();
+    const updates: Partial<ApplyFormData> = {};
+
+    if (!current.role && initialProfileDraft?.role) {
+      updates.role = initialProfileDraft.role;
+    }
+    if ((current.skills?.length ?? 0) === 0 && (initialProfileDraft?.skills.length ?? 0) > 0) {
+      updates.skills = initialProfileDraft?.skills;
+    }
+    if (!current.timezone && initialProfileDraft?.timezone) {
+      updates.timezone = initialProfileDraft.timezone;
+    }
+    if (!current.bio && initialProfileDraft?.bio) {
+      updates.bio = initialProfileDraft.bio;
+    }
+    if (!current.portfolio && initialProfileDraft?.portfolio) {
+      updates.portfolio = initialProfileDraft.portfolio;
+    }
+
+    if (Object.keys(updates).length > 0) {
+      form.reset({ ...current, ...updates });
+    }
+  }, [form, initialProfileDraft]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {
@@ -50,15 +79,15 @@ export function useApplyForm() {
   const getStepFields = (step: FormStep): (keyof ApplyFormData)[] => {
     switch (step) {
       case 1:
-        return Object.keys(stepPersonalInfoSchema.shape) as (keyof ApplyFormData)[];
-      case 2:
         return Object.keys(stepRoleExperienceSchema.shape) as (keyof ApplyFormData)[];
-      case 3:
+      case 2:
         return Object.keys(stepSkillsSchema.shape) as (keyof ApplyFormData)[];
-      case 4:
+      case 3:
         return Object.keys(stepAvailabilitySchema.shape) as (keyof ApplyFormData)[];
-      case 5:
+      case 4:
         return Object.keys(stepMotivationSchema.shape) as (keyof ApplyFormData)[];
+      case 5:
+        return [];
       default:
         return [];
     }
@@ -69,7 +98,7 @@ export function useApplyForm() {
     const fields = getStepFields(currentStep);
     const isStepValid = await form.trigger(fields);
 
-    if (isStepValid && currentStep < 6) {
+    if (isStepValid && currentStep < 5) {
       setStep((currentStep + 1) as FormStep);
     }
   }, [currentStep, form, setStep]);
@@ -93,19 +122,10 @@ export function useApplyForm() {
 
     try {
       const data = form.getValues();
-      const res = await fetch("/api/applications", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const result = await submitApplication(data);
 
-      if (!res.ok) {
-        const body = await res.json();
-        if (res.status === 409) {
-          setSubmitError(body.error || "An application with this email already exists.");
-        } else {
-          setSubmitError(body.error || "Something went wrong. Please try again.");
-        }
+      if ("error" in result) {
+        setSubmitError(result.error);
         return null;
       }
 

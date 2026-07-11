@@ -45,7 +45,7 @@ export default function StepRoleExperience() {
     <div className="space-y-5">
       <div>
         <h2 className="text-lg font-semibold text-white mb-1 font-outfit">Role & Experience</h2>
-        <p className="text-xs text-slate-400">What do you do best?</p>
+        <p className="text-xs text-slate-400">Pick the role you want to contribute in.</p>
       </div>
 
       <div className="space-y-1.5 text-left">

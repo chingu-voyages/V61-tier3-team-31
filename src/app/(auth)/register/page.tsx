@@ -44,7 +44,7 @@ export default function RegisterPage() {
         email: data.email,
         password: data.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/login?verified=email`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent("/app/apply")}`,
           data: {
             full_name: data.fullName,
           },

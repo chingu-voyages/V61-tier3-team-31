@@ -34,20 +34,45 @@ export function shouldRedirectAuthenticatedUsersAwayFrom(pathname: string): bool
   return AUTH_REDIRECT_PATHS.has(pathname) && pathname !== "/reset-password";
 }
 
-export function getPostLoginRedirect(role: UserRole, redirect: string | null | undefined): string {
+function getParticipantHome(hasSubmittedApplication: boolean): string {
+  return hasSubmittedApplication ? "/app/overview" : "/app/apply";
+}
+
+export function getPostAuthRedirect(
+  role: UserRole,
+  redirect: string | null | undefined,
+  hasSubmittedApplication = false,
+): string {
   const safeRedirect = getSafeInternalRedirect(redirect);
 
   if (safeRedirect) {
     if (safeRedirect === "/admin" || safeRedirect.startsWith("/admin/")) {
-      return isStaffRole(role) ? safeRedirect : "/app/overview";
+      return isStaffRole(role) ? safeRedirect : getParticipantHome(hasSubmittedApplication);
     }
 
     return safeRedirect;
   }
 
-  return isStaffRole(role) ? "/admin" : "/app/overview";
+  if (isStaffRole(role)) {
+    return "/admin";
+  }
+
+  return getParticipantHome(hasSubmittedApplication);
 }
 
-export function getDashboardRedirect(role: UserRole): string {
-  return isStaffRole(role) ? "/admin" : "/app/overview";
+/** @deprecated Use getPostAuthRedirect instead */
+export function getPostLoginRedirect(
+  role: UserRole,
+  redirect: string | null | undefined,
+  hasSubmittedApplication = false,
+): string {
+  return getPostAuthRedirect(role, redirect, hasSubmittedApplication);
+}
+
+export function getDashboardRedirect(role: UserRole, hasSubmittedApplication = false): string {
+  if (isStaffRole(role)) {
+    return "/admin";
+  }
+
+  return getParticipantHome(hasSubmittedApplication);
 }

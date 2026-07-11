@@ -2,13 +2,9 @@ import { useFormContext } from "react-hook-form";
 import { Clock, Sparkles } from "lucide-react";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
 import { TimezonePicker } from "@/components/ui/timezone-picker";
+import type { OpenVoyage } from "@/lib/applications/voyages";
 
-const VOYAGES = [
-  { id: "voyage-51", name: "Voyage 51", deadline: "Jul 15, 2026" },
-  { id: "voyage-52", name: "Voyage 52", deadline: "Sep 1, 2026" },
-];
-
-export default function StepAvailability() {
+export default function StepAvailability({ voyages }: { voyages: OpenVoyage[] }) {
   const {
     register,
     setValue,
@@ -67,12 +63,18 @@ export default function StepAvailability() {
             {...register("voyage")}
             className={`${inputClasses} cursor-pointer appearance-none`}
           >
-            <option value="">Select a voyage...</option>
-            {VOYAGES.map((v) => (
-              <option key={v.id} value={v.name}>
-                {v.name} — Deadline: {v.deadline}
-              </option>
-            ))}
+            {voyages.length === 0 ? (
+              <option>No open voyages</option>
+            ) : (
+              <>
+                <option value="">Select a voyage...</option>
+                {voyages.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name}
+                  </option>
+                ))}
+              </>
+            )}
           </select>
         </div>
       </div>

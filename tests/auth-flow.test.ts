@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   getDashboardRedirect,
+  getPostAuthRedirect,
   getPostLoginRedirect,
   getSafeInternalRedirect,
   shouldRedirectAuthenticatedUsersAwayFrom,
@@ -22,24 +23,31 @@ test("keeps safe internal redirects", () => {
 });
 
 test("routes staff and participants after login", () => {
-  assert.equal(getPostLoginRedirect("admin", null), "/admin");
-  assert.equal(getPostLoginRedirect("moderator", null), "/admin");
-  assert.equal(getPostLoginRedirect("user", null), "/app/overview");
+  assert.equal(getPostAuthRedirect("admin", null, false), "/admin");
+  assert.equal(getPostAuthRedirect("moderator", null, false), "/admin");
+  assert.equal(getPostAuthRedirect("user", null, false), "/app/apply");
+  assert.equal(getPostAuthRedirect("user", null, true), "/app/overview");
   assert.equal(
-    getPostLoginRedirect("user", "/projects/alpha?tab=members"),
+    getPostAuthRedirect("user", "/projects/alpha?tab=members", false),
     "/projects/alpha?tab=members",
   );
 });
 
+test("getPostLoginRedirect delegates to getPostAuthRedirect", () => {
+  assert.equal(getPostLoginRedirect("user", null, false), "/app/apply");
+  assert.equal(getPostLoginRedirect("user", null, true), "/app/overview");
+});
+
 test("routes authenticated users away from dashboard landing", () => {
-  assert.equal(getDashboardRedirect("admin"), "/admin");
-  assert.equal(getDashboardRedirect("moderator"), "/admin");
-  assert.equal(getDashboardRedirect("user"), "/app/overview");
+  assert.equal(getDashboardRedirect("admin", false), "/admin");
+  assert.equal(getDashboardRedirect("moderator", false), "/admin");
+  assert.equal(getDashboardRedirect("user", false), "/app/apply");
+  assert.equal(getDashboardRedirect("user", true), "/app/overview");
 });
 
 test("does not let non-staff land on admin redirects", () => {
-  assert.equal(getPostLoginRedirect("user", "/admin"), "/app/overview");
-  assert.equal(getPostLoginRedirect("user", "/admin/settings"), "/app/overview");
+  assert.equal(getPostAuthRedirect("user", "/admin", false), "/app/apply");
+  assert.equal(getPostAuthRedirect("user", "/admin/settings", true), "/app/overview");
 });
 
 test("allows reset-password for authenticated users", () => {

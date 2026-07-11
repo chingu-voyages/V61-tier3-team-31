@@ -61,7 +61,7 @@ export async function proxy(request: NextRequest) {
   if (isAuthenticated && isAuth) {
     if (pathname !== "/reset-password") {
       const url = request.nextUrl.clone();
-      url.pathname = "/app/overview";
+      url.pathname = "/app";
       return NextResponse.redirect(url);
     }
   }

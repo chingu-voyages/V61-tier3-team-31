@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import {
-  stepPersonalInfoSchema,
   stepRoleExperienceSchema,
   stepSkillsSchema,
   stepAvailabilitySchema,
@@ -9,35 +8,6 @@ import {
 } from "./apply-schema";
 
 describe("Apply Form Schemas", () => {
-  describe("stepPersonalInfoSchema", () => {
-    it("validates a correct personal info object", () => {
-      const validData = {
-        fullName: "Jane Cooper",
-        email: "jane@example.com",
-      };
-      const result = stepPersonalInfoSchema.safeParse(validData);
-      expect(result.success).toBe(true);
-    });
-
-    it("fails if email is invalid", () => {
-      const invalidData = {
-        fullName: "Jane Cooper",
-        email: "not-an-email",
-      };
-      const result = stepPersonalInfoSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-
-    it("fails if name is too short", () => {
-      const invalidData = {
-        fullName: "J",
-        email: "jane@example.com",
-      };
-      const result = stepPersonalInfoSchema.safeParse(invalidData);
-      expect(result.success).toBe(false);
-    });
-  });
-
   describe("stepRoleExperienceSchema", () => {
     it("validates correct role and experience data", () => {
       const validData = {
@@ -121,8 +91,6 @@ describe("Apply Form Schemas", () => {
   describe("applyFormSchema", () => {
     it("validates the complete form submission correctly", () => {
       const validData = {
-        fullName: "Jane Cooper",
-        email: "jane@example.com",
         role: "Frontend",
         experience: "Intermediate",
         skills: ["React", "TypeScript"],

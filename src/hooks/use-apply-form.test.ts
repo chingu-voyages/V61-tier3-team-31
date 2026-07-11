@@ -2,10 +2,28 @@ import { renderHook, act } from "@testing-library/react";
 import { useApplyForm } from "./use-apply-form";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
+const submitApplicationMock = vi.hoisted(() => vi.fn());
+
+vi.mock("@/lib/auth/auth-context", () => ({
+  useAuth: () => ({
+    user: null,
+    profile: null,
+    role: "user" as const,
+    signOut: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
+
+vi.mock("@/app/(protected)/app/apply/actions", () => ({
+  submitApplication: (...args: unknown[]) => submitApplicationMock(...args),
+}));
+
 describe("useApplyForm", () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.restoreAllMocks();
+    submitApplicationMock.mockReset();
+    submitApplicationMock.mockResolvedValue({ ok: true });
   });
   it("initializes with step 1", () => {
     const { result } = renderHook(() => useApplyForm());
@@ -17,8 +35,8 @@ describe("useApplyForm", () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Cooper");
-      result.current.form.setValue("email", "jane@example.com");
+      result.current.form.setValue("role", "Frontend");
+      result.current.form.setValue("experience", "Intermediate");
     });
 
     await act(async () => {
@@ -32,8 +50,7 @@ describe("useApplyForm", () => {
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "J");
-      result.current.form.setValue("email", "not-an-email");
+      result.current.form.setValue("role", "Frontend");
     });
 
     await act(async () => {
@@ -70,18 +87,9 @@ describe("useApplyForm", () => {
   });
 
   it("submits form data when valid", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
-      new Response(JSON.stringify({ application: { id: "app-123" } }), {
-        status: 201,
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
-
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Cooper");
-      result.current.form.setValue("email", "jane@example.com");
       result.current.form.setValue("role", "Frontend");
       result.current.form.setValue("experience", "Intermediate");
       result.current.form.setValue("skills", ["React", "TypeScript"]);
@@ -102,23 +110,19 @@ describe("useApplyForm", () => {
     });
 
     expect(submittedData).toBeTruthy();
-    expect(submittedData?.fullName).toBe("Jane Cooper");
+    expect(submittedData?.role).toBe("Frontend");
     expect(result.current.submitError).toBe("");
+    expect(submitApplicationMock).toHaveBeenCalledTimes(1);
   });
 
-  it("sets submitError on duplicate email (409)", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
-      new Response(JSON.stringify({ error: "An application with this email already exists." }), {
-        status: 409,
-        headers: { "Content-Type": "application/json" },
-      }),
-    );
+  it("sets submitError when submit action returns an error", async () => {
+    submitApplicationMock.mockResolvedValueOnce({
+      error: "You already have an application for this voyage.",
+    });
 
     const { result } = renderHook(() => useApplyForm());
 
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Cooper");
-      result.current.form.setValue("email", "jane@example.com");
       result.current.form.setValue("role", "Frontend");
       result.current.form.setValue("experience", "Intermediate");
       result.current.form.setValue("skills", ["React", "TypeScript"]);
@@ -135,7 +139,7 @@ describe("useApplyForm", () => {
       await result.current.submit();
     });
 
-    expect(result.current.submitError).toBe("An application with this email already exists.");
+    expect(result.current.submitError).toBe("You already have an application for this voyage.");
   });
 
   it("persists form data and current step to storage and restores on mount", async () => {
@@ -144,7 +148,7 @@ describe("useApplyForm", () => {
 
     // 2. Change state
     await act(async () => {
-      result.current.form.setValue("fullName", "Jane Restored");
+      result.current.form.setValue("role", "Backend");
       result.current.setStep(3);
     });
 
@@ -156,6 +160,6 @@ describe("useApplyForm", () => {
 
     // 5. Expect state to be restored
     expect(newResult.current.currentStep).toBe(3);
-    expect(newResult.current.form.getValues("fullName")).toBe("Jane Restored");
+    expect(newResult.current.form.getValues("role")).toBe("Backend");
   });
 });
