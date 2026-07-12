@@ -1,9 +1,11 @@
 "use client";
 
-import { Controller, useForm } from "react-hook-form";
+import { useMemo, useState } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,8 +15,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { InputForm } from "@/components/form/InputForm";
+import { MessageForm } from "@/components/form/MessageForm";
 import type { ParticipantProfileEditorData } from "@/lib/profile/profile-editor";
 import { profileSchema, type ProfileFormData } from "@/schemas/profile.schema";
+import { getProfileFormDefaults } from "@/lib/profile/profile-form-defaults";
+import { saveProfile } from "@/app/(protected)/app/profile/actions";
 
 const roleOptions = [
   { value: "frontend", label: "Frontend" },
@@ -29,29 +34,64 @@ type ProfileEditorFormProps = {
 };
 
 export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
+  const initialValues = getProfileFormDefaults(profile);
+  const [savedProfile, setSavedProfile] = useState<ProfileFormData>(initialValues);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const {
     control,
     handleSubmit,
     reset,
-    formState: { isSubmitting },
+    setError,
+    clearErrors,
+    formState: { isSubmitting, errors },
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     mode: "onBlur",
-    defaultValues: {
-      fullName: profile.fullName,
-      preferredRole: profile.preferredRole,
-      timezone: profile.timezone,
-      portfolioUrl: profile.portfolioUrl,
-      bio: profile.bio,
-    },
+    defaultValues: initialValues,
   });
+  const currentValues = useWatch({ control });
+  const hasUnsavedChanges = useMemo(
+    () =>
+      (currentValues.fullName ?? "") !== savedProfile.fullName ||
+      (currentValues.preferredRole ?? "") !== savedProfile.preferredRole ||
+      (currentValues.timezone ?? "") !== savedProfile.timezone ||
+      (currentValues.portfolioUrl ?? "") !== savedProfile.portfolioUrl ||
+      (currentValues.bio ?? "") !== savedProfile.bio,
+    [currentValues, savedProfile],
+  );
 
-  function onSubmit(_: ProfileFormData) {
-    return;
+  async function onSubmit(data: ProfileFormData) {
+    clearErrors("root");
+    setSuccessMessage(null);
+
+    const result = await saveProfile(data);
+
+    if ("error" in result) {
+      setError("root", {
+        type: "server",
+        message: result.error,
+      });
+      return;
+    }
+
+    reset(result.profile);
+    setSavedProfile(result.profile);
+    setSuccessMessage("Profile saved successfully.");
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-10">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      onChange={() => {
+        if (successMessage) {
+          setSuccessMessage(null);
+        }
+      }}
+      className="mt-10 space-y-10"
+    >
+      {successMessage && <MessageForm type="success" message={successMessage} />}
+      {errors.root && <MessageForm type="error" message={errors.root.message} />}
+
       <FieldGroup className="grid gap-6 md:grid-cols-2">
         <InputForm
           name="fullName"
@@ -64,11 +104,11 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
 
         <Field>
           <FieldLabel htmlFor="profile-email">Email</FieldLabel>
-          <input
+          <Input
             id="profile-email"
             value={profile.email}
             readOnly
-            className="flex h-11 w-full rounded-xl border border-input bg-input/40 px-4 text-sm text-muted-foreground outline-none"
+            className="bg-input/40 text-muted-foreground"
           />
           <FieldDescription>Email is managed through your account settings.</FieldDescription>
         </Field>
@@ -168,19 +208,12 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
           type="button"
           variant="outline"
           className="h-11 px-4"
-          onClick={() =>
-            reset({
-              fullName: profile.fullName,
-              preferredRole: profile.preferredRole,
-              timezone: profile.timezone,
-              portfolioUrl: profile.portfolioUrl,
-              bio: profile.bio,
-            })
-          }
+          disabled={!hasUnsavedChanges || isSubmitting}
+          onClick={() => reset(savedProfile)}
         >
           Reset
         </Button>
-        <Button type="submit" disabled className="h-11 px-4">
+        <Button type="submit" disabled={!hasUnsavedChanges || isSubmitting} className="h-11 px-4">
           Save profile
         </Button>
       </div>
