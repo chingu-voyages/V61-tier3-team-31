@@ -6,6 +6,7 @@ export function getProfileFormDefaults(data: {
   timezone: string;
   portfolioUrl: string;
   bio: string;
+  skills: string[];
 }): ProfileFormData {
   return {
     fullName: data.fullName,
@@ -13,5 +14,6 @@ export function getProfileFormDefaults(data: {
     timezone: data.timezone,
     portfolioUrl: data.portfolioUrl,
     bio: data.bio,
+    skills: data.skills,
   };
 }

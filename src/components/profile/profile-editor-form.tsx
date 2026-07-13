@@ -20,6 +20,7 @@ import type { ParticipantProfileEditorData } from "@/lib/profile/profile-editor"
 import { profileSchema, type ProfileFormData } from "@/schemas/profile.schema";
 import { getProfileFormDefaults } from "@/lib/profile/profile-form-defaults";
 import { saveProfile } from "@/app/(protected)/app/profile/actions";
+import { normalizeSkillKey } from "@/lib/applications/skill-normalization";
 
 const roleOptions = [
   { value: "frontend", label: "Frontend" },
@@ -37,10 +38,12 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
   const initialValues = getProfileFormDefaults(profile);
   const [savedProfile, setSavedProfile] = useState<ProfileFormData>(initialValues);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [skillInput, setSkillInput] = useState("");
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
     setError,
     clearErrors,
     formState: { isSubmitting, errors },
@@ -50,15 +53,49 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
     defaultValues: initialValues,
   });
   const currentValues = useWatch({ control });
+  const watchedSkills = currentValues.skills;
+  const currentSkills = useMemo(() => watchedSkills ?? [], [watchedSkills]);
   const hasUnsavedChanges = useMemo(
     () =>
       (currentValues.fullName ?? "") !== savedProfile.fullName ||
       (currentValues.preferredRole ?? "") !== savedProfile.preferredRole ||
       (currentValues.timezone ?? "") !== savedProfile.timezone ||
       (currentValues.portfolioUrl ?? "") !== savedProfile.portfolioUrl ||
-      (currentValues.bio ?? "") !== savedProfile.bio,
-    [currentValues, savedProfile],
+      (currentValues.bio ?? "") !== savedProfile.bio ||
+      currentSkills.map(normalizeSkillKey).sort().join(",") !==
+        savedProfile.skills.map(normalizeSkillKey).sort().join(","),
+    [currentValues, currentSkills, savedProfile],
   );
+
+  function addSkill(skill: string) {
+    const trimmedSkill = skill.trim();
+    const skillKey = normalizeSkillKey(trimmedSkill);
+
+    if (
+      !trimmedSkill ||
+      !skillKey ||
+      currentSkills.length >= 15 ||
+      currentSkills.some((currentSkill) => normalizeSkillKey(currentSkill) === skillKey)
+    ) {
+      return;
+    }
+
+    setValue("skills", [...currentSkills, trimmedSkill], {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    setSkillInput("");
+  }
+
+  function removeSkill(skillToRemove: string) {
+    setValue(
+      "skills",
+      currentSkills.filter(
+        (currentSkill) => normalizeSkillKey(currentSkill) !== normalizeSkillKey(skillToRemove),
+      ),
+      { shouldDirty: true, shouldValidate: true },
+    );
+  }
 
   async function onSubmit(data: ProfileFormData) {
     clearErrors("root");
@@ -76,6 +113,7 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
 
     reset(result.profile);
     setSavedProfile(result.profile);
+    setSkillInput("");
     setSuccessMessage("Profile saved successfully.");
   }
 
@@ -181,19 +219,25 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
         <div>
           <h2 className="text-sm font-medium text-foreground/90">Skills</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Your current saved skills are shown here. Editing them comes in the next step.
+            Add or remove your current skills, then save the profile once.
           </p>
         </div>
 
-        {profile.skills.length > 0 ? (
+        {currentSkills.length > 0 ? (
           <div className="flex flex-wrap gap-2">
-            {profile.skills.map((skill) => (
-              <span
+            {currentSkills.map((skill) => (
+              <button
+                type="button"
                 key={skill}
-                className="inline-flex items-center rounded-lg border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary"
+                onClick={() => removeSkill(skill)}
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/15 disabled:pointer-events-none disabled:opacity-50"
               >
                 {skill}
-              </span>
+                <span aria-hidden="true" className="text-sm leading-none">
+                  &times;
+                </span>
+              </button>
             ))}
           </div>
         ) : (
@@ -201,6 +245,31 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
             No skills saved yet.
           </div>
         )}
+
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Input
+            value={skillInput}
+            onChange={(event) => setSkillInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                addSkill(skillInput);
+              }
+            }}
+            disabled={isSubmitting || currentSkills.length >= 15}
+            placeholder="Add a skill and press Enter"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11 px-4"
+            disabled={isSubmitting || currentSkills.length >= 15 || !skillInput.trim()}
+            onClick={() => addSkill(skillInput)}
+          >
+            Add skill
+          </Button>
+        </div>
+        {errors.skills && <FieldError errors={[errors.skills]} />}
       </div>
 
       <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:justify-end">
@@ -209,7 +278,10 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
           variant="outline"
           className="h-11 px-4"
           disabled={!hasUnsavedChanges || isSubmitting}
-          onClick={() => reset(savedProfile)}
+          onClick={() => {
+            reset(savedProfile);
+            setSkillInput("");
+          }}
         >
           Reset
         </Button>

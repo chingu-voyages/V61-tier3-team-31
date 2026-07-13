@@ -15,6 +15,9 @@ export const profileSchema = z.object({
     .trim()
     .refine((value) => value === "" || z.url().safeParse(value).success, "Enter a valid URL"),
   bio: z.string().trim().max(500, "Bio must be at most 500 characters"),
+  skills: z
+    .array(z.string().trim().min(1, "Skill cannot be empty"))
+    .max(15, "Maximum 15 skills allowed"),
 });
 
 export type ProfileFormData = z.infer<typeof profileSchema>;
