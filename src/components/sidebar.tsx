@@ -8,7 +8,7 @@ import {
   LogOut,
   User,
 } from "lucide-react";
-import { NexusLogo } from "@/components/nexus-logo";
+import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/auth/auth-context";
 import {
@@ -97,10 +97,10 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
 
       {/* Header */}
       <div className="h-[76px] flex items-center px-6 gap-3 pt-2 overflow-hidden">
-        <NexusLogo className="w-8 h-8 shrink-0" />
+        <Logo className="w-8 h-8 shrink-0" />
         {isExpanded && (
           <span className="font-outfit text-xl font-medium tracking-wide text-white truncate">
-            Nexus
+            Cohorix
           </span>
         )}
       </div>
