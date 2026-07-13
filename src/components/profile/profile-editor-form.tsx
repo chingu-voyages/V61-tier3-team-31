@@ -3,8 +3,10 @@
 import { useMemo, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronLeft, Code2, ExternalLink, Mail, User } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -30,9 +32,48 @@ const roleOptions = [
   { value: "product", label: "Product" },
 ] as const;
 
+const roleLabelByValue = new Map(roleOptions.map((role) => [role.value, role.label]));
+
 type ProfileEditorFormProps = {
   profile: ParticipantProfileEditorData;
 };
+
+function getInitials(name: string, email: string): string {
+  const source = name.trim() || email;
+  const initials = source
+    .split(/[\s@._-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+
+  return initials || "U";
+}
+
+function ProfileCard({
+  title,
+  icon,
+  children,
+  className = "",
+}: {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={`overflow-hidden rounded-2xl border border-border bg-card shadow-sm ${className}`}
+    >
+      <div className="flex items-center gap-2 border-b border-border/80 px-6 py-4 text-sm font-semibold text-foreground">
+        {icon}
+        {title}
+      </div>
+      <div className="p-6">{children}</div>
+    </section>
+  );
+}
 
 export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
   const initialValues = getProfileFormDefaults(profile);
@@ -55,6 +96,9 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
   const currentValues = useWatch({ control });
   const watchedSkills = currentValues.skills;
   const currentSkills = useMemo(() => watchedSkills ?? [], [watchedSkills]);
+  const displayName = currentValues.fullName?.trim() || "Your profile";
+  const portfolioUrl = currentValues.portfolioUrl?.trim() ?? "";
+  const initials = getInitials(displayName, profile.email);
   const hasUnsavedChanges = useMemo(
     () =>
       (currentValues.fullName ?? "") !== savedProfile.fullName ||
@@ -125,169 +169,210 @@ export function ProfileEditorForm({ profile }: ProfileEditorFormProps) {
           setSuccessMessage(null);
         }
       }}
-      className="mt-10 space-y-10"
+      className="space-y-6"
     >
-      {successMessage && <MessageForm type="success" message={successMessage} />}
-      {errors.root && <MessageForm type="error" message={errors.root.message} />}
+      <div className="flex flex-col gap-5 pb-8 md:flex-row md:items-start md:justify-between">
+        <div className="flex min-w-0 gap-5">
+          <div className="relative shrink-0">
+            <div className="flex size-[86px] items-center justify-center rounded-full bg-indigo-500/20 text-2xl font-bold text-indigo-400 ring-1 ring-indigo-400/10">
+              {initials}
+            </div>
+          </div>
 
-      <FieldGroup className="grid gap-6 md:grid-cols-2">
-        <InputForm
-          name="fullName"
-          control={control}
-          label="Full name"
-          placeholder="Your full name"
-          disabled={isSubmitting}
-          autoComplete="name"
-        />
-
-        <Field>
-          <FieldLabel htmlFor="profile-email">Email</FieldLabel>
-          <Input
-            id="profile-email"
-            value={profile.email}
-            readOnly
-            className="bg-input/40 text-muted-foreground"
-          />
-          <FieldDescription>Email is managed through your account settings.</FieldDescription>
-        </Field>
-
-        <Controller
-          name="preferredRole"
-          control={control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="profile-role">Preferred role</FieldLabel>
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger
-                  id="profile-role"
-                  className="h-11 w-full rounded-xl px-4"
-                  aria-invalid={fieldState.invalid}
-                >
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {roleOptions.map((role) => (
-                    <SelectItem key={role.value} value={role.value}>
-                      {role.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-
-        <InputForm
-          name="timezone"
-          control={control}
-          label="Timezone"
-          placeholder="Europe/Berlin"
-          disabled={isSubmitting}
-          autoComplete="off"
-        />
-      </FieldGroup>
-
-      <InputForm
-        name="portfolioUrl"
-        control={control}
-        label="Portfolio / GitHub"
-        placeholder="https://github.com/yourusername"
-        disabled={isSubmitting}
-        autoComplete="url"
-      />
-
-      <Controller
-        name="bio"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>Bio</FieldLabel>
-            <Textarea
-              {...field}
-              id={field.name}
-              rows={5}
-              disabled={isSubmitting}
-              aria-invalid={fieldState.invalid}
-            />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <div className="space-y-4">
-        <div>
-          <h2 className="text-sm font-medium text-foreground/90">Skills</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Add or remove your current skills, then save the profile once.
-          </p>
+          <div className="min-w-0 pt-2">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="truncate font-outfit text-3xl font-semibold tracking-tight text-foreground">
+                {displayName}
+              </h1>
+            </div>
+            <div className="mt-2 flex items-center gap-1.5 text-lg text-muted-foreground">
+              <span className="truncate">{profile.email}</span>
+              <Mail className="size-4" />
+            </div>
+          </div>
         </div>
 
-        {currentSkills.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {currentSkills.map((skill) => (
-              <button
-                type="button"
-                key={skill}
-                onClick={() => removeSkill(skill)}
-                disabled={isSubmitting}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/15 disabled:pointer-events-none disabled:opacity-50"
-              >
-                {skill}
-                <span aria-hidden="true" className="text-sm leading-none">
-                  &times;
-                </span>
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-xl border border-dashed border-border px-4 py-5 text-sm text-muted-foreground">
-            No skills saved yet.
-          </div>
-        )}
-
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Input
-            value={skillInput}
-            onChange={(event) => setSkillInput(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                addSkill(skillInput);
-              }
-            }}
-            disabled={isSubmitting || currentSkills.length >= 15}
-            placeholder="Add a skill and press Enter"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            className="h-11 px-4"
-            disabled={isSubmitting || currentSkills.length >= 15 || !skillInput.trim()}
-            onClick={() => addSkill(skillInput)}
+        {portfolioUrl ? (
+          <a
+            href={portfolioUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-muted/60 px-5 text-sm font-semibold text-foreground transition hover:bg-muted md:mt-2"
           >
-            Add skill
-          </Button>
-        </div>
-        {errors.skills && <FieldError errors={[errors.skills]} />}
+            Portfolio
+            <ExternalLink className="size-4" />
+          </a>
+        ) : null}
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          className="h-11 px-4"
-          disabled={!hasUnsavedChanges || isSubmitting}
-          onClick={() => {
-            reset(savedProfile);
-            setSkillInput("");
-          }}
-        >
-          Reset
-        </Button>
-        <Button type="submit" disabled={!hasUnsavedChanges || isSubmitting} className="h-11 px-4">
-          Save profile
-        </Button>
+      <div className="grid gap-6 lg:grid-cols-12">
+        <div className="space-y-6 lg:col-span-7">
+          <ProfileCard title="Profile details" icon={<User className="size-4" />}>
+            <div className="space-y-6">
+              {successMessage && <MessageForm type="success" message={successMessage} />}
+              {errors.root && <MessageForm type="error" message={errors.root.message} />}
+
+              <FieldGroup className="grid gap-6 md:grid-cols-2">
+                <div className="md:col-span-2">
+                  <InputForm
+                    name="fullName"
+                    control={control}
+                    label="Full name"
+                    placeholder="Your full name"
+                    disabled={isSubmitting}
+                    autoComplete="name"
+                  />
+                </div>
+
+                <Controller
+                  name="preferredRole"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="profile-role">Preferred role</FieldLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger
+                          id="profile-role"
+                          className="h-11 w-full rounded-xl px-4"
+                          aria-invalid={fieldState.invalid}
+                        >
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {roleOptions.map((role) => (
+                            <SelectItem key={role.value} value={role.value}>
+                              {role.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    </Field>
+                  )}
+                />
+
+                <InputForm
+                  name="timezone"
+                  control={control}
+                  label="Timezone"
+                  placeholder="Europe/Berlin"
+                  disabled={isSubmitting}
+                  autoComplete="off"
+                />
+              </FieldGroup>
+
+              <InputForm
+                name="portfolioUrl"
+                control={control}
+                label="Portfolio"
+                placeholder="https://your-portfolio.example"
+                disabled={isSubmitting}
+                autoComplete="url"
+              />
+
+              <Controller
+                name="bio"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Bio</FieldLabel>
+                    <Textarea
+                      {...field}
+                      id={field.name}
+                      rows={5}
+                      disabled={isSubmitting}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </div>
+          </ProfileCard>
+        </div>
+
+        <div className="space-y-6 lg:col-span-5">
+          <ProfileCard title="Skills" icon={<Code2 className="size-4" />}>
+            <div className="space-y-4">
+              <p className="text-sm leading-6 text-muted-foreground">
+                Add or remove your current skills, then save the profile once.
+              </p>
+
+              {currentSkills.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {currentSkills.map((skill) => (
+                    <button
+                      type="button"
+                      key={skill}
+                      onClick={() => removeSkill(skill)}
+                      disabled={isSubmitting}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-muted/70 px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
+                    >
+                      {skill}
+                      <span
+                        aria-hidden="true"
+                        className="text-sm leading-none text-muted-foreground"
+                      >
+                        &times;
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-xl border border-dashed border-border px-4 py-5 text-sm text-muted-foreground">
+                  No skills saved yet.
+                </div>
+              )}
+
+              <div className="flex flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
+                <Input
+                  value={skillInput}
+                  onChange={(event) => setSkillInput(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      addSkill(skillInput);
+                    }
+                  }}
+                  disabled={isSubmitting || currentSkills.length >= 15}
+                  placeholder="Add a skill and press Enter"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 px-4"
+                  disabled={isSubmitting || currentSkills.length >= 15 || !skillInput.trim()}
+                  onClick={() => addSkill(skillInput)}
+                >
+                  Add skill
+                </Button>
+              </div>
+              {errors.skills && <FieldError errors={[errors.skills]} />}
+            </div>
+          </ProfileCard>
+
+          <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 px-4"
+              disabled={!hasUnsavedChanges || isSubmitting}
+              onClick={() => {
+                reset(savedProfile);
+                setSkillInput("");
+              }}
+            >
+              Reset
+            </Button>
+            <Button
+              type="submit"
+              disabled={!hasUnsavedChanges || isSubmitting}
+              className="h-11 px-4"
+            >
+              Save profile
+            </Button>
+          </div>
+        </div>
       </div>
     </form>
   );
