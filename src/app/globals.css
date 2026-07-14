@@ -143,25 +143,7 @@
 /* ── Base styles ── */
 @layer base {
   html {
-    scrollbar-gutter: stable;
-  }
-
-  .tz-list {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(0 0% 100% / 0.06) transparent;
-  }
-  .tz-list::-webkit-scrollbar {
-    width: 3px;
-  }
-  .tz-list::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .tz-list::-webkit-scrollbar-thumb {
-    background-color: hsl(0 0% 100% / 0.06);
-    border-radius: 8px;
-  }
-  .tz-list::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(0 0% 100% / 0.12);
+    overflow-x: hidden;
   }
 
   input:focus-visible,
@@ -202,5 +184,40 @@ input:-webkit-autofill:first-line {
 
   .active-glow {
     @apply border-nexus-green bg-nexus-green/5 dark:bg-nexus-green/10 shadow-[0_0_15px_rgba(119,207,151,0.15)] dark:shadow-[0_0_20px_rgba(119,207,151,0.2)];
+  }
+
+  .scrollbar-premium {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 0% / 0.08) transparent;
+    transition: scrollbar-color 0.2s ease;
+  }
+  .scrollbar-premium::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-premium::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-premium::-webkit-scrollbar-thumb {
+    background-color: hsl(0 0% 0% / 0.08);
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+  }
+  .scrollbar-premium::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(0 0% 0% / 0.18);
+  }
+  .scrollbar-premium::-webkit-scrollbar-thumb:active {
+    background-color: hsl(0 0% 0% / 0.25);
+  }
+  .dark .scrollbar-premium {
+    scrollbar-color: hsl(0 0% 100% / 0.08) transparent;
+  }
+  .dark .scrollbar-premium::-webkit-scrollbar-thumb {
+    background-color: hsl(0 0% 100% / 0.08);
+  }
+  .dark .scrollbar-premium::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(0 0% 100% / 0.18);
+  }
+  .dark .scrollbar-premium::-webkit-scrollbar-thumb:active {
+    background-color: hsl(0 0% 100% / 0.25);
   }
 }

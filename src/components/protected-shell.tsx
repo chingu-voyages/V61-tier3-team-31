@@ -40,7 +40,10 @@ export function ProtectedShell({ children, role }: { children: React.ReactNode; 
   return (
     <div className="flex bg-background text-foreground min-h-screen font-sans transition-colors">
       <Sidebar role={role} currentView={currentView} />
-      <div className="flex-1 flex flex-col items-stretch overflow-hidden h-screen overflow-y-auto">
+      <div
+        id="main-scroll-container"
+        className="flex-1 flex flex-col items-stretch overflow-hidden h-screen overflow-y-auto"
+      >
         <main className="p-8 max-w-[1400px] w-full mx-auto space-y-8 pb-12">{children}</main>
       </div>
     </div>
