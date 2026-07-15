@@ -21,7 +21,7 @@ const INITIAL_TEAMS = [
     bg: "bg-indigo-50 dark:bg-indigo-500/10",
     textColor: "text-indigo-600 dark:text-indigo-400",
     status: "Active",
-    statusStyle: "bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20",
+    statusStyle: "bg-nexus-green/10 text-nexus-green border border-nexus-green/20",
     statusIcon: CheckCircle,
     description: "Building a decentralized marketplace.",
     progress: 75,
@@ -76,7 +76,7 @@ export default function TeamsPage() {
       bg: "bg-emerald-50 dark:bg-emerald-500/10",
       textColor: "text-emerald-600 dark:text-emerald-400",
       status: "Active",
-      statusStyle: "bg-[#77CF97]/10 text-[#77CF97] border border-[#77CF97]/20",
+      statusStyle: "bg-nexus-green/10 text-nexus-green border border-nexus-green/20",
       statusIcon: CheckCircle,
       description: newTeamDesc || "A newly created team.",
       progress: 0,
@@ -103,17 +103,17 @@ export default function TeamsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">
+          <h1 className="text-[28px] font-outfit font-medium             text-foreground mb-1 tracking-tight">
             Teams Directory
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm">
+          <p className=" text-muted-foreground text-sm">
             Monitor team progress, project status, and engagement.
           </p>
         </div>
         <div className="flex gap-3">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="w-full sm:w-auto px-4 py-2 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" /> New Team
           </button>
@@ -121,26 +121,26 @@ export default function TeamsPage() {
       </div>
 
       {successMessage && (
-        <div className="bg-[#77CF97]/10 border border-[#77CF97]/20 text-[#77CF97] px-4 py-3 rounded-xl flex items-center gap-2 text-sm font-medium animate-in fade-in slide-in-from-top-2">
+        <div className="bg-nexus-green/10 border border-nexus-green/20 text-nexus-green px-4 py-3 rounded-xl flex items-center gap-2 text-sm font-medium animate-in fade-in slide-in-from-top-2">
           <CheckCircle className="w-4 h-4" />
           {successMessage}
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 dark:border-white/10 pb-px gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-px gap-4">
         <div className="flex gap-2 overflow-x-auto">
-          <button className="px-4 py-2 border-b-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-medium text-sm cursor-pointer whitespace-nowrap">
+          <button className="px-4 py-2 border-b-2 border-foreground text-foreground font-medium text-sm cursor-pointer whitespace-nowrap">
             All Teams ({teams.length})
           </button>
         </div>
         <div className="relative mb-2 w-full sm:w-auto">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search teams..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full sm:w-64 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#77CF97]/50 transition-colors shadow-sm"
+            className="w-full sm:w-64 bg-muted border border-border rounded-lg py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green/50 transition-colors shadow-sm"
           />
         </div>
       </div>
@@ -153,7 +153,7 @@ export default function TeamsPage() {
             return (
               <div
                 key={team.id}
-                className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all p-6 flex flex-col"
+                className="bg-card rounded-[24px] border border-border shadow-sm hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all p-6 flex flex-col"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex gap-3 items-center">
@@ -163,10 +163,8 @@ export default function TeamsPage() {
                       {team.emoji}
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 dark:text-white text-lg">
-                        {team.name}
-                      </h3>
-                      <div className="text-xs text-slate-500 dark:text-slate-400">
+                      <h3 className="font-bold text-foreground text-lg">{team.name}</h3>
+                      <div className="text-xs text-muted-foreground">
                         {team.tier} {"\u2022"} {team.domain}
                       </div>
                     </div>
@@ -177,39 +175,37 @@ export default function TeamsPage() {
                     <TeamIcon className="w-3 h-3" /> {team.status}
                   </span>
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6 line-clamp-2">
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6 line-clamp-2">
                   {team.description}
                 </p>
                 <div className="mt-auto">
                   <div className="flex items-center justify-between mb-3 text-sm">
-                    <span className="text-slate-500 dark:text-slate-400 font-medium">Progress</span>
-                    <span className="text-slate-800 dark:text-white font-bold">
-                      {team.progress}%
-                    </span>
+                    <span className="text-muted-foreground font-medium">Progress</span>
+                    <span className="text-foreground font-bold">{team.progress}%</span>
                   </div>
-                  <div className="relative w-full h-1.5 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden mb-6">
+                  <div className="relative w-full h-1.5 bg-muted rounded-full overflow-hidden mb-6">
                     <div
                       className={`absolute top-0 left-0 h-full ${team.barColor} rounded-full`}
                       style={{ width: `${team.progress}%` }}
                     ></div>
                   </div>
-                  <div className="flex items-center justify-between border-t border-slate-100 dark:border-white/10 pt-4">
+                  <div className="flex items-center justify-between border-t border-border pt-4">
                     <div className="flex -space-x-2">
                       {team.members.slice(0, 3).map((m, j) => (
                         <img
                           key={j}
                           src={`https://i.pravatar.cc/100?img=${m}`}
-                          className="w-8 h-8 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-100 dark:bg-white/10"
+                          className="w-8 h-8 rounded-full border-2 border-card bg-muted"
                           alt=""
                         />
                       ))}
                       {team.members.length > 3 && (
-                        <div className="w-8 h-8 rounded-full border-2 border-white dark:border-[#1a1b24] bg-slate-50 dark:bg-white/10 text-slate-500 dark:text-slate-400 text-[10px] font-medium flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full border-2 border-card bg-muted text-muted-foreground text-[10px] font-medium flex items-center justify-center">
                           +{team.members.length - 3}
                         </div>
                       )}
                     </div>
-                    <button className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-[#77CF97] transition-colors cursor-pointer">
+                    <button className="text-sm font-semibold text-muted-foreground hover:text-nexus-green transition-colors cursor-pointer">
                       View Details
                     </button>
                   </div>
@@ -221,14 +217,12 @@ export default function TeamsPage() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-          <div className="bg-white dark:bg-[#1a1b24] rounded-2xl w-full max-w-lg shadow-2xl relative my-auto animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-white/10">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white font-outfit">
-                Create New Team
-              </h2>
+          <div className="bg-card rounded-2xl w-full max-w-lg shadow-2xl relative my-auto animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between p-5 border-b border-border">
+              <h2 className="text-lg font-semibold text-foreground font-outfit">Create New Team</h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 -mr-2 text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                className="p-2 -mr-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -236,7 +230,7 @@ export default function TeamsPage() {
 
             <form onSubmit={handleCreateTeam} className="p-5 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-sm font-medium text-muted-foreground mb-1.5">
                   Team Name *
                 </label>
                 <input
@@ -245,12 +239,12 @@ export default function TeamsPage() {
                   value={newTeamName}
                   onChange={(e) => setNewTeamName(e.target.value)}
                   placeholder="e.g. Code Ninjas"
-                  className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#77CF97]/30 focus:border-[#77CF97]/50 transition-all"
+                  className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-nexus-green/30 focus:border-nexus-green/50 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-sm font-medium text-muted-foreground mb-1.5">
                   Description (Optional)
                 </label>
                 <textarea
@@ -258,45 +252,45 @@ export default function TeamsPage() {
                   onChange={(e) => setNewTeamDesc(e.target.value)}
                   placeholder="What is this team building?"
                   rows={3}
-                  className="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#77CF97]/30 focus:border-[#77CF97]/50 transition-all resize-none"
+                  className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-nexus-green/30 focus:border-nexus-green/50 transition-all resize-none"
                 />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  <label className="block text-sm font-medium text-muted-foreground">
                     Assign Participants
                   </label>
-                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                  <span className="text-xs text-muted-foreground">
                     {selectedParticipants.length} selected
                   </span>
                 </div>
-                <div className="border border-slate-200 dark:border-white/10 rounded-xl overflow-hidden max-h-[200px] overflow-y-auto bg-slate-50 dark:bg-white/5 scrollbar-premium">
+                <div className="border border-border rounded-xl overflow-hidden max-h-[200px] overflow-y-auto bg-muted scrollbar-premium">
                   {unassignedParticipants.length === 0 ? (
-                    <div className="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
+                    <div className="p-4 text-center text-sm text-muted-foreground">
                       No unassigned participants available.
                     </div>
                   ) : (
-                    <div className="divide-y divide-slate-200 dark:divide-white/5">
+                    <div className="divide-y divide-border">
                       {unassignedParticipants.map((p) => (
                         <div
                           key={p.id}
                           onClick={() => toggleParticipant(p.id)}
-                          className="flex items-center gap-3 p-3 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer transition-colors"
+                          className="flex items-center gap-3 p-3 hover:bg-muted cursor-pointer transition-colors"
                         >
                           <div
-                            className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${selectedParticipants.includes(p.id) ? "bg-[#77CF97] border-[#77CF97] text-black" : "border-slate-300 dark:border-white/20"}`}
+                            className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${selectedParticipants.includes(p.id) ? "bg-nexus-green border-nexus-green text-black" : "border-border"}`}
                           >
                             {selectedParticipants.includes(p.id) && (
                               <Check className="w-3.5 h-3.5" strokeWidth={3} />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white truncate">
+                            <div className="text-sm font-medium text-foreground truncate">
                               {p.name}
                             </div>
                           </div>
-                          <span className="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full bg-white dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/5">
+                          <span className="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">
                             {p.role}
                           </span>
                         </div>
@@ -306,18 +300,18 @@ export default function TeamsPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-200 dark:border-white/10 flex justify-end gap-3">
+              <div className="pt-4 border-t border-border flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                  className="px-5 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={!newTeamName.trim()}
-                  className="px-5 py-2.5 bg-[#0b0c10] dark:bg-[#77CF97] text-white dark:text-[#0b0c10] rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-[#5ab87e] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Create Team
                 </button>
