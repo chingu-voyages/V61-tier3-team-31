@@ -83,7 +83,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
 
   return (
     <div
-      className={`bg-nexus-dark text-muted-foreground flex flex-col shrink-0 min-h-screen border-r border-border transition-all duration-300 relative ${
+      className={`bg-nexus-dark text-muted-foreground flex flex-col shrink-0 h-screen border-r border-border transition-all duration-300 relative ${
         isExpanded ? "w-[260px]" : "w-[80px]"
       }`}
     >
@@ -106,7 +106,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 px-4 py-2 space-y-1 overflow-hidden">
+      <div className="flex-1 px-4 py-2 space-y-1 overflow-y-auto scrollbar-premium">
         {menuItems.map((item) => (
           <NavItem
             key={item.view}

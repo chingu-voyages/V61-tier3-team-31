@@ -38,11 +38,11 @@ export function ProtectedShell({ children, role }: { children: React.ReactNode; 
   const currentView = getCurrentView(pathname, role);
 
   return (
-    <div className="flex bg-background text-foreground min-h-screen font-sans transition-colors">
+    <div className="flex bg-background text-foreground h-screen overflow-hidden font-sans transition-colors">
       <Sidebar role={role} currentView={currentView} />
       <div
         id="main-scroll-container"
-        className="flex-1 flex flex-col items-stretch overflow-hidden h-screen overflow-y-auto"
+        className="flex-1 flex flex-col items-stretch overflow-y-auto"
       >
         <main className="p-8 max-w-[1400px] w-full mx-auto space-y-8 pb-12">{children}</main>
       </div>
