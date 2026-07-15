@@ -12,6 +12,14 @@
 
   --radius: 0.75rem;
 
+  --shadow-light-green: 0 10px 30px hsl(145 37% 69% / 0.1);
+  --shadow-green: 0 0 40px hsl(145 47% 64% / 0.25);
+  --shadow-black: 0 10px 30px hsl(0 0% 0% / 0.25);
+
+  --background-image-gradient:
+    radial-gradient(circle at top left, rgba(125, 211, 252, 0.16), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(74, 222, 128, 0.16), transparent 32%);
+
   --animate-wave: wave 0.8s ease-in-out 1;
   --animate-gradient-sweep: gradient-sweep 3s linear infinite;
 }
@@ -177,6 +185,18 @@
   label:has(input[type="checkbox"]),
   label:has(input[type="radio"]) {
     cursor: pointer;
+  }
+
+  h2 {
+    @apply font-outfit text-3xl font-semibold tracking-tight text-foreground sm:text-4xl;
+  }
+
+  h3 {
+    @apply text-base font-medium text-primary tracking-[0.15em] uppercase;
+  }
+
+  p {
+    @apply text-base text-muted-foreground;
   }
 }
 
