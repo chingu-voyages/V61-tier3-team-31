@@ -1,11 +1,10 @@
-import { Sparkle, Sparkles } from "lucide-react";
 import { Logo } from "../Logo";
 import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border p-6 text-center text-muted-foreground text-sm space-y-3">
-      <div className="max-w-6xl mx-auto flex justify-center sm:justify-between gap-4 flex-wrap">
+    <footer className="border-t border-border text-center text-muted-foreground text-sm">
+      <div className="max-w-6xl mx-auto px-6 sm:px-12 py-6 sm:py-8 flex justify-center sm:justify-between gap-4 flex-wrap">
         <div className="flex justify-center items-center gap-1">
           <Logo className="size-6 shrink-0" />
           Cohorix © 2026
