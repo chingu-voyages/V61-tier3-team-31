@@ -75,7 +75,7 @@ export async function submitApplication(data: ApplyFormData): Promise<SubmitAppl
     const message = error?.message ?? "Something went wrong while saving your application.";
 
     if (error?.code === "23505") {
-      return { error: "You already have an application for this voyage." };
+      return { error: "You already have an application for this course." };
     }
 
     return { error: message };

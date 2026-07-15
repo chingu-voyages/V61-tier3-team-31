@@ -114,7 +114,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             </div>
             {form.voyage && (
               <div>
-                <span className="text-slate-400">Voyage:</span>{" "}
+                <span className="text-slate-400">Course:</span>{" "}
                 <span className="font-medium text-white ml-1">{form.voyage}</span>
               </div>
             )}

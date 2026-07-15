@@ -5,7 +5,7 @@ export default function OnboardingPage() {
     <PlaceholderPage
       eyebrow="Participant workspace"
       title="Onboarding"
-      description="Track the steps each participant needs to complete before the voyage begins."
+      description="Track the steps each participant needs to complete before the course begins."
     />
   );
 }

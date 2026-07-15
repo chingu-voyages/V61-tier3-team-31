@@ -13,7 +13,7 @@ export default function StepMotivation() {
     <div className="space-y-5">
       <div>
         <h2 className="text-lg font-semibold text-white mb-1 font-outfit">Motivation</h2>
-        <p className="text-xs text-slate-400">Why do you want to join Amigo?</p>
+        <p className="text-xs text-slate-400">Why do you want to join Cohorix?</p>
       </div>
 
       <div className="space-y-1.5 text-left">
@@ -22,7 +22,7 @@ export default function StepMotivation() {
         </label>
         <textarea
           {...register("motivation")}
-          placeholder="Tell us what motivates you to join this Voyage cohort..."
+          placeholder="Tell us what motivates you to join this Course cohort..."
           rows={4}
           className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all resize-none"
         />

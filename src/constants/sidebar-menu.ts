@@ -15,7 +15,7 @@ import {
 
 export type DashboardView =
   | "overview"
-  | "voyages"
+  | "courses"
   | "applications"
   | "participants"
   | "matching"
@@ -43,8 +43,8 @@ export const adminMenu: SidebarItem[] = [
     icon: Home,
   },
   {
-    view: "voyages",
-    label: "Voyages",
+    view: "courses",
+    label: "Courses",
     icon: Compass,
   },
   {

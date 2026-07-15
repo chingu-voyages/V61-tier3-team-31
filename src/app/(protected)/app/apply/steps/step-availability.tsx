@@ -56,7 +56,7 @@ export default function StepAvailability({ voyages }: { voyages: OpenVoyage[] })
       </div>
 
       <div className="space-y-1.5 text-left">
-        <label className="text-sm font-medium text-slate-300">Preferred Voyage</label>
+        <label className="text-sm font-medium text-slate-300">Preferred Course</label>
         <div className="relative">
           <Sparkles className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
           <select
@@ -64,10 +64,10 @@ export default function StepAvailability({ voyages }: { voyages: OpenVoyage[] })
             className={`${inputClasses} cursor-pointer appearance-none`}
           >
             {voyages.length === 0 ? (
-              <option>No open voyages</option>
+              <option>No open courses</option>
             ) : (
               <>
-                <option value="">Select a voyage...</option>
+                <option value="">Select a course...</option>
                 {voyages.map((v) => (
                   <option key={v.id} value={v.id}>
                     {v.name}

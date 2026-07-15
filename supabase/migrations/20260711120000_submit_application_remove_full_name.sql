@@ -65,7 +65,7 @@ begin
   end if;
 
   if v_voyage_id is null then
-    raise exception 'No open voyage is available right now.' using errcode = '22023';
+    raise exception 'No open course is available right now.' using errcode = '22023';
   end if;
 
   if not exists (

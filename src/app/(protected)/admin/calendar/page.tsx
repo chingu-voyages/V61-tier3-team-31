@@ -5,7 +5,7 @@ export default function AdminCalendarPage() {
     <PlaceholderPage
       eyebrow="Admin workspace"
       title="Calendar"
-      description="Coordinate voyage events, deadlines, and operational milestones here."
+      description="Coordinate course events, deadlines, and operational milestones here."
     />
   );
 }

@@ -65,7 +65,7 @@ const deadlines = [
     badgeColor: "bg-blue-500/10 text-blue-500",
   },
   {
-    title: "Voyage starts",
+    title: "Course starts",
     date: "May 23, 2026",
     badge: "24 days",
     badgeColor: "bg-primary/10 text-primary",
@@ -214,7 +214,7 @@ function AdminOverview() {
               Good morning, Jane. <span className="animate-wave">👋</span>
             </h1>
             <p className="text-muted-foreground text-sm">
-              Voyage <span className="text-destructive font-medium">51</span> is in application
+              Course <span className="text-destructive font-medium">51</span> is in application
               review.
             </p>
           </div>
@@ -280,7 +280,7 @@ function AdminOverview() {
       {/* Pipeline */}
       <div>
         <div className="flex justify-between items-end mb-4 px-1">
-          <h2 className="font-semibold text-foreground text-lg">Voyage Pipeline</h2>
+          <h2 className="font-semibold text-foreground text-lg">Course Pipeline</h2>
           <button className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
             View full pipeline
           </button>
@@ -402,7 +402,7 @@ function ApplicantOverview() {
         <h1 className="text-[28px] font-outfit font-medium text-foreground mb-1 tracking-tight">
           Application Status
         </h1>
-        <p className="text-muted-foreground text-sm">Track your application for Voyage 51.</p>
+        <p className="text-muted-foreground text-sm">Track your application for Course 51.</p>
       </div>
 
       <div className="bg-card rounded-[24px] border border-border shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-8">
@@ -413,7 +413,7 @@ function ApplicantOverview() {
           <div>
             <h2 className="text-lg font-bold text-foreground">Your Application</h2>
             <p className="text-sm text-muted-foreground">
-              Submitted for Voyage 51 — Application Review
+              Submitted for Course 51 — Application Review
             </p>
           </div>
         </div>

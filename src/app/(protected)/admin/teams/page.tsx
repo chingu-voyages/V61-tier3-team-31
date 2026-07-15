@@ -5,7 +5,7 @@ export default function AdminTeamsPage() {
     <PlaceholderPage
       eyebrow="Admin workspace"
       title="Teams"
-      description="Monitor team composition, assignments, and voyage delivery health here."
+      description="Monitor team composition, assignments, and course delivery health here."
     />
   );
 }

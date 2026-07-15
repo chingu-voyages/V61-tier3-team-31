@@ -117,7 +117,7 @@ describe("useApplyForm", () => {
 
   it("sets submitError when submit action returns an error", async () => {
     submitApplicationMock.mockResolvedValueOnce({
-      error: "You already have an application for this voyage.",
+      error: "You already have an application for this course.",
     });
 
     const { result } = renderHook(() => useApplyForm());
@@ -139,7 +139,7 @@ describe("useApplyForm", () => {
       await result.current.submit();
     });
 
-    expect(result.current.submitError).toBe("You already have an application for this voyage.");
+    expect(result.current.submitError).toBe("You already have an application for this course.");
   });
 
   it("persists form data and current step to storage and restores on mount", async () => {

@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/sidebar";
 
 type DashboardView =
   | "overview"
-  | "voyages"
+  | "courses"
   | "applications"
   | "participants"
   | "matching"

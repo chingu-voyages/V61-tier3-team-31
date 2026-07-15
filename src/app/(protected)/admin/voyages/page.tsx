@@ -4,8 +4,8 @@ export default function AdminVoyagesPage() {
   return (
     <PlaceholderPage
       eyebrow="Admin workspace"
-      title="Voyages"
-      description="Configure voyage timelines, states, and operational details from this admin route."
+      title="Courses"
+      description="Configure course timelines, states, and operational details from this admin route."
     />
   );
 }

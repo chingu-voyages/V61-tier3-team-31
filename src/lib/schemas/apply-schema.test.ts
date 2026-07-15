@@ -51,7 +51,7 @@ describe("Apply Form Schemas", () => {
       const validData = {
         hoursPerWeek: 20,
         timezone: "America/New_York",
-        voyage: "Voyage 51",
+        voyage: "Course 51",
       };
       const result = stepAvailabilitySchema.safeParse(validData);
       expect(result.success).toBe(true);
@@ -96,7 +96,7 @@ describe("Apply Form Schemas", () => {
         skills: ["React", "TypeScript"],
         hoursPerWeek: 20,
         timezone: "America/New_York",
-        voyage: "Voyage 51",
+        voyage: "Course 51",
         motivation: "I want to join because I am passionate about building great software.",
         bio: "I am a software developer with 3 years of experience.",
         portfolio: "https://github.com/janedoe",

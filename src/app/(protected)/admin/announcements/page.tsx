@@ -5,7 +5,7 @@ export default function AdminAnnouncementsPage() {
     <PlaceholderPage
       eyebrow="Admin workspace"
       title="Announcements"
-      description="Draft and publish staff announcements to the right voyage audiences."
+      description="Draft and publish staff announcements to the right course audiences."
     />
   );
 }
