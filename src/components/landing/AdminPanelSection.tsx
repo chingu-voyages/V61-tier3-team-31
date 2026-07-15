@@ -1,7 +1,7 @@
 import { CircleCheckBig } from "lucide-react";
 import { adminPanelList } from "@/constants/list";
-import Image from "next/image";
 import { Section } from "./Section";
+import { ThemeImage } from "../ThemeImage";
 
 export function AdminPanelSection() {
   return (
@@ -26,9 +26,10 @@ export function AdminPanelSection() {
         </ul>
       </div>
 
-      <Image
-        src="/admin-panel.png"
-        alt="Admin panel image"
+      <ThemeImage
+        lightSrc="/admin-panel-light.png"
+        darkSrc="/admin-panel.png"
+        alt="Cohorix application dashboard"
         width={650}
         height={520}
         className="rounded-xl border border-border shadow-light-green"

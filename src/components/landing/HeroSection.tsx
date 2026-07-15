@@ -3,6 +3,7 @@ import { Sparkles } from "lucide-react";
 
 import { AuthActionButtons } from "./AuthActionButtons";
 import { Section } from "./Section";
+import { ThemeImage } from "../ThemeImage";
 const AVATARS = [
   "/avatars/avatar1.jpg",
   "/avatars/avatar2.jpg",
@@ -53,10 +54,10 @@ export function HeroSection() {
             </span>
           </div>
         </div>
-        <Image
-          src="/hero.png"
+        <ThemeImage
+          lightSrc="/hero-light.png"
+          darkSrc="/hero.png"
           alt="Cohorix application dashboard"
-          priority
           width={650}
           height={520}
           className="hidden md:block rounded-xl border border-border shadow-light-green"

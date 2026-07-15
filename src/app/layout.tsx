@@ -36,7 +36,7 @@ export default async function RootLayout({
     <html
       lang="en"
       className={cn(
-        "dark",
+        // "dark",
         inter.variable,
         outfit.variable,
         geist.variable,

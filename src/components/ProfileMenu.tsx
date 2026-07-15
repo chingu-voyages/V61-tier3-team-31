@@ -87,7 +87,7 @@ export function ProfileMenu({
       >
         <DropdownMenuItem
           onClick={() => router.push("/app/profile")}
-          className="focus:text-foreground focus:bg-foreground/5 px-2 py-2"
+          className="focus:text-foreground focus:bg-foreground/5 px-2 py-2 text-muted-foreground"
         >
           <User className="size-4" />
           Profile

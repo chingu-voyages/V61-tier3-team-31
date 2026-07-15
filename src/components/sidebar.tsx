@@ -47,8 +47,8 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
   };
 
   return (
-    <div
-      className={`bg-nexus-dark text-muted-foreground flex flex-col shrink-0 min-h-screen border-r border-border transition-all duration-300 relative ${
+    <aside
+      className={`dark bg-nexus-dark text-muted-foreground flex flex-col shrink-0 min-h-screen border-r border-border transition-all duration-300 relative ${
         isExpanded ? "w-65" : "w-20"
       }`}
     >
@@ -165,6 +165,6 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
           </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
