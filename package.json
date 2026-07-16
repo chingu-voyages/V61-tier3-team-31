@@ -9,7 +9,6 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "node --experimental-strip-types --test tests/auth-flow.test.ts",
     "prepare": "husky",
     "seed:admin": "node --experimental-strip-types scripts/seed-admin.ts"
   },
