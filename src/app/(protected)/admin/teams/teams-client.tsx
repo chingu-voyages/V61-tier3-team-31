@@ -51,7 +51,12 @@ export function TeamsClient({
 
   const handleCreateTeam = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTeamName.trim() || !voyageId) return;
+    if (!newTeamName.trim()) return;
+    if (!voyageId) {
+      setSuccessMessage("No active voyage found. Cannot create team.");
+      setTimeout(() => setSuccessMessage(""), 4000);
+      return;
+    }
 
     const result = await createTeamAction(
       newTeamName,
@@ -61,7 +66,7 @@ export function TeamsClient({
       userId,
     );
 
-    if (!result.ok) {
+    if ("error" in result) {
       setSuccessMessage(`Error: ${result.error}`);
       setTimeout(() => setSuccessMessage(""), 4000);
       return;
@@ -112,7 +117,9 @@ export function TeamsClient({
         <div className="flex gap-3">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+            disabled={!voyageId}
+            title={!voyageId ? "No active voyage available" : "Create a new team"}
+            className="w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="w-4 h-4" /> New Team
           </button>
