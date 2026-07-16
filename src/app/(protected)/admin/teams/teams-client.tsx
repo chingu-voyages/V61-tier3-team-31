@@ -117,9 +117,7 @@ export function TeamsClient({
         <div className="flex gap-3">
           <button
             onClick={() => setIsModalOpen(true)}
-            disabled={!voyageId}
-            title={!voyageId ? "No active voyage available" : "Create a new team"}
-            className="w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" /> New Team
           </button>
@@ -234,6 +232,11 @@ export function TeamsClient({
             </div>
 
             <form onSubmit={handleCreateTeam} className="p-5 space-y-5">
+              {!voyageId && (
+                <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 px-4 py-3 rounded-xl text-sm font-medium">
+                  No active voyage found. A voyage must be active before teams can be created.
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1.5">
                   Team Name *
@@ -315,7 +318,8 @@ export function TeamsClient({
                 </button>
                 <button
                   type="submit"
-                  disabled={!newTeamName.trim()}
+                  disabled={!newTeamName.trim() || !voyageId}
+                  title={!voyageId ? "No active voyage available" : ""}
                   className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Create Team
