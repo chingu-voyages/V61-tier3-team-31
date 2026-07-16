@@ -5,7 +5,7 @@ export default function CalendarPage() {
     <PlaceholderPage
       eyebrow="Participant workspace"
       title="Calendar"
-      description="Upcoming sessions, deadlines, and voyage events will live in this participant calendar."
+      description="Upcoming sessions, deadlines, and course events will live in this participant calendar."
     />
   );
 }

@@ -17,7 +17,7 @@ insert into public.voyages (
 )
 values (
   1,
-  'Voyage 1',
+  'Course 1',
   'First cohort of the platform. Building cross-functional product teams to ship MVP web apps.',
   'applications_open',
   now(),

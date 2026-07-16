@@ -226,10 +226,10 @@ export function ApplyPageClient({
             className="text-center mb-8"
           >
             <h1 className="text-3xl sm:text-4xl font-outfit font-bold text-white tracking-tight mb-2">
-              Apply for Voyage
+              Apply for Course
             </h1>
             <p className="text-slate-400 text-sm">
-              Complete the form below to apply for the next Amigo Voyage cohort.
+              Complete the form below to apply for the next Cohorix course cohort.
             </p>
           </motion.div>
 

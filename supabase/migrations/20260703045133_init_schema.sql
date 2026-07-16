@@ -1,5 +1,5 @@
 -- =============================================================================
--- Amigo Platform — Supabase/Postgres Schema
+-- Cohorix Platform — Supabase/Postgres Schema
 -- =============================================================================
 --
 -- This file mirrors the schema that was applied directly to the remote database

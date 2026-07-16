@@ -30,11 +30,11 @@ export function ThemeToggle() {
     <button
       onClick={cycle}
       title={`Theme: ${theme}`}
-      className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+      className="size-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
     >
-      {theme === "light" && <Sun className="w-4 h-4" />}
-      {theme === "dark" && <Moon className="w-4 h-4" />}
-      {theme === "system" && <Monitor className="w-4 h-4" />}
+      {theme === "light" && <Sun className="size-4" />}
+      {theme === "dark" && <Moon className="size-4" />}
+      {theme === "system" && <Monitor className="size-4" />}
     </button>
   );
 }

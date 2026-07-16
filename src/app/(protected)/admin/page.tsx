@@ -10,7 +10,7 @@ export default async function AdminPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-            <h1 className="text-xl font-semibold">Nexus Admin</h1>
+            <h1 className="text-xl font-semibold">Cohorix Admin</h1>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-zinc-600 dark:text-zinc-400 capitalize">{user.role}</span>

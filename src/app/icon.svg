@@ -1,0 +1,36 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="20 20 216 216"
+  fill="none"
+>
+  <defs>
+    <linearGradient
+      id="nexus-grad"
+      x1="40"
+      y1="32"
+      x2="216"
+      y2="224"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop offset="0%" stop-color="#77CF97" />
+      <stop offset="60%" stop-color="#77CF97" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M128 224C185 224 216 180 216 136C216 95 192 80 176 52C166 80 152 90 136 90C120 90 112 70 100 32C68 80 40 112 40 144C40 188 71 224 128 224Z"
+    fill="url(#nexus-grad)"
+    stroke="#111418"
+    stroke-width="12"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M76 136C76 176 96 196 128 196C160 196 180 176 180 136C180 116 162 106 150 116C140 126 136 130 128 130C120 130 116 126 106 116C94 106 76 116 76 136Z"
+    fill="#111418"
+  />
+
+  <circle cx="106" cy="154" r="12" fill="#ffffff" />
+  <circle cx="150" cy="154" r="12" fill="#ffffff" />
+</svg>

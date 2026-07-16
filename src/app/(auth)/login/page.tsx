@@ -48,6 +48,8 @@ function LoginForm() {
         password: data.password,
       });
 
+      console.log(error);
+
       if (error) {
         setError("root", {
           type: "server",
