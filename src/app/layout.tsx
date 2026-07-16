@@ -21,8 +21,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Nexus — Voyage Management",
-  description: "Manage your tech voyage experience",
+  title: "Cohorix — Course Management",
+  description: "Manage your tech course experience",
 };
 
 export default async function RootLayout({
@@ -36,7 +36,7 @@ export default async function RootLayout({
     <html
       lang="en"
       className={cn(
-        "dark",
+        // "dark",
         inter.variable,
         outfit.variable,
         geist.variable,

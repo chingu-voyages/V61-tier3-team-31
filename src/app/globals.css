@@ -12,14 +12,6 @@
 
   --radius: 0.75rem;
 
-  --shadow-light-green: 0 10px 30px hsl(145 37% 69% / 0.1);
-  --shadow-green: 0 0 40px hsl(145 47% 64% / 0.25);
-  --shadow-black: 0 10px 30px hsl(0 0% 0% / 0.25);
-
-  --background-image-gradient:
-    radial-gradient(circle at top left, rgba(125, 211, 252, 0.16), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(74, 222, 128, 0.16), transparent 32%);
-
   --animate-wave: wave 0.8s ease-in-out 1;
   --animate-gradient-sweep: gradient-sweep 3s linear infinite;
 }
@@ -52,6 +44,14 @@
   --color-nexus-dark: var(--nexus-dark);
   --color-nexus-sidebar: var(--nexus-sidebar);
   --color-nexus-page: var(--nexus-page);
+
+  /* Shadows */
+  --shadow-light-green: var(--shadow-light-green);
+  --shadow-green: var(--shadow-dark-green);
+  --shadow-black: var(--shadow-black);
+
+  /* Gradients */
+  --background-image-gradient: var(--background-gradient);
 }
 
 /* ── Keyframes ── */
@@ -90,13 +90,13 @@
 
 /* ── Light theme ── */
 :root {
-  --background: hsl(0 0% 100%);
+  --background: hsl(150, 20%, 98%);
   --foreground: hsl(240 7% 4%);
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(240 7% 4%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(240 7% 4%);
-  --primary: hsl(240 7% 4%);
+  --primary: hsl(145 29% 54%);
   --primary-foreground: hsl(0 0% 100%);
   --secondary: hsl(220 14% 96%);
   --secondary-foreground: hsl(240 7% 4%);
@@ -116,6 +116,16 @@
   --nexus-dark: hsl(240 11% 6%);
   --nexus-sidebar: hsl(220 13% 10%);
   --nexus-page: hsl(228 33% 97%);
+
+  /* Shadows */
+  --shadow-light-green: 0 10px 30px hsl(145 29% 54% / 0.14);
+  --shadow-dark-green: 0 0 40px hsl(145 35% 55% / 0.35);
+  --shadow-black: 0 5px 25px hsl(220 10% 60% / 0.16);
+
+  /* Gradients */
+  --background-gradient:
+    radial-gradient(circle at top left, hsl(220 10% 78% / 0.8), transparent 28%),
+    radial-gradient(circle at bottom right, hsl(145 29% 62% / 0.35), transparent 24%);
 }
 
 /* ── Dark theme ── */
@@ -146,6 +156,16 @@
   --nexus-dark: hsl(240 11% 6%);
   --nexus-sidebar: hsl(220 13% 10%);
   --nexus-page: hsl(228 33% 97%);
+
+  /* Shadows */
+  --shadow-light-green: 0 10px 30px hsl(145 37% 69% / 0.1);
+  --shadow-dark-green: 0 0 40px hsl(145 47% 64% / 0.25);
+  --shadow-black: 0 10px 30px hsl(0 0% 0% / 0.25);
+
+  /* Gradients */
+  --background-gradient:
+    radial-gradient(circle at top left, rgba(125 211% 252% / 0.16), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(74 222% 128% / 0.16), transparent 32%);
 }
 
 /* ── Base styles ── */

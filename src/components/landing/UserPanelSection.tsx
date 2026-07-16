@@ -20,7 +20,7 @@ export function UserPanelSection() {
           <Card
             key={label}
             className="
-              flex flex-col items-center gap-4 p-6
+              flex flex-col items-center gap-4 p-6 shadow-black
               transition
               hover:bg-muted/50
               hover:border-primary
