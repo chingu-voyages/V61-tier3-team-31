@@ -34,9 +34,11 @@ interface SidebarProps {
   role: string;
   status?: string;
   currentView: DashboardView;
+  onNavClick?: () => void;
+  hideCollapse?: boolean;
 }
 
-export function Sidebar({ role, status, currentView }: SidebarProps) {
+export function Sidebar({ role, status, currentView, onNavClick, hideCollapse }: SidebarProps) {
   const { profile, signOut } = useAuth();
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
@@ -62,6 +64,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
           : "/app/overview"
         : `${isStaff ? "/admin" : "/app"}/${view}`;
 
+    onNavClick?.();
     router.push(nextPath);
   };
 
@@ -88,12 +91,14 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
       }`}
     >
       {/* Toggle Button */}
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="absolute -right-3.5 top-[28px] w-7 h-7 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-10 cursor-pointer transition-colors"
-      >
-        {isExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-      </button>
+      {!hideCollapse && (
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="absolute -right-3.5 top-[28px] w-7 h-7 bg-card border border-border rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-10 cursor-pointer transition-colors"
+        >
+          {isExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+        </button>
+      )}
 
       {/* Header */}
       <div className="h-[76px] flex items-center px-6 gap-3 pt-2 overflow-hidden">

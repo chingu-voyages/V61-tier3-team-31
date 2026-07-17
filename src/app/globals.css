@@ -44,6 +44,18 @@
   --color-nexus-dark: var(--nexus-dark);
   --color-nexus-sidebar: var(--nexus-sidebar);
   --color-nexus-page: var(--nexus-page);
+
+  /* Surface tokens */
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+
+  /* Border tokens */
+  --color-border-subtle: var(--border-subtle);
+
+  /* Text tokens */
+  --color-text-body: var(--text-body);
+  --color-text-tertiary: var(--text-tertiary);
 }
 
 /* ── Keyframes ── */
@@ -102,6 +114,18 @@
   --input: hsl(214 32% 91%);
   --ring: hsl(240 7% 4%);
 
+  /* Surface hierarchy */
+  --surface-subtle: hsl(220 20% 98%);
+  --surface: hsl(220 14% 96%);
+  --surface-elevated: hsl(220 14% 94%);
+
+  /* Border hierarchy */
+  --border-subtle: hsl(214 25% 95%);
+
+  /* Text hierarchy */
+  --text-body: hsl(240 7% 20%);
+  --text-tertiary: hsl(215 16% 57%);
+
   /* Brand colors */
   --nexus-green: hsl(145 37% 69%);
   --nexus-green-dark: hsl(145 29% 54%);
@@ -131,6 +155,18 @@
   --border: hsl(0 0% 100% / 0.1);
   --input: hsl(0 0% 100% / 0.1);
   --ring: hsl(145 37% 69%);
+
+  /* Surface hierarchy */
+  --surface-subtle: hsl(0 0% 100% / 0.03);
+  --surface: hsl(0 0% 100% / 0.05);
+  --surface-elevated: hsl(0 0% 100% / 0.1);
+
+  /* Border hierarchy */
+  --border-subtle: hsl(0 0% 100% / 0.05);
+
+  /* Text hierarchy */
+  --text-body: hsl(210 20% 80%);
+  --text-tertiary: hsl(215 16% 47%);
 
   /* Brand colors */
   --nexus-green: hsl(145 37% 69%);
