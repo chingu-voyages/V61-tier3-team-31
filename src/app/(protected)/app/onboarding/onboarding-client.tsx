@@ -66,7 +66,6 @@ export function OnboardingClient({
         return next;
       });
     });
-    return null;
   }
 
   return (

@@ -1,6 +1,7 @@
 import { CheckCircle2, Clock3, ListChecks } from "lucide-react";
 import { requireUser } from "@/lib/auth/queries";
 import { getParticipantOnboardingState } from "@/lib/onboarding/get-participant-onboarding-state";
+import { OnboardingClient } from "./onboarding-client";
 
 function OnboardingStatusCard({
   title,
@@ -71,13 +72,11 @@ export default async function OnboardingPage() {
 
   if (state.kind === "checklist" || state.kind === "complete") {
     return (
-      <section className="max-w-2xl rounded-[24px] border border-border bg-card p-8">
-        <h1 className="text-2xl font-semibold tracking-tight">Onboarding checklist</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {state.completedRequiredSteps} of {state.requiredSteps} required steps complete (
-          {state.percentComplete}%). Interactive checklist comes next.
-        </p>
-      </section>
+      <OnboardingClient
+        enrollmentId={state.enrollment.id}
+        initialSteps={state.steps}
+        discordInviteUrl={process.env.DISCORD_INVITE_URL ?? null}
+      />
     );
   }
 
