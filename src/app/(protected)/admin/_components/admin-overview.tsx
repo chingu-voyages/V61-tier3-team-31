@@ -37,10 +37,10 @@ function MetricBlock({
       </div>
       <div className="min-w-0">
         <div className="font-outfit text-xl font-bold text-foreground leading-none">{value}</div>
-        <div className="text-11 font-semibold text-muted-foreground leading-tight truncate">
+        <div className="text-[11px] font-semibold text-muted-foreground leading-tight truncate">
           {label}
         </div>
-        <div className="text-xxs text-muted-foreground/60 font-medium mt-0.5">{subtext}</div>
+        <div className="text-[10px] text-muted-foreground/60 font-medium mt-0.5">{subtext}</div>
       </div>
     </div>
   );
@@ -265,7 +265,7 @@ export default function AdminOverview() {
           <div className="space-y-4 flex-1">
             {deadlines.map((d, i) => (
               <div key={i} className="flex items-center gap-4 py-1">
-                <div className="p-2.5 rounded-xl bg-muted text-muted-foreground border border-border">
+                <div className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground border border-border/50">
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div className="flex-1">
@@ -342,67 +342,82 @@ export default function AdminOverview() {
       </div>
 
       {/* Attention & Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Needs Attention */}
-        <div className="admin-card p-6">
-          <div className="flex items-center justify-between mb-5">
+        <div className="lg:col-span-6 admin-card p-6">
+          <div className="flex items-center justify-between mb-6 px-1">
             <h3 className="font-semibold text-foreground">Needs Attention</h3>
-            <span className="text-xxs font-semibold bg-destructive/10 text-destructive px-2 py-0.5 rounded-full">
-              4 items
-            </span>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-1">
             {attentionItems.map((item, i) => (
               <div
                 key={i}
-                className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted transition-colors cursor-pointer"
+                className="flex items-center gap-4 py-3 border-b border-border/50 last:border-0 last:pb-0 cursor-pointer group"
               >
                 <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 [&>svg]:w-4 [&>svg]:h-4 ${item.color.bg} ${item.color.text}`}
+                  className={`p-2.5 rounded-xl border border-border/50 shrink-0 shadow-sm [&>svg]:w-4 [&>svg]:h-4 ${item.color.bg} ${item.color.text}`}
                 >
                   {item.icon}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-foreground truncate">{item.title}</div>
-                  <div className="text-xxs text-muted-foreground">{item.desc}</div>
+                <div className="flex-1 pt-0.5">
+                  <div className="text-sm font-medium text-foreground group-hover:text-destructive transition-colors mb-0.5">
+                    {item.title}
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">{item.desc}</div>
                 </div>
-                <span className="text-sm font-bold text-foreground">{item.value}</span>
-                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                <div className="flex items-center gap-3">
+                  <div className="text-xs font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded-md">
+                    {item.value}
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground/60 group-hover:text-muted-foreground transition-colors" />
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="admin-card p-6">
-          <div className="flex items-center justify-between mb-5">
+        <div className="lg:col-span-6 admin-card p-6">
+          <div className="flex items-center justify-between mb-6 px-1">
             <h3 className="font-semibold text-foreground">Recent Activity</h3>
             <button className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
               View all
             </button>
           </div>
-          <div className="space-y-4">
-            {activityItems.map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <img
-                  src={item.avatar}
-                  className="w-8 h-8 rounded-full bg-muted border border-border shrink-0"
-                  alt=""
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">
-                    <span className="font-semibold">{item.highlight}</span>{" "}
-                    <span className="text-muted-foreground">{item.text}</span>
-                  </p>
-                  <p className="text-xxs text-muted-foreground mt-0.5">{item.time}</p>
-                </div>
+          <div className="space-y-1">
+            {activityItems.map((item, i) => {
+              const Icon = item.icon;
+              return (
                 <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${item.iconColor.bg}`}
+                  key={i}
+                  className="flex gap-4 items-start py-3 border-b border-border/50 last:border-0 last:pb-0 cursor-pointer group"
                 >
-                  <item.icon className={`w-3 h-3 ${item.iconColor.text}`} />
+                  <div className="relative shrink-0 mt-0.5">
+                    <img
+                      src={item.avatar}
+                      className="w-10 h-10 rounded-full bg-muted border border-border"
+                      alt="avatar"
+                    />
+                    <div
+                      className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-card flex items-center justify-center ${item.iconColor.bg} ${item.iconColor.text}`}
+                    >
+                      <Icon className="w-3 h-3" />
+                    </div>
+                  </div>
+                  <div className="pt-0.5">
+                    <div className="text-sm text-muted-foreground leading-snug">
+                      <span className="font-semibold text-foreground group-hover:text-nexus-green transition-colors">
+                        {item.highlight}
+                      </span>{" "}
+                      {item.text}
+                    </div>
+                    <div className="text-[11px] text-muted-foreground mt-1 font-medium">
+                      {item.time}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
