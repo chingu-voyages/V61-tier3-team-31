@@ -13,7 +13,7 @@ function OnboardingStatusCard({
   icon: React.ReactNode;
 }) {
   return (
-    <section className="max-w-2xl rounded-[24px] border border-border bg-card p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+    <section className="max-w-2xl rounded-2xl border border-border bg-card p-8 shadow-sm">
       <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
         {icon}
       </div>

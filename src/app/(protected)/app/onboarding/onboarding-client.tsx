@@ -70,7 +70,7 @@ export function OnboardingClient({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[24px] border border-border bg-card p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+      <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
         <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-sm font-medium text-muted-foreground">Your onboarding progress</p>
@@ -100,16 +100,18 @@ export function OnboardingClient({
       )}
 
       {isComplete && (
-        <div className="flex items-start gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-400">
+        <div className="flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/10 p-4 text-sm text-primary">
           <CheckCircle2 className="mt-0.5 size-5 shrink-0" />
           <div>
             <p className="font-semibold">You&apos;re ready for the voyage.</p>
-            <p className="mt-1">All required onboarding steps are complete.</p>
+            <p className="mt-1 text-muted-foreground">
+              All required onboarding steps are complete.
+            </p>
           </div>
         </div>
       )}
 
-      <section className="rounded-[24px] border border-border bg-card p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+      <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
         <fieldset>
           <legend className="text-lg font-semibold">Your checklist</legend>
           <div className="mt-4 divide-y divide-border">
@@ -155,7 +157,7 @@ export function OnboardingClient({
         </fieldset>
       </section>
 
-      <section className="rounded-[24px] border border-border bg-card p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+      <section className="rounded-2xl border border-border bg-card p-6 shadow-sm">
         <h2 className="text-lg font-semibold">Resources</h2>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link href="/app/profile" className={cn(buttonVariants({ variant: "outline" }))}>
