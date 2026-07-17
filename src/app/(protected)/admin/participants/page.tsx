@@ -5,7 +5,7 @@ export default function AdminParticipantsPage() {
     <PlaceholderPage
       eyebrow="Admin workspace"
       title="Participants"
-      description="Manage accepted participants, enrollments, and voyage readiness from this route."
+      description="Manage accepted participants, enrollments, and course readiness from this route."
     />
   );
 }

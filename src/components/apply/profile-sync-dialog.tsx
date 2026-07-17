@@ -33,13 +33,13 @@ export function ProfileSyncDialog({
           <DialogTitle>Update your profile too?</DialogTitle>
           <DialogDescription>
             Your application has been submitted. We can also update your reusable profile with the
-            new information from this voyage application.
+            new information from this course application.
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-5 space-y-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
-            Profile stores your current reusable info. Application stores this voyage&apos;s
+            Profile stores your current reusable info. Application stores this course&apos;s
             submitted snapshot.
           </div>
 

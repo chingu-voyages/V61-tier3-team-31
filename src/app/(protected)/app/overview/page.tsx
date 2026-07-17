@@ -75,7 +75,7 @@ const deadlines = [
     badgeColor: "bg-blue-50 dark:bg-blue-500/10 text-blue-500",
   },
   {
-    title: "Voyage starts",
+    title: "Course starts",
     date: "May 23, 2026",
     badge: "24 days",
     badgeColor: "bg-[#77CF97]/10 text-[#77CF97]",
@@ -259,8 +259,9 @@ export function AdminOverview() {
             <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">
               Good morning, Jane. <span className="animate-wave">👋</span>
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">
-              Voyage <span className="text-rose-500 font-medium">51</span> is in application review.
+            <p className="text-muted-foreground text-sm">
+              Course <span className="text-destructive font-medium">51</span> is in application
+              review.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -789,9 +790,7 @@ export function ApplicantOverview() {
         <h1 className="text-[28px] font-outfit font-medium text-slate-900 dark:text-white mb-1 tracking-tight">
           Application Status
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">
-          Track your application for Voyage 51.
-        </p>
+        <p className="text-muted-foreground text-sm">Track your application for Course 51.</p>
       </div>
 
       <div className="bg-white dark:bg-[#1a1b24] rounded-[24px] border border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)] p-8">
@@ -800,9 +799,9 @@ export function ApplicantOverview() {
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Your Application</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Submitted for Voyage 51 — Application Review
+            <h2 className="text-lg font-bold text-foreground">Your Application</h2>
+            <p className="text-sm text-muted-foreground">
+              Submitted for Course 51 — Application Review
             </p>
           </div>
         </div>

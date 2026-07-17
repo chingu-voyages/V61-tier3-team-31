@@ -11,7 +11,7 @@ export type DashboardView =
   | "forms"
   | "settings"
   | "profile"
-  | "voyages"
+  | "courses"
   | "participants"
   | "announcements"
   | "calendar"

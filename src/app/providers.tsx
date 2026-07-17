@@ -2,6 +2,7 @@
 
 import { AuthProvider } from "@/lib/auth/auth-context";
 import type { AuthUser } from "@/lib/auth/queries";
+import { ThemeProvider } from "next-themes";
 
 export function Providers({
   children,
@@ -11,8 +12,10 @@ export function Providers({
   initialUser: AuthUser | null;
 }) {
   return (
-    <AuthProvider initialUser={initialUser} clearStaleClientSession>
-      {children}
-    </AuthProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <AuthProvider initialUser={initialUser} clearStaleClientSession>
+        {children}
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
