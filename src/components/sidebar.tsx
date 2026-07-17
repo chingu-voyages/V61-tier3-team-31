@@ -23,7 +23,7 @@ interface SidebarProps {
   hideCollapse?: boolean;
 }
 
-export function Sidebar({ role, status, currentView }: SidebarProps) {
+export function Sidebar({ role, status, currentView, onNavClick, hideCollapse }: SidebarProps) {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
@@ -51,7 +51,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
 
   return (
     <aside
-      className={`dark bg-nexus-dark text-muted-foreground flex flex-col shrink-0 min-h-screen border-r border-border transition-all duration-300 relative ${
+      className={`dark bg-nexus-dark text-muted-foreground flex flex-col shrink-0 h-screen border-r border-border transition-all duration-300 relative ${
         isExpanded ? "w-65" : "w-20"
       }`}
     >
