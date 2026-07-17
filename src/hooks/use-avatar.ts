@@ -10,6 +10,7 @@ export function useAvatar(userId?: string, avatarName?: string | null) {
 
   useEffect(() => {
     if (!userId || !avatarName) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAvatarUrl(DEFAULT_AVATAR);
       return;
     }

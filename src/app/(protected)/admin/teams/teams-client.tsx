@@ -149,7 +149,7 @@ export function TeamsClient({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {teams
           .filter((t) => t.name.toLowerCase().includes(search.toLowerCase()))
           .map((team) => {

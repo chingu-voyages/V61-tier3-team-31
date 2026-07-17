@@ -30,8 +30,10 @@ function MetricBlock({
 }) {
   return (
     <div className="flex items-center gap-3 p-3">
-      <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${color.bg}`}>
-        <span className={`w-4 h-4 ${color.text}`}>{icon}</span>
+      <div
+        className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 [&>svg]:w-4 [&>svg]:h-4 ${color.bg} ${color.text}`}
+      >
+        {icon}
       </div>
       <div className="min-w-0">
         <div className="font-outfit text-xl font-bold text-foreground leading-none">{value}</div>
@@ -287,41 +289,52 @@ export default function AdminOverview() {
             View full pipeline
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {pipelineSteps.map((p, i) => (
             <div
               key={i}
-              className="admin-card p-5 flex flex-col hover:shadow-lg transition-shadow cursor-pointer"
+              className="admin-card p-6 relative flex flex-col h-full hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow cursor-pointer group/card"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <span className={`text-lg font-bold font-outfit ${p.color}`}>{p.step}</span>
-                  <div>
-                    <div className="text-sm font-semibold text-foreground">{p.title}</div>
-                    <div className="text-xxs text-muted-foreground">{p.subtitle}</div>
+              <div className="flex gap-3.5 items-start mb-6">
+                <div
+                  className={`font-outfit text-[40px] leading-none tracking-tighter font-light ${p.color}`}
+                >
+                  {p.step}
+                </div>
+                <div className="pt-1">
+                  <div className="font-semibold text-foreground text-sm leading-tight mb-1">
+                    {p.title}
+                  </div>
+                  <div className="text-[11px] text-muted-foreground leading-tight">
+                    {p.subtitle}
                   </div>
                 </div>
-                <span
-                  className={`text-xxs font-semibold ${p.btnBg} ${p.color} px-2 py-0.5 rounded-full`}
-                >
+              </div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full ${p.barColor}`}
+                    style={{ width: p.progressWidth }}
+                  ></div>
+                </div>
+                <div className="text-[10px] font-medium text-muted-foreground whitespace-nowrap uppercase tracking-wider">
                   {p.total}
-                </span>
+                </div>
               </div>
-
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden mb-4">
-                <div
-                  className={`h-full rounded-full ${p.barColor}`}
-                  style={{ width: p.progressWidth }}
-                />
-              </div>
-
-              <div className="space-y-2 mt-auto">
+              <div className="space-y-3 mb-8 flex-1">
                 {p.stats.map((s, j) => (
-                  <div key={j} className="flex items-center justify-between">
-                    <span className="text-11 text-muted-foreground">{s.label}</span>
-                    <span className={`text-xs font-bold ${s.color}`}>{s.value}</span>
+                  <div key={j} className="flex justify-between items-center text-xs">
+                    <span className="text-muted-foreground font-medium">{s.label}</span>
+                    <span className={`font-semibold ${s.color || "text-foreground"}`}>
+                      {s.value}
+                    </span>
                   </div>
                 ))}
+              </div>
+              <div
+                className={`absolute bottom-5 right-5 w-8 h-8 rounded-full flex items-center justify-center transition-all ${p.btnBg} ${p.color} group-hover/card:scale-110`}
+              >
+                <ChevronRight className="w-4 h-4" />
               </div>
             </div>
           ))}
@@ -345,9 +358,9 @@ export default function AdminOverview() {
                 className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted transition-colors cursor-pointer"
               >
                 <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${item.color.bg}`}
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 [&>svg]:w-4 [&>svg]:h-4 ${item.color.bg} ${item.color.text}`}
                 >
-                  <span className={`w-4 h-4 ${item.color.text}`}>{item.icon}</span>
+                  {item.icon}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-foreground truncate">{item.title}</div>
