@@ -3,39 +3,39 @@ import { createAdminClient } from "@/lib/supabase/admin";
 const TEAM_STYLES = [
   {
     emoji: "🌌",
-    bg: "bg-indigo-50 dark:bg-indigo-500/10",
-    textColor: "text-indigo-600 dark:text-indigo-400",
-    barColor: "bg-indigo-500",
+    bg: "bg-primary/10",
+    textColor: "text-primary",
+    barColor: "bg-primary",
   },
   {
     emoji: "🚀",
-    bg: "bg-rose-50 dark:bg-rose-500/10",
-    textColor: "text-rose-600 dark:text-rose-400",
-    barColor: "bg-rose-500",
+    bg: "bg-destructive/10",
+    textColor: "text-destructive",
+    barColor: "bg-destructive",
   },
   {
     emoji: "🌿",
-    bg: "bg-emerald-50 dark:bg-emerald-500/10",
-    textColor: "text-emerald-600 dark:text-emerald-400",
-    barColor: "bg-emerald-500",
+    bg: "bg-nexus-green/10",
+    textColor: "text-nexus-green",
+    barColor: "bg-nexus-green",
   },
   {
     emoji: "⚡",
-    bg: "bg-amber-50 dark:bg-amber-500/10",
-    textColor: "text-amber-600 dark:text-amber-400",
-    barColor: "bg-amber-500",
+    bg: "bg-accent",
+    textColor: "text-accent-foreground",
+    barColor: "bg-accent-foreground",
   },
   {
     emoji: "🌊",
-    bg: "bg-cyan-50 dark:bg-cyan-500/10",
-    textColor: "text-cyan-600 dark:text-cyan-400",
-    barColor: "bg-cyan-500",
+    bg: "bg-secondary",
+    textColor: "text-secondary-foreground",
+    barColor: "bg-secondary-foreground",
   },
   {
     emoji: "🎮",
-    bg: "bg-purple-50 dark:bg-purple-500/10",
-    textColor: "text-purple-600 dark:text-purple-400",
-    barColor: "bg-purple-500",
+    bg: "bg-muted",
+    textColor: "text-muted-foreground",
+    barColor: "bg-muted-foreground",
   },
 ];
 
@@ -46,13 +46,11 @@ const STATUS_MAP: Record<string, { label: string; style: string }> = {
   },
   at_risk: {
     label: "At Risk",
-    style:
-      "bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20",
+    style: "bg-destructive/10 text-destructive border border-destructive/20",
   },
   forming: {
     label: "Forming",
-    style:
-      "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-white/10",
+    style: "bg-muted text-muted-foreground border border-border",
   },
   completed: {
     label: "Completed",
@@ -60,8 +58,7 @@ const STATUS_MAP: Record<string, { label: string; style: string }> = {
   },
   archived: {
     label: "Archived",
-    style:
-      "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-white/10",
+    style: "bg-muted text-muted-foreground border border-border",
   },
 };
 
@@ -186,8 +183,7 @@ export async function listTeams(voyageId?: string): Promise<TeamCardData[]> {
     const count = memberCountMap.get(team.id) ?? 0;
     const statusInfo = STATUS_MAP[team.status] ?? {
       label: team.status,
-      style:
-        "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/50 dark:border-white/10",
+      style: "bg-muted text-muted-foreground border border-border",
     };
 
     return {

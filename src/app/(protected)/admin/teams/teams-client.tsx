@@ -78,13 +78,13 @@ export function TeamsClient({
       tier: "Tier 3",
       domain: "New Project",
       emoji: "🚀",
-      bg: "bg-emerald-50 dark:bg-emerald-500/10",
-      textColor: "text-emerald-600 dark:text-emerald-400",
+      bg: "bg-nexus-green/10",
+      textColor: "text-nexus-green",
       status: "Active",
       statusStyle: "bg-nexus-green/10 text-nexus-green border border-nexus-green/20",
       description: newTeamDesc || "A newly created team.",
       progress: 0,
-      barColor: "bg-emerald-500",
+      barColor: "bg-nexus-green",
       members: [],
       extra: "",
     };
@@ -233,7 +233,7 @@ export function TeamsClient({
 
             <form onSubmit={handleCreateTeam} className="p-5 space-y-5">
               {!voyageId && (
-                <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-600 dark:text-rose-400 px-4 py-3 rounded-xl text-sm font-medium">
+                <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-xl text-sm font-medium">
                   No active voyage found. A voyage must be active before teams can be created.
                 </div>
               )}

@@ -57,13 +57,13 @@ const deadlines = [
     title: "Confirm teams",
     date: "May 9, 2026",
     badge: "10 days",
-    badgeColor: "bg-amber-500/10 text-amber-500",
+    badgeColor: "bg-accent text-accent-foreground",
   },
   {
     title: "Onboarding check",
     date: "May 16, 2026",
     badge: "17 days",
-    badgeColor: "bg-blue-500/10 text-blue-500",
+    badgeColor: "bg-nexus-green/10 text-nexus-green",
   },
   {
     title: "Voyage starts",
@@ -92,30 +92,30 @@ const pipelineSteps = [
   },
   {
     step: "02",
-    color: "text-blue-500",
-    btnBg: "bg-blue-500/10",
-    barColor: "bg-blue-500",
+    color: "text-nexus-green",
+    btnBg: "bg-nexus-green/10",
+    barColor: "bg-nexus-green",
     title: "Matching",
     subtitle: "Match & assign participants",
     total: "72 REMAINING",
     progressWidth: "40%",
     stats: [
       { label: "Unassigned", value: "72", color: "text-foreground" },
-      { label: "Partial Matches", value: "34", color: "text-blue-500" },
-      { label: "Matched", value: "56", color: "text-purple-600" },
+      { label: "Partial Matches", value: "34", color: "text-nexus-green" },
+      { label: "Matched", value: "56", color: "text-primary" },
     ],
   },
   {
     step: "03",
-    color: "text-purple-600",
-    btnBg: "bg-purple-600/10",
-    barColor: "bg-purple-600",
+    color: "text-accent-foreground",
+    btnBg: "bg-accent",
+    barColor: "bg-accent-foreground",
     title: "Teams",
     subtitle: "Form & confirm teams",
     total: "18 TEAMS",
     progressWidth: "70%",
     stats: [
-      { label: "Draft Teams", value: "12", color: "text-purple-600" },
+      { label: "Draft Teams", value: "12", color: "text-accent-foreground" },
       { label: "Confirmed", value: "6", color: "text-primary" },
       { label: "Needs Attention", value: "3", color: "text-destructive" },
     ],
@@ -131,7 +131,7 @@ const pipelineSteps = [
     progressWidth: "61%",
     stats: [
       { label: "Completed", value: "79", color: "text-primary" },
-      { label: "In Progress", value: "38", color: "text-blue-500" },
+      { label: "In Progress", value: "38", color: "text-nexus-green" },
       { label: "Missing", value: "19", color: "text-destructive" },
     ],
   },
@@ -147,21 +147,21 @@ const attentionItems = [
   },
   {
     icon: <AlertTriangle />,
-    color: { bg: "bg-amber-500/10", text: "text-amber-500" },
+    color: { bg: "bg-accent", text: "text-accent-foreground" },
     title: "Accepted participants without team",
     desc: "Require assignment",
     value: "16",
   },
   {
     icon: <UsersRound />,
-    color: { bg: "bg-purple-600/10", text: "text-purple-600" },
+    color: { bg: "bg-primary/10", text: "text-primary" },
     title: "Teams missing required role",
     desc: "Missing Product Owner or Developer",
     value: "8",
   },
   {
     icon: <FileSignature />,
-    color: { bg: "bg-blue-500/10", text: "text-blue-500" },
+    color: { bg: "bg-nexus-green/10", text: "text-nexus-green" },
     title: "Onboarding forms incomplete",
     desc: "Participants need to complete",
     value: "12",
@@ -180,7 +180,7 @@ const activityItems = [
   {
     avatar: "https://i.pravatar.cc/100?img=4",
     icon: UsersRound,
-    iconColor: { bg: "bg-purple-600/20", text: "text-purple-600" },
+    iconColor: { bg: "bg-accent", text: "text-accent-foreground" },
     highlight: 'New team "Pixel Pioneers"',
     text: "was created",
     time: "15 minutes ago",
@@ -188,7 +188,7 @@ const activityItems = [
   {
     avatar: "https://i.pravatar.cc/100?img=5",
     icon: FileSignature,
-    iconColor: { bg: "bg-blue-500/20", text: "text-blue-500" },
+    iconColor: { bg: "bg-nexus-green/10", text: "text-nexus-green" },
     highlight: "Sophia Taylor",
     text: "submitted onboarding",
     time: "1 hour ago",
@@ -232,14 +232,14 @@ export default function AdminOverview() {
             />
             <MetricBlock
               icon={<User />}
-              color={{ bg: "bg-blue-500/10", text: "text-blue-500" }}
+              color={{ bg: "bg-nexus-green/10", text: "text-nexus-green" }}
               value="128"
               label="Accepted"
               subtext="41% of total"
             />
             <MetricBlock
               icon={<Users />}
-              color={{ bg: "bg-purple-600/10", text: "text-purple-600" }}
+              color={{ bg: "bg-accent", text: "text-accent-foreground" }}
               value="64"
               label="Pending Review"
               subtext="20% of total"
