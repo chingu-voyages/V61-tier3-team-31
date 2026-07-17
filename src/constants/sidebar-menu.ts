@@ -92,6 +92,14 @@ export const adminMenu: SidebarItem[] = [
   },
 ];
 
+export const applyOnlyMenu: SidebarItem[] = [
+  {
+    view: "apply",
+    label: "Apply",
+    icon: FileText,
+  },
+];
+
 export const applicantMenu: SidebarItem[] = [
   {
     view: "apply",
