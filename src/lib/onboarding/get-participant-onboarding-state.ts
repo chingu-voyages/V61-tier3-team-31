@@ -102,7 +102,7 @@ function toApplicationSummary(
     id: application.id,
     status: application.status,
     voyageId: application.voyage_id,
-    voyageName: voyage?.name ?? "Your voyage",
+    voyageName: voyage?.name ?? "Your course",
     voyageNumber: voyage?.number ?? 0,
     preferredRole: application.preferred_role,
     experience: application.experience,

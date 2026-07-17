@@ -33,13 +33,21 @@ function getCurrentView(pathname: string, role: string): DashboardView {
   return leaf as DashboardView;
 }
 
-export function ProtectedShell({ children, role }: { children: React.ReactNode; role: string }) {
+export function ProtectedShell({
+  children,
+  role,
+  status,
+}: {
+  children: React.ReactNode;
+  role: string;
+  status?: string;
+}) {
   const pathname = usePathname();
   const currentView = getCurrentView(pathname, role);
 
   return (
     <div className="flex bg-background text-foreground min-h-screen font-sans transition-colors">
-      <Sidebar role={role} currentView={currentView} />
+      <Sidebar role={role} status={status} currentView={currentView} />
       <div className="flex-1 flex flex-col items-stretch overflow-hidden h-screen overflow-y-auto">
         <main className="p-8 max-w-[1400px] w-full mx-auto space-y-8 pb-12">{children}</main>
       </div>

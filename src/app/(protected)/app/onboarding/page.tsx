@@ -27,7 +27,7 @@ const waitingCopy = {
   error: {
     title: "We could not load onboarding",
     description:
-      "Please refresh the page and try again. If this keeps happening, contact your voyage organizer.",
+      "Please refresh the page and try again. If this keeps happening, contact your course organizer.",
     icon: <Clock3 className="size-6" />,
   },
   no_application: {
@@ -44,24 +44,24 @@ const waitingCopy = {
   pending_enrollment: {
     title: "Your participant access is being prepared",
     description:
-      "Your application was accepted. Your onboarding checklist will appear when your voyage enrollment is ready.",
+      "Your application was accepted. Your onboarding checklist will appear when your course enrollment is ready.",
     icon: <Clock3 className="size-6" />,
   },
   preparing: {
     title: "Your onboarding checklist is being prepared",
-    description: "Please check back soon. Your voyage preparation steps will appear here.",
+    description: "Please check back soon. Your course preparation steps will appear here.",
     icon: <ListChecks className="size-6" />,
   },
   rejected: {
     title: "Onboarding is unavailable",
     description:
-      "Onboarding becomes available only to accepted participants with an active voyage enrollment.",
+      "Onboarding becomes available only to accepted participants with an active course enrollment.",
     icon: <CheckCircle2 className="size-6" />,
   },
   withdrawn: {
     title: "Onboarding is unavailable",
     description:
-      "Onboarding becomes available only to accepted participants with an active voyage enrollment.",
+      "Onboarding becomes available only to accepted participants with an active course enrollment.",
     icon: <CheckCircle2 className="size-6" />,
   },
 } as const;

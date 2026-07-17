@@ -75,7 +75,7 @@ export function OnboardingClient({
           <div>
             <p className="text-sm font-medium text-muted-foreground">Your onboarding progress</p>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-              Get ready for your voyage
+              Get ready for your course
             </h1>
           </div>
           <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
@@ -103,7 +103,7 @@ export function OnboardingClient({
         <div className="flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/10 p-4 text-sm text-primary">
           <CheckCircle2 className="mt-0.5 size-5 shrink-0" />
           <div>
-            <p className="font-semibold">You&apos;re ready for the voyage.</p>
+            <p className="font-semibold">You&apos;re ready for the course.</p>
             <p className="mt-1 text-muted-foreground">
               All required onboarding steps are complete.
             </p>
@@ -166,7 +166,7 @@ export function OnboardingClient({
           </Link>
           <Link href="/app/voyage-guide" className={cn(buttonVariants({ variant: "outline" }))}>
             <ExternalLink className="size-4" />
-            Open Voyage Guide
+            Open Course Guide
           </Link>
           {discordInviteUrl ? (
             <a

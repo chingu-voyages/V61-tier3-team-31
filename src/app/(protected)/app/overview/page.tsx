@@ -208,7 +208,7 @@ export default async function OverviewPage() {
             <div>
               <p className="text-sm font-medium text-foreground">No submitted application yet</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Complete the apply form to start your voyage journey.
+                Complete the apply form to start your course journey.
               </p>
               <Link href="/app/apply" className={cn(buttonVariants(), "mt-4")}>
                 Go to Apply
