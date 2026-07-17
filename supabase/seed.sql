@@ -38,18 +38,31 @@ insert into public.voyages (
   min_team_size,
   max_team_size
 )
-values (
-  1,
-  'Voyage 1',
-  'First cohort of the Chingu platform. Building cross-functional product teams to ship MVP web apps.',
-  'active',
-  now(),
-  '2026-12-31 23:59:59+00',
-  '2027-01-15 00:00:00+00',
-  '2027-03-15 00:00:00+00',
-  4,
-  6
-)
+values
+  (
+    1,
+    'Course 1',
+    'First cohort of the platform. Building cross-functional product teams to ship MVP web apps.',
+    'active',
+    '2026-06-15 00:00:00+00',
+    '2026-08-10 23:59:59+00',
+    '2026-08-15 00:00:00+00',
+    '2026-10-15 23:59:59+00',
+    4,
+    6
+  ),
+  (
+    2,
+    'Course 2',
+    'Second cohort of the platform. Apply while Course 1 is in progress.',
+    'applications_open',
+    '2026-08-15 00:00:00+00',
+    '2026-11-01 23:59:59+00',
+    '2026-11-15 00:00:00+00',
+    '2027-01-15 23:59:59+00',
+    4,
+    6
+  )
 on conflict (number) do nothing;
 
 -- Seed Users (Triggers will create public.profiles)
@@ -81,3 +94,4 @@ VALUES
   ('e4444444-4444-4444-4444-444444444444', '44444444-4444-4444-4444-444444444444', 'a4444444-4444-4444-4444-444444444444', (SELECT id FROM public.voyages WHERE number = 1), 'design', 'beginner', 'active', 'UTC', 20),
   ('e5555555-5555-5555-5555-555555555555', '55555555-5555-5555-5555-555555555555', 'a5555555-5555-5555-5555-555555555555', (SELECT id FROM public.voyages WHERE number = 1), 'frontend', 'intermediate', 'active', 'UTC', 20)
 ON CONFLICT (id) DO NOTHING;
+
