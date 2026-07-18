@@ -35,7 +35,15 @@ function getCurrentView(pathname: string, role: string): DashboardView {
   return leaf as DashboardView;
 }
 
-export function ProtectedShell({ children, role }: { children: React.ReactNode; role: string }) {
+export function ProtectedShell({
+  children,
+  role,
+  status,
+}: {
+  children: React.ReactNode;
+  role: string;
+  status?: string;
+}) {
   const pathname = usePathname();
   const currentView = getCurrentView(pathname, role);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -46,7 +54,7 @@ export function ProtectedShell({ children, role }: { children: React.ReactNode; 
     <div className="flex bg-background text-foreground min-h-screen font-sans transition-colors h-screen overflow-hidden">
       {/* Desktop sidebar — always visible */}
       <div className="hidden lg:block shrink-0">
-        <Sidebar role={role} currentView={currentView} />
+        <Sidebar role={role} status={status} currentView={currentView} />
       </div>
 
       {/* Mobile overlay */}
@@ -64,7 +72,13 @@ export function ProtectedShell({ children, role }: { children: React.ReactNode; 
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <Sidebar role={role} currentView={currentView} onNavClick={closeMobile} hideCollapse />
+        <Sidebar
+          role={role}
+          status={status}
+          currentView={currentView}
+          onNavClick={closeMobile}
+          hideCollapse
+        />
       </div>
 
       {/* Main content */}
