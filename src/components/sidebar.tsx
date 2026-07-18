@@ -33,7 +33,7 @@ export function Sidebar({ role, status, currentView, onNavClick, hideCollapse }:
     ? adminMenu
     : status === "applicant"
       ? applicantMenu
-      : status === "participant"
+      : status === "participant" || status === "accepted"
         ? participantMenu
         : defaultMenu;
 

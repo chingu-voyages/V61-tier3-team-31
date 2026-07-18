@@ -1370,7 +1370,14 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      accept_application: {
+        Args: { p_application_id: string };
+        Returns: string;
+      };
+      reject_application: {
+        Args: { p_application_id: string; p_note?: string | null };
+        Returns: undefined;
+      };
     };
     Enums: {
       announcement_status: "draft" | "published" | "archived";
