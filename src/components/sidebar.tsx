@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Settings, ChevronLeft, ChevronRight, ChevronDown, Target } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Target } from "lucide-react";
 import {
   adminMenu,
   applicantMenu,
@@ -203,16 +203,6 @@ export function Sidebar({
               isExpanded ? "items-center justify-center" : "flex-col items-center order-1"
             } gap-0.5 shrink-0`}
           >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate("settings");
-              }}
-              title="Settings"
-              className="size-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-colors cursor-pointer"
-            >
-              <Settings className="size-3.5" />
-            </button>
             <ThemeToggle />
           </div>
         </div>

@@ -86,14 +86,18 @@ export function ProfileMenu({
         sideOffset={8}
         className="min-w-44 bg-secondary border border-border p-1 shadow-xl"
       >
-        <DropdownMenuItem
-          onClick={() => router.push("/app/profile")}
-          className="focus:text-foreground focus:bg-foreground/5 px-2 py-2 text-muted-foreground"
-        >
-          <User className="size-4" />
-          Profile
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-foreground/10" />
+        {!isStaff && (
+          <>
+            <DropdownMenuItem
+              onClick={() => router.push("/app/profile")}
+              className="focus:text-foreground focus:bg-foreground/5 px-2 py-2 text-muted-foreground"
+            >
+              <User className="size-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-foreground/10" />
+          </>
+        )}
         <DropdownMenuItem
           onClick={handleLogout}
           className="text-destructive focus:text-destructive/60 focus:bg-foreground/5 px-2 py-2"
