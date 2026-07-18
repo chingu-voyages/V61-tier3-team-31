@@ -16,12 +16,14 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
       {/* Progress bar (mobile: shown, sm+: hidden) */}
       <div className="sm:hidden mb-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-slate-400">
+          <span className="text-xs font-medium text-muted-foreground">
             Step {currentStep} of {steps.length}
           </span>
-          <span className="text-xs font-semibold text-white">{steps[currentStep - 1].label}</span>
+          <span className="text-xs font-semibold text-foreground">
+            {steps[currentStep - 1].label}
+          </span>
         </div>
-        <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
+        <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
           <motion.div
             className="h-full rounded-full bg-gradient-to-r from-nexus-green/80 to-nexus-green"
             initial={{ width: 0 }}
@@ -44,10 +46,10 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
                     isCompleted
-                      ? "bg-nexus-green text-[#0b0c10]"
+                      ? "bg-nexus-green text-primary-foreground"
                       : isActive
                         ? "bg-nexus-green/15 border border-nexus-green/60 text-nexus-green"
-                        : "bg-white/5 border border-white/8 text-white/20"
+                        : "bg-muted border border-border text-foreground/20"
                   }`}
                   aria-current={isActive ? "step" : undefined}
                   aria-label={`${step.label}${isCompleted ? " (completed)" : isActive ? " (current)" : ""}`}
@@ -59,7 +61,7 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                   )}
                 </div>
                 {i < steps.length - 1 && (
-                  <div className="w-3 h-px bg-white/10 rounded-full overflow-hidden">
+                  <div className="w-3 h-px bg-accent rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-nexus-green"
                       initial={{ width: 0 }}
@@ -94,7 +96,7 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
               {/* Connector line — runs between circles with 2px gap from each edge */}
               {i < steps.length - 1 && (
                 <div
-                  className="absolute top-[18px] h-0.5 rounded-full bg-white/8 overflow-hidden"
+                  className="absolute top-[18px] h-0.5 rounded-full bg-accent overflow-hidden"
                   style={{ left: "calc(50% + 20px)", right: "calc(-50% + 20px)" }}
                   aria-hidden="true"
                 >
@@ -122,10 +124,10 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                 <motion.div
                   className={`relative w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-300 ${
                     isCompleted
-                      ? "bg-nexus-green text-[#0b0c10]"
+                      ? "bg-nexus-green text-primary-foreground"
                       : isActive
-                        ? "bg-[#0b0c10] border-2 border-nexus-green text-nexus-green shadow-[0_0_20px_rgba(119,207,151,0.25)]"
-                        : "bg-white/5 border border-white/10 text-white/30"
+                        ? "bg-background border-2 border-nexus-green text-nexus-green shadow-[0_0_20px_rgba(119,207,151,0.25)]"
+                        : "bg-muted border border-border text-muted-foreground"
                   }`}
                   initial={false}
                   animate={isCompleted ? { scale: [1, 1.15, 1] } : { scale: 1 }}
@@ -142,7 +144,11 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
               {/* Label */}
               <span
                 className={`text-[11px] font-medium whitespace-nowrap mt-2 transition-colors duration-300 ${
-                  isActive ? "text-white" : isCompleted ? "text-nexus-green/80" : "text-white/25"
+                  isActive
+                    ? "text-foreground"
+                    : isCompleted
+                      ? "text-nexus-green/80"
+                      : "text-foreground/25"
                 }`}
               >
                 {step.label}

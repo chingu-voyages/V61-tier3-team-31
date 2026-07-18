@@ -24,23 +24,25 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-white mb-1 font-outfit">
+        <h2 className="text-lg font-semibold text-foreground mb-1 font-outfit">
           Review Your Application
         </h2>
-        <p className="text-xs text-slate-400">Please review your information before submitting.</p>
+        <p className="text-xs text-muted-foreground">
+          Please review your information before submitting.
+        </p>
       </div>
 
       {error && (
-        <div className="flex items-start gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-sm text-rose-400">
+        <div className="flex items-start gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-sm text-destructive">
           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>
       )}
 
       <div className="space-y-4">
-        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+        <div className="bg-muted rounded-xl border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Role & Experience
             </h3>
             <button
@@ -53,19 +55,19 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <span className="text-slate-400">Role:</span>{" "}
-              <span className="font-medium text-white ml-1">{form.role || "—"}</span>
+              <span className="text-muted-foreground">Role:</span>{" "}
+              <span className="font-medium text-foreground ml-1">{form.role || "—"}</span>
             </div>
             <div>
-              <span className="text-slate-400">Experience:</span>{" "}
-              <span className="font-medium text-white ml-1">{form.experience || "—"}</span>
+              <span className="text-muted-foreground">Experience:</span>{" "}
+              <span className="font-medium text-foreground ml-1">{form.experience || "—"}</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+        <div className="bg-muted rounded-xl border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Skills
             </h3>
             <button
@@ -88,9 +90,9 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+        <div className="bg-muted rounded-xl border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Availability
             </h3>
             <button
@@ -103,27 +105,27 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <span className="text-slate-400">Hours:</span>{" "}
-              <span className="font-medium text-white ml-1">
+              <span className="text-muted-foreground">Hours:</span>{" "}
+              <span className="font-medium text-foreground ml-1">
                 {form.hoursPerWeek ? `${form.hoursPerWeek} hrs/week` : "—"}
               </span>
             </div>
             <div>
-              <span className="text-slate-400">Timezone:</span>{" "}
-              <span className="font-medium text-white ml-1">{form.timezone}</span>
+              <span className="text-muted-foreground">Timezone:</span>{" "}
+              <span className="font-medium text-foreground ml-1">{form.timezone}</span>
             </div>
             {form.voyage && (
               <div>
-                <span className="text-slate-400">Course:</span>{" "}
-                <span className="font-medium text-white ml-1">{form.voyage}</span>
+                <span className="text-muted-foreground">Course:</span>{" "}
+                <span className="font-medium text-foreground ml-1">{form.voyage}</span>
               </div>
             )}
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+        <div className="bg-muted rounded-xl border border-border p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Motivation
             </h3>
             <button
@@ -136,16 +138,16 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
           </div>
           <div className="space-y-2 text-sm">
             <div>
-              <span className="text-slate-400">Motivation:</span>
-              <p className="text-slate-200 mt-1">{form.motivation || "—"}</p>
+              <span className="text-muted-foreground">Motivation:</span>
+              <p className="text-foreground mt-1">{form.motivation || "—"}</p>
             </div>
             <div>
-              <span className="text-slate-400">About:</span>
-              <p className="text-slate-200 mt-1">{form.bio || "—"}</p>
+              <span className="text-muted-foreground">About:</span>
+              <p className="text-foreground mt-1">{form.bio || "—"}</p>
             </div>
             {form.portfolio && (
               <div>
-                <span className="text-slate-400">Portfolio:</span>{" "}
+                <span className="text-muted-foreground">Portfolio:</span>{" "}
                 <a
                   href={form.portfolio}
                   target="_blank"

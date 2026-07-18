@@ -44,12 +44,14 @@ export default function StepRoleExperience() {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-white mb-1 font-outfit">Role & Experience</h2>
-        <p className="text-xs text-slate-400">Pick the role you want to contribute in.</p>
+        <h2 className="text-lg font-semibold text-foreground mb-1 font-outfit">
+          Role & Experience
+        </h2>
+        <p className="text-xs text-muted-foreground">Pick the role you want to contribute in.</p>
       </div>
 
       <div className="space-y-1.5 text-left">
-        <label className="text-sm font-medium text-slate-300">Role *</label>
+        <label className="text-sm font-medium text-muted-foreground">Role *</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {ROLES.map((role) => {
             const isSelected = currentRole === role.value;
@@ -61,13 +63,13 @@ export default function StepRoleExperience() {
                 className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   isSelected
                     ? "border-nexus-green bg-nexus-green/10"
-                    : "border-white/10 bg-white/5 hover:border-white/20"
+                    : "border-border bg-muted hover:border-foreground/20"
                 }`}
               >
                 <span className="text-lg">{role.emoji}</span>
                 <div>
-                  <div className="text-sm font-medium text-white">{role.label}</div>
-                  <div className="text-[11px] text-slate-400">{role.desc}</div>
+                  <div className="text-sm font-medium text-foreground">{role.label}</div>
+                  <div className="text-[11px] text-muted-foreground">{role.desc}</div>
                 </div>
                 {isSelected && (
                   <CheckCircle className="w-4 h-4 text-nexus-green ml-auto shrink-0" />
@@ -77,12 +79,12 @@ export default function StepRoleExperience() {
           })}
         </div>
         {errors.role && (
-          <p className="text-xs text-red-400 flex items-center gap-1">{errors.role.message}</p>
+          <p className="text-xs text-destructive flex items-center gap-1">{errors.role.message}</p>
         )}
       </div>
 
       <div className="space-y-1.5 text-left">
-        <label className="text-sm font-medium text-slate-300">Experience Level *</label>
+        <label className="text-sm font-medium text-muted-foreground">Experience Level *</label>
         <div className="grid grid-cols-3 gap-2">
           {EXPERIENCES.map((exp) => {
             const isSelected = currentExperience === exp.value;
@@ -94,17 +96,17 @@ export default function StepRoleExperience() {
                 className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
                   isSelected
                     ? "border-nexus-green bg-nexus-green/10"
-                    : "border-white/10 bg-white/5 hover:border-white/20"
+                    : "border-border bg-muted hover:border-foreground/20"
                 }`}
               >
-                <div className="text-sm font-medium text-white">{exp.label}</div>
-                <div className="text-[11px] text-slate-400">{exp.desc}</div>
+                <div className="text-sm font-medium text-foreground">{exp.label}</div>
+                <div className="text-[11px] text-muted-foreground">{exp.desc}</div>
               </button>
             );
           })}
         </div>
         {errors.experience && (
-          <p className="text-xs text-red-400 flex items-center gap-1">
+          <p className="text-xs text-destructive flex items-center gap-1">
             {errors.experience.message}
           </p>
         )}
