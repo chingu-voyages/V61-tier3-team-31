@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Settings, ChevronLeft, ChevronRight, ChevronDown, Target } from "lucide-react";
@@ -8,13 +8,11 @@ import {
   adminMenu,
   applicantMenu,
   participantMenu,
-  defaultMenu,
   type DashboardView,
 } from "@/constants/sidebar-menu";
 import { Logo } from "@/components/Logo";
 import { NavItem } from "./sidebar/NavItem";
 import { ProfileMenu } from "./ProfileMenu";
-import { isStaffRole } from "@/lib/auth/navigation";
 
 interface SidebarProps {
   role: string;
@@ -28,8 +26,8 @@ export function Sidebar({ role, status, currentView, onNavClick, hideCollapse }:
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
-  const isStaff = isStaffRole(role);
-  //const isStaff = role === "admin" || role === "moderator";
+  //const isStaff = isStaffRole(role);
+  const isStaff = role === "admin" || role === "moderator";
 
   // const menuItems = isStaff
   //   ? adminMenu
