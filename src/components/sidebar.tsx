@@ -8,7 +8,6 @@ import {
   adminMenu,
   applicantMenu,
   participantMenu,
-  defaultMenu,
   type DashboardView,
 } from "@/constants/sidebar-menu";
 import { Logo } from "@/components/Logo";
@@ -27,15 +26,22 @@ export function Sidebar({ role, status, currentView, onNavClick, hideCollapse }:
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
+  //const isStaff = isStaffRole(role);
   const isStaff = role === "admin" || role === "moderator";
+
+  // const menuItems = isStaff
+  //   ? adminMenu
+  //   : status === "applicant"
+  //     ? applicantMenu
+  //     : status === "participant"
+  //       ? participantMenu
+  //       : defaultMenu;
 
   const menuItems = isStaff
     ? adminMenu
-    : status === "applicant"
-      ? applicantMenu
-      : status === "participant" || status === "accepted"
-        ? participantMenu
-        : defaultMenu;
+    : status === "participant" || status === "accepted"
+      ? participantMenu
+      : applicantMenu;
 
   const navigate = (view: DashboardView) => {
     const nextPath =

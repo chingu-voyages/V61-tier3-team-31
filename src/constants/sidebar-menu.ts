@@ -98,10 +98,15 @@ export const applicantMenu: SidebarItem[] = [
     label: "Application Form",
     icon: FileText,
   },
+  // {
+  //   view: "overview",
+  //   label: "Application Status",
+  //   icon: Home,
+  // },
   {
-    view: "overview",
-    label: "Application Status",
-    icon: Home,
+    view: "profile",
+    label: "Profile",
+    icon: User,
   },
 ];
 
@@ -126,32 +131,37 @@ export const participantMenu: SidebarItem[] = [
     label: "Calendar",
     icon: CalendarDays,
   },
-];
-
-export const defaultMenu: SidebarItem[] = [
-  {
-    view: "overview",
-    label: "Overview",
-    icon: Home,
-  },
-  {
-    view: "apply",
-    label: "Apply",
-    icon: FileText,
-  },
-  {
-    view: "onboarding",
-    label: "Onboarding",
-    icon: ClipboardList,
-  },
-  {
-    view: "calendar",
-    label: "Calendar",
-    icon: CalendarDays,
-  },
   {
     view: "profile",
     label: "Profile",
     icon: User,
   },
 ];
+
+// export const defaultMenu: SidebarItem[] = [
+//   {
+//     view: "overview",
+//     label: "Overview",
+//     icon: Home,
+//   },
+//   {
+//     view: "apply",
+//     label: "Apply",
+//     icon: FileText,
+//   },
+//   {
+//     view: "onboarding",
+//     label: "Onboarding",
+//     icon: ClipboardList,
+//   },
+//   {
+//     view: "calendar",
+//     label: "Calendar",
+//     icon: CalendarDays,
+//   },
+//   {
+//     view: "profile",
+//     label: "Profile",
+//     icon: User,
+//   },
+// ];

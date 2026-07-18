@@ -65,6 +65,7 @@ export function ProfileMenu({
           height={32}
           alt={`${userName} avatar`}
           title={userName}
+          unoptimized
           className={`${avatarSize ?? "size-8"} rounded-full object-cover bg-muted border border-border shrink-0`}
         />
 

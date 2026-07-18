@@ -24,8 +24,7 @@ export function useAvatar(userId?: string, avatarName?: string | null) {
 
       if (!isMounted) return;
 
-      if (error || !data?.signedUrl) {
-        console.error("Avatar loading error:", error);
+      if (!data?.signedUrl) {
         setAvatarUrl(DEFAULT_AVATAR);
         return;
       }
