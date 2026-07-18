@@ -31,7 +31,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
     ? adminMenu
     : status === "applicant"
       ? applicantMenu
-      : status === "participant"
+      : status === "participant" || status === "accepted"
         ? participantMenu
         : defaultMenu;
 
