@@ -1,11 +1,21 @@
-import { PlaceholderPage } from "@/components/placeholder-page";
+import { requireStaff } from "@/lib/auth/queries";
+import { listTeams, listAvailableParticipants, getCurrentVoyage } from "@/lib/admin/teams";
+import { TeamsClient } from "./teams-client";
 
-export default function AdminTeamsPage() {
+export default async function AdminTeamsPage() {
+  await requireStaff();
+  const voyageId = await getCurrentVoyage();
+
+  const [teams, participants] = await Promise.all([
+    listTeams(voyageId ?? undefined).catch(() => []),
+    listAvailableParticipants().catch(() => []),
+  ]);
+
   return (
-    <PlaceholderPage
-      eyebrow="Admin workspace"
-      title="Teams"
-      description="Monitor team composition, assignments, and course delivery health here."
+    <TeamsClient
+      initialTeams={teams}
+      initialParticipants={participants}
+      voyageId={voyageId ?? ""}
     />
   );
 }

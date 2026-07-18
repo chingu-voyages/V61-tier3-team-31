@@ -50,8 +50,10 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-white mb-1 font-outfit">Skills & Tech Stack</h2>
-        <p className="text-xs text-slate-400">
+        <h2 className="text-lg font-semibold text-foreground mb-1 font-outfit">
+          Skills & Tech Stack
+        </h2>
+        <p className="text-xs text-muted-foreground">
           Add the technologies and skills you work with. If something is missing from the
           recommendations, type it yourself and press Enter.
         </p>
@@ -70,7 +72,7 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
               <button
                 type="button"
                 onClick={() => removeSkill(skill)}
-                className="hover:text-red-400 transition-colors cursor-pointer ml-0.5"
+                className="hover:text-destructive transition-colors cursor-pointer ml-0.5"
               >
                 &times;
               </button>
@@ -80,8 +82,8 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
       )}
 
       <div className="space-y-1.5 text-left">
-        <label className="text-sm font-medium text-slate-300">
-          Add a skill <span className="text-white/30">(Press Enter to add)</span>
+        <label className="text-sm font-medium text-muted-foreground">
+          Add a skill <span className="text-muted-foreground">(Press Enter to add)</span>
         </label>
         <input
           type="text"
@@ -94,16 +96,16 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
             }
           }}
           placeholder="e.g. React, Python, Figma..."
-          className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all"
+          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all"
         />
       </div>
 
       <div className="space-y-1.5 text-left">
-        <span className="text-[10px] text-white/40 uppercase tracking-wider font-semibold">
+        <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
           Recommended Skills
         </span>
         {popularSkills.length === 0 ? (
-          <span className="text-xs text-white/40">No recommended skills available</span>
+          <span className="text-xs text-muted-foreground">No recommended skills available</span>
         ) : (
           <div className="flex flex-wrap gap-1.5">
             {popularSkills.map((skill) => {
@@ -119,7 +121,7 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${
                     isAdded
                       ? "bg-nexus-green/10 text-nexus-green border-nexus-green/20 cursor-default"
-                      : "border-white/10 text-slate-400 hover:bg-white/5"
+                      : "border-border text-muted-foreground hover:bg-muted"
                   }`}
                 >
                   {isAdded ? (
@@ -138,7 +140,7 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
       </div>
 
       {errors.skills && (
-        <p className="text-xs text-red-400 flex items-center gap-1">{errors.skills.message}</p>
+        <p className="text-xs text-destructive flex items-center gap-1">{errors.skills.message}</p>
       )}
     </div>
   );

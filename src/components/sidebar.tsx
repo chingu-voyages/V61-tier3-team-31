@@ -20,9 +20,11 @@ interface SidebarProps {
   role: string;
   status?: string;
   currentView: DashboardView;
+  onNavClick?: () => void;
+  hideCollapse?: boolean;
 }
 
-export function Sidebar({ role, status, currentView }: SidebarProps) {
+export function Sidebar({ role, status, currentView, onNavClick, hideCollapse }: SidebarProps) {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isVoyageExpanded, setIsVoyageExpanded] = useState(true);
@@ -39,7 +41,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
 
   const menuItems = isStaff
     ? adminMenu
-    : status === "participant"
+    : status === "participant" || status === "accepted"
       ? participantMenu
       : applicantMenu;
 
@@ -51,12 +53,13 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
           : "/app/overview"
         : `${isStaff ? "/admin" : "/app"}/${view}`;
 
+    onNavClick?.();
     router.push(nextPath);
   };
 
   return (
     <aside
-      className={`dark bg-nexus-dark text-muted-foreground flex flex-col shrink-0 min-h-screen border-r border-border transition-all duration-300 relative ${
+      className={`dark bg-nexus-dark text-muted-foreground flex flex-col shrink-0 h-screen border-r border-border transition-all duration-300 relative ${
         isExpanded ? "w-65" : "w-20"
       }`}
     >
@@ -79,7 +82,7 @@ export function Sidebar({ role, status, currentView }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 px-4 py-2 space-y-1 overflow-hidden">
+      <div className="flex-1 px-4 py-2 space-y-1 overflow-y-auto scrollbar-premium">
         {menuItems.map((item) => (
           <NavItem
             key={item.view}

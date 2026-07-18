@@ -157,10 +157,10 @@ export function ApplyPageClient({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.4 }}
           >
-            <h2 className="text-3xl sm:text-4xl font-outfit font-bold text-white tracking-tight mb-3">
+            <h2 className="text-3xl sm:text-4xl font-outfit font-bold text-foreground tracking-tight mb-3">
               Application Submitted!
             </h2>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-sm mx-auto mb-10">
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mx-auto mb-10">
               Thank you for applying to join our community. We&apos;ll review your application and
               get back to you within 48 hours.
             </p>
@@ -178,12 +178,12 @@ export function ApplyPageClient({
             transition={{ delay: 0.8, duration: 0.4 }}
             className="grid grid-cols-2 gap-3 mb-10"
           >
-            <div className="rounded-xl bg-white/5 border border-white/10 p-4">
-              <p className="text-xs text-slate-500 mb-1">Response Time</p>
-              <p className="text-sm font-semibold text-white">~48 hours</p>
+            <div className="rounded-xl bg-muted border border-border p-4">
+              <p className="text-xs text-muted-foreground mb-1">Response Time</p>
+              <p className="text-sm font-semibold text-foreground">~48 hours</p>
             </div>
-            <div className="rounded-xl bg-white/5 border border-white/10 p-4">
-              <p className="text-xs text-slate-500 mb-1">Status</p>
+            <div className="rounded-xl bg-muted border border-border p-4">
+              <p className="text-xs text-muted-foreground mb-1">Status</p>
               <p className="text-sm font-semibold text-nexus-green flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-nexus-green animate-pulse" />
                 Pending Review
@@ -198,7 +198,7 @@ export function ApplyPageClient({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => (window.location.href = "/app/overview")}
-            className="cursor-pointer w-full py-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-medium hover:bg-white/10 hover:text-white transition-all"
+            className="cursor-pointer w-full py-3 rounded-xl bg-muted border border-border text-muted-foreground text-sm font-medium hover:bg-accent hover:text-foreground transition-all"
           >
             Back to Workspace
           </motion.button>
@@ -218,17 +218,17 @@ export function ApplyPageClient({
         onSkip={handleProfileSyncSkip}
       />
 
-      <div className="w-full min-h-full flex items-center justify-center p-4 text-white">
+      <div className="w-full min-h-full flex items-center justify-center p-4 text-foreground">
         <div className="w-full max-w-2xl">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-8"
           >
-            <h1 className="text-3xl sm:text-4xl font-outfit font-bold text-white tracking-tight mb-2">
+            <h1 className="text-3xl sm:text-4xl font-outfit font-bold text-foreground tracking-tight mb-2">
               Apply for Course
             </h1>
-            <p className="text-slate-400 text-sm">
+            <p className="text-muted-foreground text-sm">
               Complete the form below to apply for the next Cohorix course cohort.
             </p>
           </motion.div>
