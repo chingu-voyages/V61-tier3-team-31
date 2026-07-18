@@ -287,7 +287,7 @@ export function TeamsClient({
                           className="flex items-center gap-3 p-3 hover:bg-muted cursor-pointer transition-colors"
                         >
                           <div
-                            className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${selectedParticipants.includes(p.id) ? "bg-nexus-green border-nexus-green text-black" : "border-border"}`}
+                            className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${selectedParticipants.includes(p.id) ? "bg-nexus-green border-nexus-green text-primary-foreground" : "border-border"}`}
                           >
                             {selectedParticipants.includes(p.id) && (
                               <Check className="w-3.5 h-3.5" strokeWidth={3} />

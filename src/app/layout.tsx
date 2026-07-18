@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Geist } from "next/font/google";
+import Script from "next/script";
 import { Providers } from "./providers";
 import { getCurrentUser } from "@/lib/auth/queries";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,9 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans antialiased text-foreground">
         <Providers initialUser={currentUser}>{children}</Providers>
+        <Script id="perf-patch" strategy="beforeInteractive">
+          {`if(window.performance){const _m=window.performance.measure.bind(window.performance);window.performance.measure=(n,s,e)=>{try{return _m(n,s,e)}catch(c){if(c instanceof TypeError&&c.message.includes("negative"))return;throw c}}}`}
+        </Script>
       </body>
     </html>
   );

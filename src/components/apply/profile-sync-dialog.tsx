@@ -38,7 +38,7 @@ export function ProfileSyncDialog({
         </DialogHeader>
 
         <div className="mt-5 space-y-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+          <div className="rounded-2xl border border-border bg-muted p-4 text-sm text-muted-foreground">
             Profile stores your current reusable info. Application stores this course&apos;s
             submitted snapshot.
           </div>
@@ -47,14 +47,14 @@ export function ProfileSyncDialog({
             {differences.map((difference) => (
               <div
                 key={difference.field}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+                className="rounded-2xl border border-border bg-muted/50 p-4"
               >
-                <p className="text-sm font-semibold text-white">{difference.label}</p>
-                <p className="mt-2 text-xs text-slate-400">
+                <p className="text-sm font-semibold text-foreground">{difference.label}</p>
+                <p className="mt-2 text-xs text-muted-foreground">
                   Current profile:{" "}
-                  <span className="text-slate-200">{difference.profileValue || "Empty"}</span>
+                  <span className="text-foreground">{difference.profileValue || "Empty"}</span>
                 </p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs text-muted-foreground">
                   This application:{" "}
                   <span className="text-nexus-green">{difference.applicationValue || "Empty"}</span>
                 </p>
@@ -63,7 +63,7 @@ export function ProfileSyncDialog({
           </div>
 
           {error && (
-            <div className="rounded-2xl border border-rose-400/25 bg-rose-400/10 p-4 text-sm text-rose-100">
+            <div className="rounded-2xl border border-destructive/25 bg-destructive/10 p-4 text-sm text-destructive-foreground">
               {error}
             </div>
           )}

@@ -15,21 +15,21 @@ export default function StepAvailability({ voyages }: { voyages: OpenVoyage[] })
   const currentTimezone = watch("timezone");
 
   const inputClasses =
-    "w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all";
+    "w-full bg-muted border border-border rounded-xl py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all";
 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-white mb-1 font-outfit">Availability</h2>
-        <p className="text-xs text-slate-400">When can you contribute?</p>
+        <h2 className="text-lg font-semibold text-foreground mb-1 font-outfit">Availability</h2>
+        <p className="text-xs text-muted-foreground">When can you contribute?</p>
       </div>
 
       {/* Side-by-side layout: Hours + Timezone on desktop, stacked on mobile */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
         <div className="space-y-1.5 text-left">
-          <label className="text-sm font-medium text-slate-300">Hours per Week *</label>
+          <label className="text-sm font-medium text-muted-foreground">Hours per Week *</label>
           <div className="relative">
-            <Clock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
+            <Clock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               {...register("hoursPerWeek", { valueAsNumber: true })}
               type="number"
@@ -40,7 +40,7 @@ export default function StepAvailability({ voyages }: { voyages: OpenVoyage[] })
             />
           </div>
           {errors.hoursPerWeek && (
-            <p className="text-xs text-red-400 flex items-center gap-1">
+            <p className="text-xs text-destructive flex items-center gap-1">
               {errors.hoursPerWeek.message}
             </p>
           )}
@@ -56,9 +56,9 @@ export default function StepAvailability({ voyages }: { voyages: OpenVoyage[] })
       </div>
 
       <div className="space-y-1.5 text-left">
-        <label className="text-sm font-medium text-slate-300">Preferred Course</label>
+        <label className="text-sm font-medium text-muted-foreground">Preferred Course</label>
         <div className="relative">
-          <Sparkles className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
+          <Sparkles className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <select
             {...register("voyage")}
             className={`${inputClasses} cursor-pointer appearance-none`}

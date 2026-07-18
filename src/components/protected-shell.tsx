@@ -43,7 +43,7 @@ export function ProtectedShell({ children, role }: { children: React.ReactNode; 
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <div className="flex bg-[#f8f9fc] dark:bg-[#0f0f0f] dark:text-slate-200 min-h-screen text-slate-800 font-sans transition-colors h-screen overflow-hidden">
+    <div className="flex bg-background text-foreground min-h-screen font-sans transition-colors h-screen overflow-hidden">
       {/* Desktop sidebar — always visible */}
       <div className="hidden lg:block shrink-0">
         <Sidebar role={role} currentView={currentView} />
