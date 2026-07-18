@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { AuthProvider } from "@/lib/auth/auth-context";
 import { requireUser } from "@/lib/auth/queries";
-import { hasSubmittedApplication } from "@/lib/auth/applications";
 import { isStaffRole } from "@/lib/auth/navigation";
 import { getParticipantOnboardingState } from "@/lib/onboarding/get-participant-onboarding-state";
+import { resolveActiveVoyage } from "@/lib/voyages/resolve-active-voyage";
 import { ApplyGate } from "@/components/apply-gate";
 import { ProtectedShell } from "@/components/protected-shell";
 
@@ -14,15 +14,24 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect("/admin");
   }
 
-  const hasApplication = await hasSubmittedApplication(user.id);
-  const participantStage = hasApplication
-    ? (await getParticipantOnboardingState(user.id)).participantStage
-    : undefined;
+  const { active, voyages } = await resolveActiveVoyage(user.id);
+  const needsApply = active?.relation === "open_apply";
+  const participantStage =
+    active?.relation === "member"
+      ? (await getParticipantOnboardingState(user.id, active.id)).participantStage
+      : active?.relation === "open_apply"
+        ? "apply_only"
+        : undefined;
 
   return (
     <AuthProvider initialUser={user}>
-      <ApplyGate hasSubmittedApplication={hasApplication}>
-        <ProtectedShell role={user.role} status={participantStage}>
+      <ApplyGate needsApply={needsApply}>
+        <ProtectedShell
+          role={user.role}
+          status={participantStage}
+          voyages={voyages}
+          activeVoyageId={active?.id ?? null}
+        >
           {children}
         </ProtectedShell>
       </ApplyGate>
