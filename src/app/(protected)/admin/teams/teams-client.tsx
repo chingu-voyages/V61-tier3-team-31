@@ -8,16 +8,10 @@ import type { TeamCardData, ParticipantData } from "@/lib/admin/teams";
 interface TeamsClientProps {
   initialTeams: TeamCardData[];
   initialParticipants: ParticipantData[];
-  userId: string;
   voyageId: string;
 }
 
-export function TeamsClient({
-  initialTeams,
-  initialParticipants,
-  userId,
-  voyageId,
-}: TeamsClientProps) {
+export function TeamsClient({ initialTeams, initialParticipants, voyageId }: TeamsClientProps) {
   const [teams, setTeams] = useState(initialTeams);
   const [participants, setParticipants] = useState(initialParticipants);
   const [search, setSearch] = useState("");
@@ -58,13 +52,7 @@ export function TeamsClient({
       return;
     }
 
-    const result = await createTeamAction(
-      newTeamName,
-      newTeamDesc,
-      voyageId,
-      selectedParticipants,
-      userId,
-    );
+    const result = await createTeamAction(newTeamName, newTeamDesc, voyageId, selectedParticipants);
 
     if ("error" in result) {
       setSuccessMessage(`Error: ${result.error}`);
