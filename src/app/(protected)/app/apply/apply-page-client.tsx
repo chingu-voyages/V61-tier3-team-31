@@ -34,14 +34,16 @@ export function ApplyPageClient({
   popularSkills,
   openVoyages,
   initialProfileDraft,
+  preferredVoyageId = null,
 }: {
   popularSkills: string[];
   openVoyages: OpenVoyage[];
   initialProfileDraft: ApplyProfileDraft;
+  preferredVoyageId?: string | null;
 }) {
   const router = useRouter();
   const { form, currentStep, isLoading, submitError, nextStep, prevStep, submit, setStep } =
-    useApplyForm(initialProfileDraft);
+    useApplyForm(initialProfileDraft, preferredVoyageId);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [profileSyncCandidate, setProfileSyncCandidate] = useState<ProfileSyncDiff[] | null>(null);
   const [profileSyncLoading, setProfileSyncLoading] = useState(false);

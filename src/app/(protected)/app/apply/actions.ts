@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { z } from "zod/v4";
 import { requireUser } from "@/lib/auth/queries";
 import { createClient } from "@/lib/supabase/server";
@@ -8,6 +10,7 @@ import { applyFormSchema } from "@/lib/schemas/apply-schema";
 import { applyProfileSync, prepareProfileSync } from "@/lib/applications/profile-draft";
 import type { ProfileSyncDiff, ProfileSyncField } from "@/lib/applications/profile-sync";
 import { normalizeSkillKey } from "@/lib/applications/skill-normalization";
+import { ACTIVE_VOYAGE_COOKIE } from "@/lib/voyages/constants";
 
 const submitApplicationSchema = applyFormSchema.extend({
   voyage: z.string().uuid().or(z.literal("")).optional(),
@@ -81,6 +84,27 @@ export async function submitApplication(data: ApplyFormData): Promise<SubmitAppl
     return { error: message };
   }
 
+  let activeVoyageId = parsed.data.voyage?.trim() || null;
+
+  if (!activeVoyageId) {
+    const { data: application } = await supabase
+      .from("applications")
+      .select("voyage_id")
+      .eq("id", applicationId)
+      .maybeSingle();
+    activeVoyageId = application?.voyage_id ?? null;
+  }
+
+  if (activeVoyageId) {
+    const cookieStore = await cookies();
+    cookieStore.set(ACTIVE_VOYAGE_COOKIE, activeVoyageId, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+    });
+  }
+
+  revalidatePath("/app", "layout");
   return { ok: true };
 }
 
