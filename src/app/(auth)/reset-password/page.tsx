@@ -42,6 +42,11 @@ export default function ResetPasswordPage() {
       if (userError || !user) {
         router.push("/login");
       }
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (!session) {
+          router.push("/login");
+        }
+      });
     });
   }, [router]);
 

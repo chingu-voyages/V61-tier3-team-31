@@ -17,9 +17,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <AuthProvider initialUser={user}>
-      <ApplyGate hasSubmittedApplication={hasApplication}>
-        <ProtectedShell role={user.role}>{children}</ProtectedShell>
-      </ApplyGate>
+      {/* <ApplyGate hasSubmittedApplication={hasApplication}> */}
+      <ProtectedShell role={user.role}>{children}</ProtectedShell>
+      {/* </ApplyGate> */}
     </AuthProvider>
   );
 }
