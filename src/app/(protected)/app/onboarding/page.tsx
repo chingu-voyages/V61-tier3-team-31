@@ -1,6 +1,7 @@
 import { CheckCircle2, Clock3, ListChecks } from "lucide-react";
 import { requireUser } from "@/lib/auth/queries";
 import { getParticipantOnboardingState } from "@/lib/onboarding/get-participant-onboarding-state";
+import { requireMemberVoyage } from "@/lib/voyages/require-member-voyage";
 import { OnboardingClient } from "./onboarding-client";
 
 function OnboardingStatusCard({
@@ -68,7 +69,8 @@ const waitingCopy = {
 
 export default async function OnboardingPage() {
   const user = await requireUser();
-  const state = await getParticipantOnboardingState(user.id);
+  const active = await requireMemberVoyage(user.id);
+  const state = await getParticipantOnboardingState(user.id, active.id);
 
   if (state.kind === "checklist" || state.kind === "complete") {
     return (

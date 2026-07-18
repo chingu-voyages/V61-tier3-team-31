@@ -132,17 +132,25 @@ function mergeStepsWithProgress(
 
 export const getParticipantOnboardingState = cache(async function getParticipantOnboardingState(
   userId: string,
+  voyageId?: string | null,
 ): Promise<ParticipantOnboardingState> {
   const supabase = await createClient();
 
-  const { data: application, error: applicationError } = await supabase
+  let applicationQuery = supabase
     .from("applications")
     .select("id, status, voyage_id, preferred_role, experience, submitted_at")
     .eq("applicant_id", userId)
-    .neq("status", "draft")
-    .order("submitted_at", { ascending: false, nullsFirst: false })
-    .limit(1)
-    .maybeSingle();
+    .neq("status", "draft");
+
+  if (voyageId) {
+    applicationQuery = applicationQuery.eq("voyage_id", voyageId);
+  } else {
+    applicationQuery = applicationQuery
+      .order("submitted_at", { ascending: false, nullsFirst: false })
+      .limit(1);
+  }
+
+  const { data: application, error: applicationError } = await applicationQuery.maybeSingle();
 
   if (applicationError) return waiting("error");
   if (!application) return waiting("no_application");

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Sidebar } from "@/components/sidebar";
+import type { UserVoyage } from "@/lib/voyages/types";
 
 type DashboardView =
   | "overview"
@@ -39,10 +40,14 @@ export function ProtectedShell({
   children,
   role,
   status,
+  voyages = [],
+  activeVoyageId = null,
 }: {
   children: React.ReactNode;
   role: string;
   status?: string;
+  voyages?: UserVoyage[];
+  activeVoyageId?: string | null;
 }) {
   const pathname = usePathname();
   const currentView = getCurrentView(pathname, role);
@@ -52,9 +57,15 @@ export function ProtectedShell({
 
   return (
     <div className="flex bg-background text-foreground min-h-screen font-sans transition-colors h-screen overflow-hidden">
-      {/* Desktop sidebar — always visible */}
+      {/* Desktop sidebar */}
       <div className="hidden lg:block shrink-0">
-        <Sidebar role={role} status={status} currentView={currentView} />
+        <Sidebar
+          role={role}
+          status={status}
+          currentView={currentView}
+          voyages={voyages}
+          activeVoyageId={activeVoyageId}
+        />
       </div>
 
       {/* Mobile overlay */}
@@ -76,6 +87,8 @@ export function ProtectedShell({
           role={role}
           status={status}
           currentView={currentView}
+          voyages={voyages}
+          activeVoyageId={activeVoyageId}
           onNavClick={closeMobile}
           hideCollapse
         />

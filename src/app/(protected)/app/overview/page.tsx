@@ -3,6 +3,7 @@ import { CheckCircle2, Clock3, FileText, ListChecks, Lock } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { requireUser } from "@/lib/auth/queries";
 import { getParticipantOnboardingState } from "@/lib/onboarding/get-participant-onboarding-state";
+import { requireMemberVoyage } from "@/lib/voyages/require-member-voyage";
 import { cn } from "@/lib/utils";
 
 const stages = ["Applied", "Under review", "Onboarding"] as const;
@@ -66,7 +67,8 @@ function getStatusTone(status: string) {
 
 export default async function OverviewPage() {
   const user = await requireUser();
-  const state = await getParticipantOnboardingState(user.id);
+  const active = await requireMemberVoyage(user.id);
+  const state = await getParticipantOnboardingState(user.id, active.id);
   const application = state.application;
   const applicationStatus = application?.status ?? "draft";
   const canStartOnboarding =

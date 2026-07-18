@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { requireUser } from "@/lib/auth/queries";
+import { requireMemberVoyage } from "@/lib/voyages/require-member-voyage";
 
 const prepChecklist = [
   "Finish your profile so teammates know who you are and what you bring.",
@@ -46,7 +48,10 @@ const conductRules = [
   "Keep project discussion in the official team channel so nobody is left out.",
 ];
 
-export default function VoyageGuidePage() {
+export default async function VoyageGuidePage() {
+  const user = await requireUser();
+  await requireMemberVoyage(user.id);
+
   return (
     <div className="mx-auto max-w-3xl space-y-8 pb-8">
       <header>

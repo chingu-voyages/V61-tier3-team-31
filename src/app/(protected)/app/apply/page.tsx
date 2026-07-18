@@ -3,12 +3,16 @@ import { requireUser } from "@/lib/auth/queries";
 import { getApplyProfileDraft } from "@/lib/applications/profile-draft";
 import { listActiveSkills } from "@/lib/applications/skills";
 import { listOpenVoyages } from "@/lib/applications/voyages";
+import { resolveActiveVoyage } from "@/lib/voyages/resolve-active-voyage";
 
 export default async function ApplyPage() {
   const user = await requireUser();
+  const { active } = await resolveActiveVoyage(user.id);
+  const preferredVoyageId = active?.relation === "open_apply" ? active.id : null;
+
   const [popularSkills, openVoyages, initialProfileDraft] = await Promise.all([
     listActiveSkills(),
-    listOpenVoyages(),
+    listOpenVoyages(user.id),
     getApplyProfileDraft(user.id),
   ]);
 
@@ -17,6 +21,7 @@ export default async function ApplyPage() {
       popularSkills={popularSkills}
       openVoyages={openVoyages}
       initialProfileDraft={initialProfileDraft}
+      preferredVoyageId={preferredVoyageId}
     />
   );
 }

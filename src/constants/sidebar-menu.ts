@@ -1,17 +1,4 @@
-import {
-  Home,
-  FileText,
-  Users,
-  Network,
-  UsersRound,
-  ClipboardList,
-  Compass,
-  Megaphone,
-  CalendarDays,
-  BarChart3,
-  Layers,
-  User,
-} from "lucide-react";
+import { Home, FileText, UsersRound, ClipboardList } from "lucide-react";
 
 export type DashboardView =
   | "overview"
@@ -43,52 +30,22 @@ export const adminMenu: SidebarItem[] = [
     icon: Home,
   },
   {
-    view: "courses",
-    label: "Courses",
-    icon: Compass,
-  },
-  {
     view: "applications",
     label: "Applications",
     icon: FileText,
-    badge: "312",
-  },
-  {
-    view: "participants",
-    label: "Participants",
-    icon: Users,
-    badge: "128",
-  },
-  {
-    view: "matching",
-    label: "Matching",
-    icon: Network,
-  },
-  {
-    view: "analytics",
-    label: "Analytics",
-    icon: BarChart3,
   },
   {
     view: "teams",
     label: "Teams",
     icon: UsersRound,
-    badge: "18",
   },
+];
+
+export const applyOnlyMenu: SidebarItem[] = [
   {
-    view: "announcements",
-    label: "Announcements",
-    icon: Megaphone,
-  },
-  {
-    view: "calendar",
-    label: "Calendar",
-    icon: CalendarDays,
-  },
-  {
-    view: "ui-components",
-    label: "UI Kit",
-    icon: Layers,
+    view: "apply",
+    label: "Apply",
+    icon: FileText,
   },
 ];
 
@@ -97,16 +54,6 @@ export const applicantMenu: SidebarItem[] = [
     view: "apply",
     label: "Application Form",
     icon: FileText,
-  },
-  // {
-  //   view: "overview",
-  //   label: "Application Status",
-  //   icon: Home,
-  // },
-  {
-    view: "profile",
-    label: "Profile",
-    icon: User,
   },
 ];
 
@@ -117,51 +64,8 @@ export const participantMenu: SidebarItem[] = [
     icon: Home,
   },
   {
-    view: "teams",
-    label: "Team Space",
-    icon: UsersRound,
-  },
-  {
     view: "onboarding",
     label: "Onboarding",
     icon: ClipboardList,
   },
-  {
-    view: "calendar",
-    label: "Calendar",
-    icon: CalendarDays,
-  },
-  {
-    view: "profile",
-    label: "Profile",
-    icon: User,
-  },
 ];
-
-// export const defaultMenu: SidebarItem[] = [
-//   {
-//     view: "overview",
-//     label: "Overview",
-//     icon: Home,
-//   },
-//   {
-//     view: "apply",
-//     label: "Apply",
-//     icon: FileText,
-//   },
-//   {
-//     view: "onboarding",
-//     label: "Onboarding",
-//     icon: ClipboardList,
-//   },
-//   {
-//     view: "calendar",
-//     label: "Calendar",
-//     icon: CalendarDays,
-//   },
-//   {
-//     view: "profile",
-//     label: "Profile",
-//     icon: User,
-//   },
-// ];

@@ -6,7 +6,7 @@ export type OpenVoyage = {
   deadline: string;
 };
 
-export async function listOpenVoyages(): Promise<OpenVoyage[]> {
+export async function listOpenVoyages(userId?: string): Promise<OpenVoyage[]> {
   const supabase = await createServerClient();
   const { data, error } = await supabase
     .from("voyages")
@@ -21,7 +21,25 @@ export async function listOpenVoyages(): Promise<OpenVoyage[]> {
     return [];
   }
 
-  return data.map((voyage) => ({
+  let voyages = data ?? [];
+
+  if (userId) {
+    const { data: applications, error: applicationError } = await supabase
+      .from("applications")
+      .select("voyage_id")
+      .eq("applicant_id", userId)
+      .neq("status", "draft");
+
+    if (applicationError) {
+      console.error("Failed to filter applied voyages:", applicationError);
+      return [];
+    }
+
+    const appliedVoyageIds = new Set((applications ?? []).map((row) => row.voyage_id));
+    voyages = voyages.filter((voyage) => !appliedVoyageIds.has(voyage.id));
+  }
+
+  return voyages.map((voyage) => ({
     id: voyage.id,
     name: voyage.name,
     deadline: voyage.application_deadline

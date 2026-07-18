@@ -17,7 +17,10 @@ import type { ApplyProfileDraft } from "@/lib/applications/profile-sync";
 
 export type FormStep = 1 | 2 | 3 | 4 | 5;
 
-export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
+export function useApplyForm(
+  initialProfileDraft?: ApplyProfileDraft,
+  preferredVoyageId?: string | null,
+) {
   const { step: currentStep, formData, setStep, setFormData, clearState } = useApplyFormStore();
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -32,13 +35,19 @@ export function useApplyForm(initialProfileDraft?: ApplyProfileDraft) {
       hoursPerWeek: 0,
       timezone:
         initialProfileDraft?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
-      voyage: "",
+      voyage: preferredVoyageId ?? "",
       motivation: "",
       bio: initialProfileDraft?.bio ?? "",
       portfolio: initialProfileDraft?.portfolio ?? "",
       ...formData,
+      ...(preferredVoyageId ? { voyage: preferredVoyageId } : {}),
     },
   });
+
+  useEffect(() => {
+    if (!preferredVoyageId) return;
+    form.setValue("voyage", preferredVoyageId, { shouldValidate: true });
+  }, [form, preferredVoyageId]);
 
   useEffect(() => {
     if (!initialProfileDraft) {
