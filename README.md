@@ -1,17 +1,24 @@
-# voyage-tasks
+COHORIX - A PARTICIPANT LIFECYCLE MANAGEMENT PLATFORM
 
-Your project's `readme` is as important to success as your code. For 
-this reason you should put as much care into its creation and maintenance
-as you would any other component of the application.
+## Overview
+This app was created for Chingu Voyage 61 by Tier3-Team 31. The planning and development was done in 6 weeks.
+COHORIX is a unified platform for organizations to manage program participants and for learners to track their onboarding, teams, and progress in one place.
+This documentation is to help the reader under the product, why it was created, the features and how it was developed.
 
-If you are unsure of what should go into the `readme` let this article,
-written by an experienced Chingu, be your starting point - 
-[Keys to a well written README](https://tinyurl.com/yk3wubft).
+Live Link: https://v61-tier3-team-31.vercel.app/ 
 
-And before we go there's "one more thing"! Once you decide what to include
-in your `readme` feel free to replace the text we've provided here.
+### Problem Statement (The problem COHORIX solves)
+Organizations like CHINGU running structured programs (bootcamps, fellowships, accelerators, volunteer cohorts, internships) typically manage applicants across spreadsheets, scattered forms, and manual follow-ups. This creates visibility gaps, inconsistent onboarding, and slow team assignment. The platform replaces that fragmented workflow with a single, organized system any admin can run.
 
-> Own it & Make it your Own!
+### Project Vision
+To empower organizations of every size and sector to run structured programs with clarity and confidence - by replacing fragmented spreadsheets and manual processes with a single, intuitive platform that manages every participant, every step, from first application to final assignment.
+
+### Product Description 
+An all-in-one portal to manage cohort-based, volunteer, and project-driven programs.
+Teams handle applications and progress tracking, while participants manage onboarding and their growth journey — all in one place.
+
+## Features
+
 
 ## Team Documents
 
