@@ -5,20 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Deadline } from "@/types/dashboard";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-
-function getDaysLeft(date: string) {
-  const deadline = new Date(date).getTime();
-  const today = new Date().getTime();
-
-  const diff = deadline - today;
-
-  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-
-  if (days < 0) return "Expired";
-  if (days === 0) return "Today";
-
-  return `${days} days`;
-}
+import { getDaysLeft } from "@/utils/date";
 
 type Props = {
   deadlines: Deadline[];
