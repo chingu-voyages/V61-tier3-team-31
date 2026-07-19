@@ -66,3 +66,10 @@ export type Activity = {
   avatar: string | null;
   created_at: string;
 };
+
+export type AttentionStats = {
+  old_applications: number;
+  accepted_without_team: number;
+  teams_missing_role: number;
+  onboarding_incomplete: number;
+};

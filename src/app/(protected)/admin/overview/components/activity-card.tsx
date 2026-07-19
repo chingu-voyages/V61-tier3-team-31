@@ -6,6 +6,7 @@ import { Activity } from "@/types/dashboard";
 import { Check, FileSignature, UsersRound, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@/components/avatar";
+import { formatRelativeTime } from "@/utils/date";
 
 function getActivityStyle(type: string) {
   switch (type) {
@@ -115,7 +116,7 @@ export function ActivityCard({ activities }: Props) {
                   {item.text}
                 </div>
                 <div className="text-[11px] text-muted-foreground mt-1 font-medium">
-                  {new Date(item.created_at).toLocaleString()}
+                  {formatRelativeTime(item.created_at)}
                 </div>
               </div>
             </div>
