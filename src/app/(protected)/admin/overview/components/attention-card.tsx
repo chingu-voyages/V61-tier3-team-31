@@ -1,53 +1,58 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { AttentionStats } from "@/types/dashboard";
 import { AlertTriangle, ChevronRight, FileSearch, FileSignature, UsersRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const attentionItems: Array<{
-  icon: React.ReactNode;
-  color: { bg: string; text: string };
-  title: string;
-  desc: string;
-  value: string;
-  route: string;
-}> = [
-  {
-    icon: <FileSearch />,
-    color: { bg: "bg-destructive/10 dark:bg-destructive/10", text: "text-destructive" },
-    title: "Applications older than 7 days",
-    desc: "Need review",
-    value: "24",
-    route: "/applications",
-  },
-  {
-    icon: <AlertTriangle />,
-    color: { bg: "bg-orange-50 dark:bg-orange-500/10", text: "text-amber-500" },
-    title: "Accepted participants without team",
-    desc: "Require assignment",
-    value: "16",
-    route: "/participants",
-  },
-  {
-    icon: <UsersRound />,
-    color: { bg: "bg-purple-50 dark:bg-purple-500/10", text: "text-purple-500" },
-    title: "Teams missing required role",
-    desc: "Missing Product Owner or Developer",
-    value: "8",
-    route: "/teams",
-  },
-  {
-    icon: <FileSignature />,
-    color: { bg: "bg-blue-50 dark:bg-blue-500/10", text: "text-blue-500" },
-    title: "Onboarding forms incomplete",
-    desc: "Participants need to complete",
-    value: "12",
-    route: "/onboarding",
-  },
-];
+type Props = {
+  attention: AttentionStats;
+};
 
-export function AttentionCard() {
+export function AttentionCard({ attention }: Props) {
   const router = useRouter();
+
+  const attentionItems: Array<{
+    icon: React.ReactNode;
+    color: { bg: string; text: string };
+    title: string;
+    desc: string;
+    value: string;
+    route: string;
+  }> = [
+    {
+      icon: <FileSearch />,
+      color: { bg: "bg-destructive/10 dark:bg-destructive/10", text: "text-destructive" },
+      title: "Applications older than 7 days",
+      desc: "Need review",
+      value: String(attention.old_applications),
+      route: "/applications",
+    },
+    {
+      icon: <AlertTriangle />,
+      color: { bg: "bg-orange-50 dark:bg-orange-500/10", text: "text-amber-500" },
+      title: "Accepted participants without team",
+      desc: "Require assignment",
+      value: String(attention.accepted_without_team),
+      route: "/participants",
+    },
+    {
+      icon: <UsersRound />,
+      color: { bg: "bg-purple-50 dark:bg-purple-500/10", text: "text-purple-500" },
+      title: "Teams missing required role",
+      desc: "Missing Product Owner or Developer",
+      value: String(attention.teams_missing_role),
+      route: "/teams",
+    },
+    {
+      icon: <FileSignature />,
+      color: { bg: "bg-blue-50 dark:bg-blue-500/10", text: "text-blue-500" },
+      title: "Onboarding forms incomplete",
+      desc: "Participants need to complete",
+      value: String(attention.onboarding_incomplete),
+      route: "/onboarding",
+    },
+  ];
 
   return (
     <Card className="lg:col-span-6 shadow-black p-6">

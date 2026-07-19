@@ -5,6 +5,7 @@ import { AdminOverview } from "./admin-overview";
 import { getDeadlines } from "@/lib/dashboard/deadlines";
 import { getOnboardingStatistics } from "@/lib/dashboard/onboarding-statistics";
 import { getRecentActivity } from "@/lib/dashboard/activity-statistics";
+import { getAttentionStatistics } from "@/lib/dashboard/attention-statistics";
 
 export default async function OverviewPage() {
   const user = await requireUser();
@@ -12,6 +13,7 @@ export default async function OverviewPage() {
   const course = await getCurrentCourse();
   const deadlines = getDeadlines(course);
   const onboarding = await getOnboardingStatistics();
+  const attention = await getAttentionStatistics();
   const activity = await getRecentActivity();
 
   return (
@@ -21,6 +23,7 @@ export default async function OverviewPage() {
       course={course}
       deadlines={deadlines}
       onboardingStats={onboarding}
+      attention={attention}
       activity={activity}
     />
   );

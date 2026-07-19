@@ -11,6 +11,7 @@ import type {
   Course,
   Deadline,
   OnboardingStats,
+  AttentionStats,
 } from "@/types/dashboard";
 import { Card } from "@/components/ui/card";
 import { MetricsCard } from "./components/metrics-card";
@@ -21,6 +22,7 @@ type Props = {
   onboardingStats: OnboardingStats;
   course: Course | null;
   deadlines?: Deadline[];
+  attention: AttentionStats;
   activity: Activity[];
 };
 
@@ -36,6 +38,7 @@ export function AdminOverview({
   onboardingStats,
   course,
   deadlines,
+  attention,
   activity,
 }: Props) {
   const router = useRouter();
@@ -68,7 +71,7 @@ export function AdminOverview({
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Attention */}
-        <AttentionCard />
+        <AttentionCard attention={attention} />
 
         {/* Activity */}
         <ActivityCard activities={activity} />
