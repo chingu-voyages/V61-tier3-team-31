@@ -118,7 +118,7 @@ export function AdminApplicationsClient({
               >
                 <div className="min-w-0 space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="truncate font-semibold text-foreground">
+                    <h2 className="text-lg truncate text-foreground">
                       {application.applicantName}
                     </h2>
                     <span

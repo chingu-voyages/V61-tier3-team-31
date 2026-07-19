@@ -7,6 +7,7 @@ set search_path to 'public', 'pg_temp'
 as $function$
 declare
   v_staff_id uuid := auth.uid();
+  v_voyage_id uuid;
 begin
 
   if v_staff_id is null then
@@ -14,93 +15,75 @@ begin
     using errcode = '28000';
   end if;
 
-
   if not private.is_staff() then
     raise exception 'Only staff can view activity.'
     using errcode = '42501';
   end if;
 
 
-  return (
-  select jsonb_agg(activity order by created_at desc)
-  from (
-    select *
+  select id
+  into v_voyage_id
+  from public.voyages
+  order by created_at desc
+  limit 1;
+
+
+    return (
+    select jsonb_agg(activity)
     from (
+      select activity
+      from (
 
-      -- Applications
-      select
-        jsonb_build_object(
-          'type', 'application_' || a.status,
-          'user_id', p.id,
-          'user_name', p.full_name,
-          'avatar', nullif(p.avatar_path, ''),
-          'text',
-            case
-              when a.status = 'accepted'
-                then 'was accepted'
-              when a.status = 'rejected'
-                then 'was rejected'
-              when a.status = 'submitted'
-                then 'submitted application'
-              else
-                'updated application'
-            end,
-          'created_at', coalesce(a.decided_at, a.created_at)
-        ) as activity,
+        -- Applications
+        select
+          jsonb_build_object(
+            'type', 'application_' || a.status,
+            'user_id', p.id,
+            'user_name', p.full_name,
+            'avatar', nullif(p.avatar_path, ''),
+            'text',
+              case
+                when a.status = 'accepted' then 'was accepted'
+                when a.status = 'rejected' then 'was rejected'
+                when a.status = 'submitted' then 'submitted application'
+                else 'updated application'
+              end,
+            'created_at', coalesce(a.decided_at, a.created_at)
+          ) activity,
+          coalesce(a.decided_at, a.created_at) created_at
 
-        coalesce(a.decided_at, a.created_at) as created_at
-
-      from public.applications a
-      join public.profiles p
-        on p.id = a.applicant_id
+        from public.applications a
+        join public.profiles p on p.id = a.applicant_id
+        where a.voyage_id = v_voyage_id
 
 
-      union all
+        union all
 
 
-      -- Onboarding
-      select
-        jsonb_build_object(
-          'type', 'onboarding_completed',
-          'user_id', p.id,
-          'user_name', p.full_name,
-          'avatar', nullif(p.avatar_path, ''),
-          'text', 'completed onboarding',
-          'created_at', op.completed_at
-        ),
+        -- Enrollment
+        select
+          jsonb_build_object(
+            'type', 'enrollment_' || e.status,
+            'user_id', p.id,
+            'user_name', p.full_name,
+            'avatar', nullif(p.avatar_path, ''),
+            'text', e.status::text,
+            'created_at', e.updated_at
+          ) activity,
+          e.updated_at created_at
 
-        op.completed_at as created_at
-
-      from public.onboarding_progress op
-      join public.profiles p
-        on p.id = op.completed_by
-
-
---       union all
+        from public.enrollments e
+        join public.profiles p on p.id = e.account_id
+        where e.voyage_id = v_voyage_id
 
 
---      -- Match proposals
--- select
---   jsonb_build_object(
---     'type', 'match_proposal_created',
---     'user_name', mp.proposed_name,
---     'avatar', null,
---     'text', 'received a team proposal',
---     'created_at', mp.created_at
---   ) as activity,
+      ) all_activity
 
---   mp.created_at as created_at
+      order by created_at desc
+      limit 10
 
--- from public.match_proposals mp
-
-
-    ) all_activity
-
-    order by created_at desc
-    limit 10
-
-  ) activity
-);
+    ) latest_activity
+  );
 
 end;
 $function$;
