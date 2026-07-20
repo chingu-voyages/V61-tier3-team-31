@@ -12,6 +12,7 @@ import type {
   Deadline,
   OnboardingStats,
   AttentionStats,
+  TeamStats,
 } from "@/types/dashboard";
 import { Card } from "@/components/ui/card";
 import { MetricsCard } from "./components/metrics-card";
@@ -22,6 +23,7 @@ type Props = {
   onboardingStats: OnboardingStats;
   course: Course | null;
   deadlines?: Deadline[];
+  teams: TeamStats;
   attention: AttentionStats;
   activity: Activity[];
 };
@@ -38,6 +40,7 @@ export function AdminOverview({
   onboardingStats,
   course,
   deadlines,
+  teams,
   attention,
   activity,
 }: Props) {
@@ -67,7 +70,7 @@ export function AdminOverview({
       </div>
 
       {/* Pipeline section */}
-      <PipelineCard applicationStats={stats} onboardingStats={onboardingStats} />
+      <PipelineCard applicationStats={stats} teamStats={teams} onboardingStats={onboardingStats} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Attention */}

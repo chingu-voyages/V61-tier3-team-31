@@ -4,13 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { ApplicationStats, OnboardingStats } from "@/types/dashboard";
-
-type PipelineStats = {
-  label: string;
-  value: string;
-  color?: string;
-};
+import type { ApplicationStats, OnboardingStats, TeamStats } from "@/types/dashboard";
 
 // type PipelineStep = {
 //   step: string;
@@ -27,10 +21,15 @@ type PipelineStats = {
 
 type Props = {
   applicationStats: ApplicationStats;
+  teamStats: TeamStats;
   onboardingStats: OnboardingStats;
 };
 
-const getPipelineSteps = (applicationStats: ApplicationStats, onboardingStats: OnboardingStats) => [
+const getPipelineSteps = (
+  applicationStats: ApplicationStats,
+  teamStats: TeamStats,
+  onboardingStats: OnboardingStats,
+) => [
   {
     step: "01",
     color: "text-primary",
@@ -76,12 +75,16 @@ const getPipelineSteps = (applicationStats: ApplicationStats, onboardingStats: O
     title: "Teams",
     subtitle: "Form & confirm teams",
     route: "/teams",
-    total: "18 TEAMS",
+    total: `${teamStats.total} TEAMS`,
     progressWidth: "70%",
     stats: [
-      { label: "Draft Teams", value: "12", color: "text-amber-600" },
-      { label: "Confirmed", value: "6", color: "text-primary" },
-      { label: "Needs Attention", value: "3", color: "text-destructive" },
+      { label: "Draft Teams", value: String(teamStats.draft_teams), color: "text-amber-600" },
+      { label: "Confirmed", value: String(teamStats.confirmed), color: "text-primary" },
+      {
+        label: "Needs Attention",
+        value: String(teamStats.needs_attention),
+        color: "text-destructive",
+      },
     ],
   },
   {
@@ -102,10 +105,10 @@ const getPipelineSteps = (applicationStats: ApplicationStats, onboardingStats: O
   },
 ];
 
-export function PipelineCard({ applicationStats, onboardingStats }: Props) {
+export function PipelineCard({ applicationStats, teamStats, onboardingStats }: Props) {
   const router = useRouter();
 
-  const pipelineSteps = getPipelineSteps(applicationStats, onboardingStats);
+  const pipelineSteps = getPipelineSteps(applicationStats, teamStats, onboardingStats);
 
   return (
     <>

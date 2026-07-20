@@ -21,9 +21,9 @@ export type MatchingStats = {
 };
 
 export type TeamStats = {
-  total_teams: number;
+  total: number;
   draft_teams: number;
-  confirmed_teams: number;
+  confirmed: number;
   needs_attention: number;
 };
 
