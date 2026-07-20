@@ -7,6 +7,7 @@ import { getOnboardingStatistics } from "@/lib/dashboard/onboarding-statistics";
 import { getRecentActivity } from "@/lib/dashboard/activity-statistics";
 import { getAttentionStatistics } from "@/lib/dashboard/attention-statistics";
 import { getTeamsStatistics } from "@/lib/dashboard/team-statistics";
+import { getMatchingStatistics } from "@/lib/dashboard/matching-statistics";
 
 export default async function OverviewPage() {
   const user = await requireUser();
@@ -14,6 +15,7 @@ export default async function OverviewPage() {
   const course = await getCurrentCourse();
   const deadlines = getDeadlines(course);
   const teams = await getTeamsStatistics();
+  const matching = await getMatchingStatistics();
   const onboarding = await getOnboardingStatistics();
   const attention = await getAttentionStatistics();
   const activity = await getRecentActivity();
@@ -24,8 +26,9 @@ export default async function OverviewPage() {
       stats={stats}
       course={course}
       deadlines={deadlines}
-      onboardingStats={onboarding}
+      onboarding={onboarding}
       teams={teams}
+      matching={matching}
       attention={attention}
       activity={activity}
     />

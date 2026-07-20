@@ -4,7 +4,12 @@ import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { ApplicationStats, OnboardingStats, TeamStats } from "@/types/dashboard";
+import type {
+  ApplicationStats,
+  MatchingStats,
+  OnboardingStats,
+  TeamStats,
+} from "@/types/dashboard";
 
 // type PipelineStep = {
 //   step: string;
@@ -22,12 +27,14 @@ import type { ApplicationStats, OnboardingStats, TeamStats } from "@/types/dashb
 type Props = {
   applicationStats: ApplicationStats;
   teamStats: TeamStats;
+  matchingStats: MatchingStats;
   onboardingStats: OnboardingStats;
 };
 
 const getPipelineSteps = (
   applicationStats: ApplicationStats,
   teamStats: TeamStats,
+  matchingStats: MatchingStats,
   onboardingStats: OnboardingStats,
 ) => [
   {
@@ -59,12 +66,16 @@ const getPipelineSteps = (
     title: "Matching",
     subtitle: "Match & assign participants",
     route: "/matching",
-    total: "72 REMAINING",
+    total: `${matchingStats.remaining} REMAINING`,
     progressWidth: "40%",
     stats: [
-      { label: "Unassigned", value: "72", color: "text-foreground" },
-      { label: "Partial Matches", value: "34", color: "text-blue-500" },
-      { label: "Matched", value: "56", color: "text-primary" },
+      { label: "Unassigned", value: String(matchingStats.unassigned), color: "text-foreground" },
+      {
+        label: "Partial Matches",
+        value: String(matchingStats.partial_matches),
+        color: "text-blue-500",
+      },
+      { label: "Matched", value: String(matchingStats.matched), color: "text-primary" },
     ],
   },
   {
@@ -105,10 +116,20 @@ const getPipelineSteps = (
   },
 ];
 
-export function PipelineCard({ applicationStats, teamStats, onboardingStats }: Props) {
+export function PipelineCard({
+  applicationStats,
+  teamStats,
+  matchingStats,
+  onboardingStats,
+}: Props) {
   const router = useRouter();
 
-  const pipelineSteps = getPipelineSteps(applicationStats, teamStats, onboardingStats);
+  const pipelineSteps = getPipelineSteps(
+    applicationStats,
+    teamStats,
+    matchingStats,
+    onboardingStats,
+  );
 
   return (
     <>
