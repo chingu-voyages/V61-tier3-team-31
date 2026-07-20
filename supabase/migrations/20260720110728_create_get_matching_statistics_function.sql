@@ -19,6 +19,9 @@ BEGIN
   RETURN (
     SELECT jsonb_build_object(
 
+      'total',
+      count(*),
+
       'remaining',
       count(*) FILTER (
         WHERE NOT EXISTS (

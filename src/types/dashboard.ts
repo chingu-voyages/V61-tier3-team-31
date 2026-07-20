@@ -15,6 +15,7 @@ export type ApplicationStats = {
 };
 
 export type MatchingStats = {
+  total: number;
   remaining: number;
   unassigned: number;
   partial_matches: number;

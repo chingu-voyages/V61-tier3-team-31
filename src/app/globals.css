@@ -44,6 +44,8 @@
   --color-nexus-dark: var(--nexus-dark);
   --color-nexus-sidebar: var(--nexus-sidebar);
   --color-nexus-page: var(--nexus-page);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
 
   /* Shadows */
   --shadow-light-green: var(--shadow-light-green);
@@ -128,6 +130,8 @@
   --nexus-dark: hsl(240 11% 6%);
   --nexus-sidebar: hsl(220 13% 10%);
   --nexus-page: hsl(228 33% 97%);
+  --warning: hsl(38 92% 50%);
+  --info: hsl(217 91% 60%);
 
   /* Shadows */
   --shadow-light-green: 0 10px 30px hsl(145 29% 54% / 0.14);
@@ -180,6 +184,8 @@
   --nexus-dark: hsl(240 11% 6%);
   --nexus-sidebar: hsl(220 13% 10%);
   --nexus-page: hsl(228 33% 97%);
+  --warning: hsl(38 92% 50%);
+  --info: hsl(217 91% 60%);
 
   /* Shadows */
   --shadow-light-green: 0 10px 30px hsl(145 37% 69% / 0.1);
