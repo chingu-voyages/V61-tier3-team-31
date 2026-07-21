@@ -246,7 +246,7 @@ export default async function OverviewPage() {
           </div>
 
           {canStartOnboarding ? (
-            <Link href="/app/onboarding" className={cn(buttonVariants())}>
+            <Link href="/app/onboarding" className={cn(buttonVariants({ size: "lg" }))}>
               {isComplete ? "View onboarding" : "Continue onboarding"}
             </Link>
           ) : (

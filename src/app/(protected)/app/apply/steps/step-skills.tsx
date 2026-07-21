@@ -66,7 +66,7 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               key={skill}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-nexus-green/10 text-nexus-green border border-nexus-green/20 rounded-lg text-xs font-medium"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-lg text-xs font-medium"
             >
               {skill}
               <button
@@ -96,7 +96,7 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
             }
           }}
           placeholder="e.g. React, Python, Figma..."
-          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all"
+          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
         />
       </div>
 
@@ -120,7 +120,7 @@ export default function StepSkills({ popularSkills }: { popularSkills: string[] 
                   disabled={isAdded}
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${
                     isAdded
-                      ? "bg-nexus-green/10 text-nexus-green border-nexus-green/20 cursor-default"
+                      ? "bg-primary/10 text-primary border-primary/20 cursor-default"
                       : "border-border text-muted-foreground hover:bg-muted"
                   }`}
                 >

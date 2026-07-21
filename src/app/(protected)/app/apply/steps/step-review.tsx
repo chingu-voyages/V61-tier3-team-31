@@ -48,7 +48,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             <button
               type="button"
               onClick={() => onEditStep(1)}
-              className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
+              className="text-xs font-medium text-primary hover:text-primary/80 cursor-pointer"
             >
               Edit
             </button>
@@ -73,7 +73,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             <button
               type="button"
               onClick={() => onEditStep(2)}
-              className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
+              className="text-xs font-medium text-primary hover:text-primary/80 cursor-pointer"
             >
               Edit
             </button>
@@ -82,7 +82,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             {form.skills.map((s) => (
               <span
                 key={s}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-nexus-green/10 text-nexus-green border border-nexus-green/20 rounded-lg text-xs font-medium"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-lg text-xs font-medium"
               >
                 {s}
               </span>
@@ -98,7 +98,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             <button
               type="button"
               onClick={() => onEditStep(3)}
-              className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
+              className="text-xs font-medium text-primary hover:text-primary/80 cursor-pointer"
             >
               Edit
             </button>
@@ -131,7 +131,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
             <button
               type="button"
               onClick={() => onEditStep(4)}
-              className="text-xs font-medium text-nexus-green hover:text-nexus-green/80 cursor-pointer"
+              className="text-xs font-medium text-primary hover:text-primary/80 cursor-pointer"
             >
               Edit
             </button>
@@ -152,7 +152,7 @@ export default function StepReview({ onEditStep, error }: StepReviewProps) {
                   href={form.portfolio}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-nexus-green hover:text-nexus-green/80 ml-1"
+                  className="font-medium text-primary hover:text-primary/80 ml-1"
                 >
                   {form.portfolio}
                 </a>

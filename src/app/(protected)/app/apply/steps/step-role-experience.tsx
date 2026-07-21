@@ -62,7 +62,7 @@ export default function StepRoleExperience() {
                 onClick={() => setValue("role", role.value, { shouldValidate: true })}
                 className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   isSelected
-                    ? "border-nexus-green bg-nexus-green/10"
+                    ? "border-primary bg-primary/10"
                     : "border-border bg-muted hover:border-foreground/20"
                 }`}
               >
@@ -71,9 +71,7 @@ export default function StepRoleExperience() {
                   <div className="text-sm font-medium text-foreground">{role.label}</div>
                   <div className="text-[11px] text-muted-foreground">{role.desc}</div>
                 </div>
-                {isSelected && (
-                  <CheckCircle className="w-4 h-4 text-nexus-green ml-auto shrink-0" />
-                )}
+                {isSelected && <CheckCircle className="w-4 h-4 text-primary ml-auto shrink-0" />}
               </button>
             );
           })}
@@ -95,7 +93,7 @@ export default function StepRoleExperience() {
                 onClick={() => setValue("experience", exp.value, { shouldValidate: true })}
                 className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
                   isSelected
-                    ? "border-nexus-green bg-nexus-green/10"
+                    ? "border-primary bg-primary/10"
                     : "border-border bg-muted hover:border-foreground/20"
                 }`}
               >

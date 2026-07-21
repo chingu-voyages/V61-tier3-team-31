@@ -215,7 +215,7 @@ export function TimezonePicker({
           ref={triggerRef}
           type="button"
           onClick={() => (isOpen ? setIsOpen(false) : handleOpen())}
-          className="w-full py-3 pl-12 pr-10 rounded-xl bg-muted border border-border text-foreground text-sm text-left transition-all duration-300 focus:outline-none focus:border-nexus-green focus:bg-accent focus:shadow-[0_0_20px_rgba(119,207,151,0.15)] cursor-pointer hover:bg-accent hover:border-foreground/20"
+          className="w-full py-3 pl-12 pr-10 rounded-xl bg-muted border border-border text-foreground text-sm text-left transition-all duration-300 focus:outline-none focus:border-primary focus:bg-accent focus:shadow-[0_0_20px_rgba(119,207,151,0.15)] cursor-pointer hover:bg-accent hover:border-foreground/20"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
         >
@@ -250,7 +250,7 @@ export function TimezonePicker({
                     }}
                     onKeyDown={handleKeyDown}
                     placeholder="Search timezone..."
-                    className="w-full h-9 pl-8 pr-7 rounded-lg bg-muted border border-border text-foreground text-xs placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green/60"
+                    className="w-full h-9 pl-8 pr-7 rounded-lg bg-muted border border-border text-foreground text-xs placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
                     aria-label="Search timezones"
                   />
                   {search && (
@@ -297,7 +297,7 @@ export function TimezonePicker({
                             onMouseEnter={() => setHighlightIndex(idx)}
                             className={`w-full flex items-center gap-3 px-3 py-2 text-left text-sm transition-colors cursor-pointer ${
                               isSelected
-                                ? "bg-nexus-green/10 text-nexus-green"
+                                ? "bg-primary/10 text-primary"
                                 : isHighlighted
                                   ? "bg-accent text-foreground"
                                   : "text-muted-foreground hover:bg-muted"
@@ -313,7 +313,7 @@ export function TimezonePicker({
                             </span>
                             <span className="truncate flex-1">{tz.value.replace(/_/g, " ")}</span>
                             {tz.isDetected && (
-                              <span className="shrink-0 text-[10px] font-medium text-nexus-green/70 bg-nexus-green/10 px-1.5 py-0.5 rounded">
+                              <span className="shrink-0 text-[10px] font-medium text-primary/70 bg-primary/10 px-1.5 py-0.5 rounded">
                                 detected
                               </span>
                             )}

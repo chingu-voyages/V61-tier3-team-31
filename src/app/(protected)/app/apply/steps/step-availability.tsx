@@ -15,7 +15,7 @@ export default function StepAvailability({ voyages }: { voyages: OpenVoyage[] })
   const currentTimezone = watch("timezone");
 
   const inputClasses =
-    "w-full bg-muted border border-border rounded-xl py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all";
+    "w-full bg-muted border border-border rounded-xl py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all";
 
   return (
     <div className="space-y-5">

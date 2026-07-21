@@ -40,8 +40,8 @@ export function ApplySidebar({ currentStep }: ApplySidebarProps) {
                     {/* Connecting Line */}
                     {stepIdx !== steps.length - 1 && (
                       <div
-                        className={`absolute left-[15px] top-[36px] -ml-px h-[calc(100%+8px)] w-[2px] rounded-full transition-colors duration-500 ${
-                          isCompleted ? "bg-nexus-green" : "bg-muted"
+                        className={`absolute left-3.75 top-9 -ml-px h-[calc(100%+8px)] w-0.5 rounded-full transition-colors duration-500 ${
+                          isCompleted ? "bg-primary" : "bg-muted"
                         }`}
                         aria-hidden="true"
                       />
@@ -53,9 +53,9 @@ export function ApplySidebar({ currentStep }: ApplySidebarProps) {
                         <span
                           className={`relative z-10 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-500 border-2 ${
                             isActive
-                              ? "bg-background border-nexus-green shadow-[0_0_15px_rgba(119,207,151,0.3)]"
+                              ? "bg-background border-destructive shadow-[0_0_15px_rgba(119,207,151,0.3)]"
                               : isCompleted
-                                ? "bg-nexus-green border-nexus-green"
+                                ? "bg-primary border-primary"
                                 : "bg-background border-border"
                           }`}
                         >
@@ -65,7 +65,7 @@ export function ApplySidebar({ currentStep }: ApplySidebarProps) {
                               strokeWidth={3}
                             />
                           ) : isActive ? (
-                            <span className="w-2.5 h-2.5 rounded-full bg-nexus-green animate-pulse" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
                           ) : (
                             <span className="text-[10px] font-bold text-muted-foreground">
                               {step.id}
@@ -88,7 +88,7 @@ export function ApplySidebar({ currentStep }: ApplySidebarProps) {
                           {step.title}
                         </span>
                         <span
-                          className={`text-[13px] mt-1 transition-colors duration-300 ${isActive ? "text-nexus-green/80" : "text-muted-foreground"}`}
+                          className={`text-[13px] mt-1 transition-colors duration-300 ${isActive ? "text-primary/80" : "text-muted-foreground"}`}
                         >
                           {step.description}
                         </span>
@@ -105,7 +105,7 @@ export function ApplySidebar({ currentStep }: ApplySidebarProps) {
         <div className="mt-auto flex items-center h-12 w-full">
           <div className="flex items-center w-full h-full px-4 rounded-xl bg-muted border border-border">
             <p className="text-xs font-medium text-muted-foreground flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-nexus-green animate-pulse shadow-[0_0_8px_rgba(119,207,151,0.6)]" />
+              <span className="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(119,207,151,0.6)]" />
               Takes ~3 minutes to complete
             </p>
           </div>

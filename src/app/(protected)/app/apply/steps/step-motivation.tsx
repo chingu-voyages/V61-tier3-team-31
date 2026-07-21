@@ -24,7 +24,7 @@ export default function StepMotivation() {
           {...register("motivation")}
           placeholder="Tell us what motivates you to join this Course cohort..."
           rows={4}
-          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all resize-none"
+          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
         />
         <div className="flex justify-between">
           {errors.motivation && (
@@ -42,7 +42,7 @@ export default function StepMotivation() {
           {...register("bio")}
           placeholder="A short bio about yourself, your background, and what you're looking for..."
           rows={3}
-          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all resize-none"
+          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
         />
         {errors.bio && (
           <p className="text-xs text-destructive flex items-center gap-1">{errors.bio.message}</p>
@@ -55,7 +55,7 @@ export default function StepMotivation() {
           {...register("portfolio")}
           type="url"
           placeholder="https://github.com/yourusername"
-          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green focus:ring-1 focus:ring-nexus-green transition-all"
+          className="w-full bg-muted border border-border rounded-xl py-3 px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
         />
         {errors.portfolio && (
           <p className="text-xs text-destructive flex items-center gap-1">

@@ -8,7 +8,7 @@ export function MessageForm({ type, message }: MessageFormProps) {
 
   const styles = {
     error: "bg-destructive/10 border-destructive/20 text-destructive",
-    success: "bg-emerald-500/10 border-emerald-500/20 text-emerald-600",
+    success: "bg-primary/10 border-primary/20 text-primary",
   };
 
   return (
