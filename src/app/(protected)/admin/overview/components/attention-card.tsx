@@ -38,18 +38,18 @@ const attentionItems: AttentionItem[] = [
     },
     title: "Applications older than 7 days",
     desc: "Need review",
-    route: "/applications",
+    route: "/admin/applications",
   },
   {
     key: "accepted_without_team",
     icon: AlertTriangle,
     color: {
-      bg: "bg-orange-50 dark:bg-orange-500/10",
-      text: "text-amber-500",
+      bg: "bg-warning/5 dark:bg-warning/10",
+      text: "text-warning",
     },
     title: "Accepted participants without team",
     desc: "Require assignment",
-    route: "/participants",
+    route: "/admin/participants",
   },
   {
     key: "teams_missing_role",
@@ -60,18 +60,18 @@ const attentionItems: AttentionItem[] = [
     },
     title: "Teams missing required role",
     desc: "Missing Product Owner or Developer",
-    route: "/teams",
+    route: "/admin/teams",
   },
   {
     key: "onboarding_incomplete",
     icon: FileSignature,
     color: {
-      bg: "bg-blue-50 dark:bg-blue-500/10",
-      text: "text-blue-500",
+      bg: "bg-info/5 dark:bg-info/10",
+      text: "text-info",
     },
     title: "Onboarding forms incomplete",
     desc: "Participants need to complete",
-    route: "/onboarding",
+    route: "/admin/onboarding",
   },
 ];
 

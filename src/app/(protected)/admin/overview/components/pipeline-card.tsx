@@ -4,108 +4,129 @@ import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { ApplicationStats, OnboardingStats } from "@/types/dashboard";
+import type {
+  ApplicationStats,
+  MatchingStats,
+  OnboardingStats,
+  TeamStats,
+} from "@/types/dashboard";
+import { calculatePercentage } from "@/utils/percentage";
+import { pipelineStyles } from "@/constants/pipeline-theme";
+import { PipelineStatColor } from "@/types/pipeline-colors";
+import { statColors } from "@/constants/stat-colors";
 
-type PipelineStats = {
+export type PipelineStat = {
   label: string;
   value: string;
-  color?: string;
+  color?: PipelineStatColor;
 };
 
-// type PipelineStep = {
-//   step: string;
-//   color: string;
-//   btnBg: string;
-//   barColor: string;
-//   title: string;
-//   subtitle: string;
-//   route: string;
-//   total: string;
-//   progressWidth: string;
-//   stats: PipelineStats[];
-// };
+type PipelineStep = {
+  step: string;
+  title: string;
+  subtitle: string;
+  route: string;
+  color: string;
+  btnBg: string;
+  barColor: string;
+  total: string;
+  progressWidth: string;
+  stats: PipelineStat[];
+};
 
 type Props = {
   applicationStats: ApplicationStats;
+  teamStats: TeamStats;
+  matchingStats: MatchingStats;
   onboardingStats: OnboardingStats;
 };
 
-const getPipelineSteps = (applicationStats: ApplicationStats, onboardingStats: OnboardingStats) => [
+const getPipelineSteps = (
+  applicationStats: ApplicationStats,
+  teamStats: TeamStats,
+  matchingStats: MatchingStats,
+  onboardingStats: OnboardingStats,
+): PipelineStep[] => [
   {
     step: "01",
-    color: "text-primary",
-    btnBg: "bg-primary/10",
-    barColor: "bg-primary",
+    ...pipelineStyles.applications,
     title: "Applications",
     subtitle: "Collect & review applications",
-    route: "/applications",
+    route: "/admin/applications",
     total: `${applicationStats.total} TOTAL`,
-    progressWidth: "100%",
+    progressWidth: calculatePercentage(
+      applicationStats.accepted + applicationStats.rejected,
+      applicationStats.total,
+    ),
     stats: [
+      { label: "Accepted", value: String(applicationStats.accepted), color: "success" },
+      { label: "Incomplete", value: String(applicationStats.draft), color: "warning" },
+      { label: "Rejected", value: String(applicationStats.rejected), color: "danger" },
       {
         label: "Pending Review",
         value: String(applicationStats.under_review),
-        color: "text-foreground",
+        color: "default",
       },
-      { label: "Accepted", value: String(applicationStats.accepted), color: "text-primary" },
-      { label: "Rejected", value: String(applicationStats.rejected), color: "text-destructive" },
-      { label: "Incomplete", value: String(applicationStats.draft), color: "text-primary" },
     ],
   },
   {
     step: "02",
-    color: "text-blue-500",
-    btnBg: "bg-blue-500/10",
-    barColor: "bg-blue-500",
+    ...pipelineStyles.matching,
     title: "Matching",
     subtitle: "Match & assign participants",
-    route: "/matching",
-    total: "72 REMAINING",
-    progressWidth: "40%",
+    route: "/admin/matching",
+    total: `${matchingStats.remaining} REMAINING`,
+    progressWidth: calculatePercentage(matchingStats.matched, matchingStats.total),
     stats: [
-      { label: "Unassigned", value: "72", color: "text-foreground" },
-      { label: "Partial Matches", value: "34", color: "text-blue-500" },
-      { label: "Matched", value: "56", color: "text-primary" },
+      { label: "Matched", value: String(matchingStats.matched), color: "success" },
+      { label: "Partial Matches", value: String(matchingStats.partial_matches), color: "warning" },
+      { label: "Unassigned", value: String(matchingStats.unassigned), color: "danger" },
     ],
   },
   {
     step: "03",
-    color: "text-amber-500",
-    btnBg: "bg-amber-500/10",
-    barColor: "bg-amber-500",
+    ...pipelineStyles.teams,
     title: "Teams",
     subtitle: "Form & confirm teams",
-    route: "/teams",
-    total: "18 TEAMS",
-    progressWidth: "70%",
+    route: "/admin/teams",
+    total: `${teamStats.total} TEAMS`,
+    progressWidth: calculatePercentage(teamStats.confirmed, applicationStats.accepted),
     stats: [
-      { label: "Draft Teams", value: "12", color: "text-amber-600" },
-      { label: "Confirmed", value: "6", color: "text-primary" },
-      { label: "Needs Attention", value: "3", color: "text-destructive" },
+      { label: "Confirmed", value: String(teamStats.confirmed), color: "success" },
+      { label: "Draft Teams", value: String(teamStats.draft_teams), color: "warning" },
+      { label: "Needs Attention", value: String(teamStats.needs_attention), color: "danger" },
     ],
   },
   {
     step: "04",
-    color: "text-destructive",
-    btnBg: "bg-destructive/10",
-    barColor: "bg-destructive",
+    ...pipelineStyles.onboarding,
     title: "Onboarding",
     subtitle: "Complete required steps",
-    route: "/onboarding",
+    route: "/admin/onboarding",
     total: `${onboardingStats.completion_rate}% COMPLETED`,
     progressWidth: `${onboardingStats.completion_rate}%`,
     stats: [
-      { label: "Completed", value: String(onboardingStats.completed), color: "text-primary" },
-      { label: "In Progress", value: String(onboardingStats.in_progress), color: "text-blue-500" },
-      { label: "Missing", value: String(onboardingStats.not_started), color: "text-destructive" },
+      { label: "Completed", value: String(onboardingStats.completed), color: "success" },
+      { label: "In Progress", value: String(onboardingStats.in_progress), color: "warning" },
+      { label: "Missing", value: String(onboardingStats.not_started), color: "danger" },
     ],
   },
 ];
 
-export function PipelineCard({ applicationStats, onboardingStats }: Props) {
+export function PipelineCard({
+  applicationStats,
+  teamStats,
+  matchingStats,
+  onboardingStats,
+}: Props) {
   const router = useRouter();
 
-  const pipelineSteps = getPipelineSteps(applicationStats, onboardingStats);
+  const pipelineSteps = getPipelineSteps(
+    applicationStats,
+    teamStats,
+    matchingStats,
+    onboardingStats,
+  );
 
   return (
     <>
@@ -153,7 +174,9 @@ export function PipelineCard({ applicationStats, onboardingStats }: Props) {
               {p.stats.map((s, j) => (
                 <div key={j} className="flex justify-between items-center text-xs">
                   <span className="text-muted-foreground font-medium">{s.label}</span>
-                  <span className={`font-semibold ${s.color || "text-foreground"}`}>{s.value}</span>
+                  <span className={`font-semibold ${statColors[s.color ?? "default"]}`}>
+                    {s.value}
+                  </span>
                 </div>
               ))}
             </div>

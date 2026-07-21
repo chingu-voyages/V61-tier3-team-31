@@ -32,8 +32,8 @@ function getActivityStyle(type: string) {
       return {
         icon: FileSignature,
         iconColor: {
-          bg: "bg-blue-100 dark:bg-blue-500/20",
-          text: "text-blue-500",
+          bg: "bg-info/10 dark:bg-info/20",
+          text: "text-info",
         },
       };
 
@@ -41,8 +41,8 @@ function getActivityStyle(type: string) {
       return {
         icon: FileSignature,
         iconColor: {
-          bg: "bg-blue-100 dark:bg-blue-500/20",
-          text: "text-blue-500",
+          bg: "bg-info/10 dark:bg-info/20",
+          text: "text-info",
         },
       };
 
@@ -110,7 +110,7 @@ export function ActivityCard({ activities }: Props) {
               </div>
               <div className="pt-0.5">
                 <div className="text-sm text-muted-foreground leading-snug">
-                  <span className="font-semibold text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <span className="font-semibold text-foreground group-hover:text-info dark:group-hover:text-info/40 transition-colors">
                     {item.user_name}
                   </span>{" "}
                   {item.text}

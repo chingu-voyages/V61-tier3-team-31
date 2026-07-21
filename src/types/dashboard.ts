@@ -15,15 +15,17 @@ export type ApplicationStats = {
 };
 
 export type MatchingStats = {
+  total: number;
+  remaining: number;
   unassigned: number;
   partial_matches: number;
   matched: number;
 };
 
 export type TeamStats = {
-  total_teams: number;
+  total: number;
   draft_teams: number;
-  confirmed_teams: number;
+  confirmed: number;
   needs_attention: number;
 };
 

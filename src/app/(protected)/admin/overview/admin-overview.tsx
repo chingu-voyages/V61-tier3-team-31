@@ -12,6 +12,8 @@ import type {
   Deadline,
   OnboardingStats,
   AttentionStats,
+  TeamStats,
+  MatchingStats,
 } from "@/types/dashboard";
 import { Card } from "@/components/ui/card";
 import { MetricsCard } from "./components/metrics-card";
@@ -19,9 +21,11 @@ import { MetricsCard } from "./components/metrics-card";
 type Props = {
   userName: string;
   stats: ApplicationStats;
-  onboardingStats: OnboardingStats;
+  onboarding: OnboardingStats;
   course: Course | null;
   deadlines?: Deadline[];
+  teams: TeamStats;
+  matching: MatchingStats;
   attention: AttentionStats;
   activity: Activity[];
 };
@@ -35,9 +39,11 @@ function getDaysLeft(date: string) {
 export function AdminOverview({
   userName,
   stats,
-  onboardingStats,
+  onboarding,
   course,
   deadlines,
+  teams,
+  matching,
   attention,
   activity,
 }: Props) {
@@ -67,7 +73,12 @@ export function AdminOverview({
       </div>
 
       {/* Pipeline section */}
-      <PipelineCard applicationStats={stats} onboardingStats={onboardingStats} />
+      <PipelineCard
+        applicationStats={stats}
+        teamStats={teams}
+        matchingStats={matching}
+        onboardingStats={onboarding}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Attention */}
