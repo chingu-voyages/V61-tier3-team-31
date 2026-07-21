@@ -25,7 +25,7 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
         </div>
         <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-nexus-green/80 to-nexus-green"
+            className="h-full rounded-full bg-gradient-to-r from-primary/80 to-primary"
             initial={{ width: 0 }}
             animate={{
               width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
@@ -46,9 +46,9 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
                     isCompleted
-                      ? "bg-nexus-green text-primary-foreground"
+                      ? "bg-primary text-primary-foreground"
                       : isActive
-                        ? "bg-nexus-green/15 border border-nexus-green/60 text-nexus-green"
+                        ? "bg-primary/15 border border-primary/60 text-primary"
                         : "bg-muted border border-border text-foreground/20"
                   }`}
                   aria-current={isActive ? "step" : undefined}
@@ -63,7 +63,7 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                 {i < steps.length - 1 && (
                   <div className="w-3 h-px bg-accent rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-nexus-green"
+                      className="h-full bg-primary"
                       initial={{ width: 0 }}
                       animate={{ width: isCompleted ? "100%" : "0%" }}
                       transition={{ duration: 0.4, ease: "easeOut" }}
@@ -96,12 +96,12 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
               {/* Connector line — runs between circles with 2px gap from each edge */}
               {i < steps.length - 1 && (
                 <div
-                  className="absolute top-[18px] h-0.5 rounded-full bg-accent overflow-hidden"
+                  className="absolute top-4.5 h-0.5 rounded-full bg-accent overflow-hidden"
                   style={{ left: "calc(50% + 20px)", right: "calc(-50% + 20px)" }}
                   aria-hidden="true"
                 >
                   <motion.div
-                    className="h-full rounded-full bg-nexus-green"
+                    className="h-full rounded-full bg-primary"
                     initial={{ width: 0 }}
                     animate={{ width: isCompleted ? "100%" : "0%" }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
@@ -114,7 +114,7 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                 {/* Active glow ring */}
                 {isActive && (
                   <motion.div
-                    className="absolute -inset-1.5 rounded-full bg-nexus-green/15 blur-sm"
+                    className="absolute -inset-1.5 rounded-full bg-primary/15 blur-sm"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3 }}
@@ -122,11 +122,11 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                   />
                 )}
                 <motion.div
-                  className={`relative w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-300 ${
+                  className={`relative size-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-300 ${
                     isCompleted
-                      ? "bg-nexus-green text-primary-foreground"
+                      ? "bg-primary text-primary-foreground"
                       : isActive
-                        ? "bg-background border-2 border-nexus-green text-nexus-green shadow-[0_0_20px_rgba(119,207,151,0.25)]"
+                        ? "bg-background border-2 border-primary text-primary shadow-green"
                         : "bg-muted border border-border text-muted-foreground"
                   }`}
                   initial={false}
@@ -147,7 +147,7 @@ export function FormStepper({ currentStep, steps }: FormStepperProps) {
                   isActive
                     ? "text-foreground"
                     : isCompleted
-                      ? "text-nexus-green/80"
+                      ? "text-primary/90"
                       : "text-foreground/25"
                 }`}
               >

@@ -11,7 +11,7 @@ export function AuthCard({ title, descr, children }: AuthCardProps) {
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader className="flex flex-col justify-center items-center gap-2 border-b border-border text-center">
-        <div className="w-16 h-16 rounded-2xl bg-nexus-dark flex items-center justify-center mb-4 shadow-sm">
+        <div className="w-16 h-16 rounded-2xl bg-background flex items-center justify-center mb-4 shadow-sm">
           <Logo className="w-8 h-8" />
         </div>
         <CardTitle className="text-2xl font-outfit font-bold">{title}</CardTitle>

@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
-import { motion } from "motion/react";
+import { Button } from "../ui/button";
 
 interface FormNavigationProps {
   currentStep: number;
@@ -22,65 +22,50 @@ export function FormNavigation({
 }: FormNavigationProps) {
   const isFirstStep = currentStep === 1;
 
-  return (
-    <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-6">
-      {/* Back / Cancel Button */}
-      <motion.button
-        type="button"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={isFirstStep ? () => window.history.back() : onBack}
-        disabled={isLoading}
-        className="w-full sm:w-auto group relative flex items-center justify-center gap-2 px-5 py-3 h-12 rounded-xl text-sm font-medium text-muted-foreground bg-muted border border-border hover:bg-accent hover:text-foreground transition-colors overflow-hidden cursor-pointer"
-      >
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-        {isFirstStep ? "Cancel" : "Back"}
-        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-foreground/10 to-transparent pointer-events-none" />
-      </motion.button>
+  const handleBack = () => {
+    if (isFirstStep) {
+      window.history.back();
+      return;
+    }
+    onBack();
+  };
 
-      {/* Continue / Submit Button */}
-      {isLastStep ? (
-        <motion.button
-          type="button"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: "0 0 20px color-mix(in srgb, var(--nexus-green) 30%, transparent)",
-          }}
-          whileTap={{ scale: 0.98 }}
-          onClick={onSubmit}
-          disabled={isLoading}
-          className="w-full sm:w-auto group relative flex items-center justify-center gap-2 px-8 py-3 h-12 rounded-xl text-sm font-bold text-primary-foreground bg-nexus-green hover:bg-nexus-green-dark transition-all overflow-hidden cursor-pointer"
-        >
-          {isLoading ? (
-            <>
-              <div className="h-4 w-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-              <span>Submitting...</span>
-            </>
-          ) : (
-            <>
-              <Sparkles className="h-4 w-4 transition-transform group-hover:scale-110" />
-              <span>Submit Application</span>
-            </>
-          )}
-          <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-foreground/30 to-transparent pointer-events-none" />
-        </motion.button>
-      ) : (
-        <motion.button
-          type="button"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: "0 0 20px color-mix(in srgb, var(--nexus-green) 20%, transparent)",
-          }}
-          whileTap={{ scale: 0.98 }}
-          onClick={onContinue}
-          disabled={isLoading}
-          className="w-full sm:w-auto group relative flex items-center justify-center gap-2 px-8 py-3 h-12 rounded-xl text-sm font-bold text-primary-foreground bg-nexus-green hover:bg-nexus-green-dark transition-all overflow-hidden cursor-pointer"
-        >
-          <span>Continue</span>
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-foreground/30 to-transparent pointer-events-none" />
-        </motion.button>
-      )}
+  return (
+    <div className="flex flex-col sm:flex-row justify-between items-center gap-2 w-full">
+      <Button
+        variant="outline"
+        size="lg"
+        onClick={handleBack}
+        disabled={isLoading}
+        className="w-full sm:w-auto group"
+      >
+        <ArrowLeft className="size-4 transition-transform duration-300 group-hover:-translate-x-1" />
+        {isFirstStep ? "Cancel" : "Back"}
+      </Button>
+
+      <Button
+        size="lg"
+        onClick={isLastStep ? onSubmit : onContinue}
+        disabled={isLoading}
+        className="w-full sm:w-auto group"
+      >
+        {isLoading ? (
+          <>
+            <span className="size-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+            Submitting...
+          </>
+        ) : isLastStep ? (
+          <>
+            <Sparkles className="size-4" />
+            Submit Application
+          </>
+        ) : (
+          <>
+            Continue
+            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </>
+        )}
+      </Button>
     </div>
   );
 }

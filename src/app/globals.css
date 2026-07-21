@@ -14,6 +14,7 @@
 
   --animate-wave: wave 0.8s ease-in-out 1;
   --animate-gradient-sweep: gradient-sweep 3s linear infinite;
+  --animate-bounce-x: bounce-x 0.8s infinite;
 }
 
 /* ── Semantic color tokens → Tailwind utilities ── */
@@ -39,11 +40,8 @@
   --color-ring: var(--ring);
 
   /* Custom brand colors */
-  --color-nexus-green: var(--nexus-green);
-  --color-nexus-green-dark: var(--nexus-green-dark);
   --color-nexus-dark: var(--nexus-dark);
   --color-nexus-sidebar: var(--nexus-sidebar);
-  --color-nexus-page: var(--nexus-page);
   --color-warning: var(--warning);
   --color-info: var(--info);
 
@@ -90,6 +88,24 @@
   }
 }
 
+@keyframes bounce-x {
+  /* from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-4px);
+  }
+} */
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-4px);
+  }
+}
 /* ── Light theme ── */
 :root {
   --background: hsl(150, 20%, 98%);
@@ -125,11 +141,8 @@
   --text-tertiary: hsl(215 16% 57%);
 
   /* Brand colors */
-  --nexus-green: hsl(145 37% 69%);
-  --nexus-green-dark: hsl(145 29% 54%);
   --nexus-dark: hsl(240 11% 6%);
   --nexus-sidebar: hsl(220 13% 10%);
-  --nexus-page: hsl(228 33% 97%);
   --warning: hsl(38 92% 50%);
   --info: hsl(217 91% 60%);
 
@@ -179,11 +192,8 @@
   --text-tertiary: hsl(215 16% 47%);
 
   /* Brand colors */
-  --nexus-green: hsl(145 37% 69%);
-  --nexus-green-dark: hsl(145 29% 54%);
   --nexus-dark: hsl(240 11% 6%);
   --nexus-sidebar: hsl(220 13% 10%);
-  --nexus-page: hsl(228 33% 97%);
   --warning: hsl(38 92% 50%);
   --info: hsl(217 91% 60%);
 
@@ -275,7 +285,7 @@ input:-webkit-autofill:first-line {
   }
 
   .active-glow {
-    @apply border-nexus-green bg-nexus-green/5 dark:bg-nexus-green/10 shadow-[0_0_15px_rgba(119,207,151,0.15)] dark:shadow-[0_0_20px_rgba(119,207,151,0.2)];
+    @apply border-primary bg-primary/5 dark:bg-primary/10 shadow-[0_0_15px_rgba(119,207,151,0.15)] dark:shadow-[0_0_20px_rgba(119,207,151,0.2)];
   }
 
   .scrollbar-premium {

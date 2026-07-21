@@ -15,9 +15,9 @@ const TEAM_STYLES = [
   },
   {
     emoji: "🌿",
-    bg: "bg-nexus-green/10",
-    textColor: "text-nexus-green",
-    barColor: "bg-nexus-green",
+    bg: "bg-primary/10",
+    textColor: "text-primary",
+    barColor: "bg-primary",
   },
   {
     emoji: "⚡",
@@ -42,7 +42,7 @@ const TEAM_STYLES = [
 const STATUS_MAP: Record<string, { label: string; style: string }> = {
   active: {
     label: "Active",
-    style: "bg-nexus-green/10 text-nexus-green border border-nexus-green/20",
+    style: "bg-primary/10 text-primary border border-primary/20",
   },
   at_risk: {
     label: "At Risk",
@@ -54,7 +54,7 @@ const STATUS_MAP: Record<string, { label: string; style: string }> = {
   },
   completed: {
     label: "Completed",
-    style: "bg-nexus-green/10 text-nexus-green border border-nexus-green/20",
+    style: "bg-primary/10 text-primary border border-primary/20",
   },
   archived: {
     label: "Archived",

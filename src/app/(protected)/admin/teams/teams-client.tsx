@@ -66,13 +66,13 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
       tier: "Tier 3",
       domain: "New Project",
       emoji: "🚀",
-      bg: "bg-nexus-green/10",
-      textColor: "text-nexus-green",
+      bg: "bg-primary/10",
+      textColor: "text-primary",
       status: "Active",
-      statusStyle: "bg-nexus-green/10 text-nexus-green border border-nexus-green/20",
+      statusStyle: "bg-primary/10 text-primary border border-primary/20",
       description: newTeamDesc || "A newly created team.",
       progress: 0,
-      barColor: "bg-nexus-green",
+      barColor: "bg-primary",
       members: [],
       extra: "",
     };
@@ -113,7 +113,7 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
       </div>
 
       {successMessage && (
-        <div className="bg-nexus-green/10 border border-nexus-green/20 text-nexus-green px-4 py-3 rounded-xl flex items-center gap-2 text-sm font-medium animate-in fade-in slide-in-from-top-2">
+        <div className="bg-primary/10 border border-primary/20 text-primary px-4 py-3 rounded-xl flex items-center gap-2 text-sm font-medium animate-in fade-in slide-in-from-top-2">
           <CheckCircle className="w-4 h-4" />
           {successMessage}
         </div>
@@ -132,7 +132,7 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
             placeholder="Search teams..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full sm:w-64 bg-muted border border-border rounded-lg py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-nexus-green/50 transition-colors shadow-sm"
+            className="w-full sm:w-64 bg-muted border border-border rounded-lg py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors shadow-sm"
           />
         </div>
       </div>
@@ -196,7 +196,7 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
                         </div>
                       )}
                     </div>
-                    <button className="text-sm font-semibold text-muted-foreground hover:text-nexus-green transition-colors cursor-pointer">
+                    <button className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors cursor-pointer">
                       View Details
                     </button>
                   </div>
@@ -207,7 +207,7 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div className="fixed inset-0 bg-background/60 backdrop-blur-sm z-100 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
           <div className="bg-card rounded-2xl w-full max-w-lg shadow-2xl relative my-auto animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between p-5 border-b border-border">
               <h2 className="text-lg font-semibold text-foreground font-outfit">Create New Team</h2>
@@ -235,7 +235,7 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
                   value={newTeamName}
                   onChange={(e) => setNewTeamName(e.target.value)}
                   placeholder="e.g. Code Ninjas"
-                  className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-nexus-green/30 focus:border-nexus-green/50 transition-all"
+                  className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
                 />
               </div>
 
@@ -248,7 +248,7 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
                   onChange={(e) => setNewTeamDesc(e.target.value)}
                   placeholder="What is this team building?"
                   rows={3}
-                  className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-nexus-green/30 focus:border-nexus-green/50 transition-all resize-none"
+                  className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all resize-none"
                 />
               </div>
 
@@ -275,7 +275,7 @@ export function TeamsClient({ initialTeams, initialParticipants, voyageId }: Tea
                           className="flex items-center gap-3 p-3 hover:bg-muted cursor-pointer transition-colors"
                         >
                           <div
-                            className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${selectedParticipants.includes(p.id) ? "bg-nexus-green border-nexus-green text-primary-foreground" : "border-border"}`}
+                            className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${selectedParticipants.includes(p.id) ? "bg-primary border-primary text-primary-foreground" : "border-border"}`}
                           >
                             {selectedParticipants.includes(p.id) && (
                               <Check className="w-3.5 h-3.5" strokeWidth={3} />

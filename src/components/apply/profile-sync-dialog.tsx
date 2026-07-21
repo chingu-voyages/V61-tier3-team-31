@@ -56,7 +56,7 @@ export function ProfileSyncDialog({
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   This application:{" "}
-                  <span className="text-nexus-green">{difference.applicationValue || "Empty"}</span>
+                  <span className="text-primary">{difference.applicationValue || "Empty"}</span>
                 </p>
               </div>
             ))}

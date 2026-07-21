@@ -21,6 +21,7 @@ import {
   syncProfileFromApplication,
 } from "@/app/(protected)/app/apply/actions";
 import type { ApplyFormData } from "@/lib/schemas/apply-schema";
+import { Card } from "@/components/ui/card";
 
 const steps = [
   { label: "Role & Experience", description: "Your profile basics" },
@@ -121,7 +122,7 @@ export function ApplyPageClient({
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="glass-panel rounded-3xl p-12 sm:p-16 max-w-lg w-full text-center relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-nexus-green/10 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-transparent pointer-events-none" />
 
           <motion.div
             initial={{ scale: 0 }}
@@ -129,14 +130,14 @@ export function ApplyPageClient({
             transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
             className="relative mx-auto w-24 h-24 mb-8"
           >
-            <div className="absolute inset-0 rounded-full bg-nexus-green/20 animate-ping" />
-            <div className="absolute inset-0 rounded-full border-2 border-nexus-green/30" />
-            <div className="relative w-24 h-24 rounded-full bg-nexus-green/15 border border-nexus-green/40 flex items-center justify-center shadow-[0_0_40px_rgba(119,207,151,0.25)]">
+            <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
+            <div className="absolute inset-0 rounded-full border-2 border-primary/30" />
+            <div className="relative w-24 h-24 rounded-full bg-primary/15 border border-primary/40 flex items-center justify-center shadow-[0_0_40px_rgba(119,207,151,0.25)]">
               <motion.svg
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
-                className="w-10 h-10 text-nexus-green"
+                className="w-10 h-10 text-primary"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={2.5}
@@ -186,8 +187,8 @@ export function ApplyPageClient({
             </div>
             <div className="rounded-xl bg-muted border border-border p-4">
               <p className="text-xs text-muted-foreground mb-1">Status</p>
-              <p className="text-sm font-semibold text-nexus-green flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-nexus-green animate-pulse" />
+              <p className="text-sm font-semibold text-primary flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 Pending Review
               </p>
             </div>
@@ -240,42 +241,41 @@ export function ApplyPageClient({
           </div>
 
           <FormProvider {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className="glass-panel rounded-3xl p-8 sm:p-10"
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={currentStep}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                >
-                  {currentStep === 1 && <StepRoleExperience />}
-                  {currentStep === 2 && <StepSkills popularSkills={popularSkills} />}
-                  {currentStep === 3 && <StepAvailability voyages={openVoyages} />}
-                  {currentStep === 4 && <StepMotivation />}
-                  {currentStep === 5 && (
-                    <StepReview
-                      onEditStep={setStep as (step: FormStep) => void}
-                      error={submitError}
-                    />
-                  )}
-                </motion.div>
-              </AnimatePresence>
+            <Card>
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="px-8 sm:px-10">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={currentStep}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                  >
+                    {currentStep === 1 && <StepRoleExperience />}
+                    {currentStep === 2 && <StepSkills popularSkills={popularSkills} />}
+                    {currentStep === 3 && <StepAvailability voyages={openVoyages} />}
+                    {currentStep === 4 && <StepMotivation />}
+                    {currentStep === 5 && (
+                      <StepReview
+                        onEditStep={setStep as (step: FormStep) => void}
+                        error={submitError}
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
 
-              <div className="mt-8">
-                <FormNavigation
-                  currentStep={currentStep}
-                  isLoading={isLoading}
-                  onBack={prevStep}
-                  onContinue={nextStep}
-                  onSubmit={handleSubmit}
-                  isLastStep={currentStep === 5}
-                />
-              </div>
-            </form>
+                <div className="mt-8">
+                  <FormNavigation
+                    currentStep={currentStep}
+                    isLoading={isLoading}
+                    onBack={prevStep}
+                    onContinue={nextStep}
+                    onSubmit={handleSubmit}
+                    isLastStep={currentStep === 5}
+                  />
+                </div>
+              </form>
+            </Card>
           </FormProvider>
         </div>
       </div>

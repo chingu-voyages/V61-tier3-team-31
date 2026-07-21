@@ -5,7 +5,7 @@
 >
   <defs>
     <linearGradient
-      id="nexus-grad"
+      id="grad"
       x1="40"
       y1="32"
       x2="216"
@@ -20,7 +20,7 @@
 
   <path
     d="M128 224C185 224 216 180 216 136C216 95 192 80 176 52C166 80 152 90 136 90C120 90 112 70 100 32C68 80 40 112 40 144C40 188 71 224 128 224Z"
-    fill="url(#nexus-grad)"
+    fill="url(#grad)"
     stroke="#111418"
     stroke-width="12"
     stroke-linejoin="round"
