@@ -23,19 +23,37 @@ Teams handle applications and progress tracking, while participants manage onboa
 
 ## Features
 
-## Team Documents
+### 1. Authentication & User Roles
+Secure login system with role-based access for Admins and Participants. This is the foundation all other features depend on.
 
-You may find these helpful as you work together to organize your project.
+### 2. Applicant Management
+Allows organisations to collect, view, and manage program applications. The entry point of the participant lifecycle.
+(Just a part of this feature was developed for the MVP. Other parts can be added in future versions)
 
-- [Team Project Ideas](./docs/team_project_ideas.md)
-- [Team Decision Log](./docs/team_decision_log.md)
+### 3. Onboarding Checklist
+A per-participant checklist to track completion of onboarding steps, visible to both the participant and the admin.
+(Also has some outstanding parts that can be added in future versions).
 
-Meeting Agenda templates (located in the `/docs` directory in this repo):
+### 4. Admin Dashboard
+A high-level summary view giving admins key metrics and quick-access actions across all features.
+(Has some outstanding parts that can be added in future versions).
 
-- Meeting - Voyage Kickoff --> ./docs/meeting-voyage_kickoff.docx
-- Meeting - App Vision & Feature Planning --> ./docs/meeting-vision_and_feature_planning.docx
-- Meeting - Sprint Retrospective, Review, and Planning --> ./docs/meeting-sprint_retrospective_review_and_planning.docx
-- Meeting - Sprint Open Topic Session --> ./docs/meeting-sprint_open_topic_session.docx
+## Features To-Do List (other features that can be added in future versions)
+### 1. Participant Database
+A structured database of accepted participants with profile information used for team matching and admin oversight.
+
+### 2. Application Status Tracking
+A visual pipeline view for admins to track where all applicants are in the process at a glance.
+
+### 3. Team Matching & Assignment
+Enables admins to form teams from accepted participants, either manually or with criteria-based suggestions.
+
+### 4. Wayfinder: Participant Onboarding Progress Tracker
+Implementation-ready spec for the 'Onboarding Progress Tracker' feature: participant onboarding checklist with immediate-save toggles, progress percentage, and empty states, including DB policy/migration and dev seed strategy.
+
+## Running The Project
+
+## Dev Dependencies 
 
 ## Our Team
 
